@@ -1,7 +1,11 @@
-import { SidebarContainer } from "./Sidebar.styles";
+import { SidebarContainer, SidebarSearchInput } from "./Sidebar.styles";
 
 const Sidebar = () => {
-  return <SidebarContainer>Sidebar</SidebarContainer>;
+  return (
+    <SidebarContainer>
+      <SidebarSearchInput placeholder="Search" />
+    </SidebarContainer>
+  );
 };
 
 export default Sidebar;
