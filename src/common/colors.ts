@@ -1,6 +1,7 @@
 export const appBackgroundColor = "#ecf2ff";
 export const chatBoxBackgroundColor = "#20232a";
 export const chatWindowBackgroundColor = "#1d1e24";
+export const errorMessageColor = "#DF2E38";
 export const messageByUserBackgroundColor = "#3E54AC";
 
 export const black = "#000000";

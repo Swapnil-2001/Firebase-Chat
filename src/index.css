@@ -5,7 +5,14 @@ body {
   margin: 0;
   padding: 0;
   font-family: "Poppins", sans-serif;
-  background-color: #ecf2ff;
+  background-image: linear-gradient(
+    to right top,
+    #1f1d36,
+    #201627,
+    #1b101a,
+    #13080e,
+    #000000
+  );
   box-sizing: border-box;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;

@@ -3,13 +3,17 @@ import Sidebar from "../sidebar/Sidebar";
 import {
   ChatBoxInnerContainer,
   ChatBoxNavbar,
+  ChatBoxNavbarImage,
   ChatBoxOuterContainer,
 } from "./ChatBox.styles";
+import Jerry from "../../../assets/Jerry.jpg";
 
 const ChatBox = () => {
   return (
     <ChatBoxOuterContainer>
-      <ChatBoxNavbar />
+      <ChatBoxNavbar>
+        <ChatBoxNavbarImage src={Jerry} />
+      </ChatBoxNavbar>
       <ChatBoxInnerContainer>
         <Sidebar />
         <ChatWindow />

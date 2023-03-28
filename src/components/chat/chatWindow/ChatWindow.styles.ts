@@ -33,6 +33,7 @@ export const ChatWindowNavbarImage = styled.img`
   margin-left: 20px;
   height: 25px;
   width: 25px;
+  object-fit: cover;
   border-radius: 50%;
 `;
 
@@ -51,6 +52,7 @@ export const MessageReceivedByUser = styled.div`
   margin-top: 14px;
   margin-left: 25px;
   padding: 15px 20px;
+  width: max-content;
   max-width: 35%;
   color: ${white};
   font-size: 0.8rem;
@@ -97,7 +99,7 @@ export const TypeMessageInputBox = styled.input`
   padding: 15px;
   width: 90%;
   color: ${white};
-  background-color: ${black};
+  background-color: ${lightBlack};
   border-radius: 15px;
 `;
 

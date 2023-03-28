@@ -1,13 +1,19 @@
 import { useState } from "react";
-import { Link } from "react-router-dom";
-import { AddAPhoto } from "@mui/icons-material";
-import { TextField } from "@mui/material";
+import { Link, useNavigate } from "react-router-dom";
+import { createUserWithEmailAndPassword, updateProfile } from "firebase/auth";
+import { doc, setDoc } from "firebase/firestore";
+import { ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
+import { v4 as uuid } from "uuid";
+import { AddAPhoto, CheckCircle } from "@mui/icons-material";
+import { CircularProgress, TextField } from "@mui/material";
 
+import { auth, db, storage } from "../../firebase";
 import {
   AuthForm,
   AuthFormAvatarUploadLabel,
   AuthFormAvatarUploadText,
   AuthFormContainer,
+  AuthFormErrorMessage,
   AuthFormFooter,
   AuthFormHeader,
   AuthFormInputStyles,
@@ -22,11 +28,6 @@ interface SignupFormFields {
   confirmPassword?: string;
 }
 
-const regexForEmailCheck = new RegExp(
-  /^[A-Za-z0-9_!#$%&'*+/=?`{|}~^.-]+@[A-Za-z0-9.-]+$/,
-  "gm"
-);
-
 const SignupForm = () => {
   const [signupFormFields, setSignupFormFields] = useState<SignupFormFields>({
     name: "",
@@ -34,17 +35,23 @@ const SignupForm = () => {
     password: "",
     confirmPassword: "",
   });
-
+  const [userImage, setUserImage] = useState<File | null>(null);
   const [errors, setErrors] = useState<SignupFormFields>({});
+  const [signupError, setSignupError] = useState<string>("");
+  const [isLoading, setIsLoading] = useState<boolean>(false);
+
+  const navigate = useNavigate();
 
   const handleFormChange = (
     event: React.FormEvent<HTMLTextAreaElement | HTMLInputElement>
   ) => {
     const { name, value } = event.target as HTMLTextAreaElement;
+
     setSignupFormFields((prevFormFields) => ({
       ...prevFormFields,
       [name]: value,
     }));
+
     setErrors((prevErrors) => {
       if (name in prevErrors) {
         const { [name as keyof typeof errors]: _, ...otherErrors } = prevErrors;
@@ -54,50 +61,42 @@ const SignupForm = () => {
     });
   };
 
+  const handleFileUpload = (event: React.FormEvent<HTMLInputElement>) => {
+    const { files } = event.currentTarget;
+    if (files) setUserImage(files[0]);
+  };
+
   const isFormSubmissionValid = (
     name: string,
     email: string,
     password: string,
     confirmPassword: string
   ): boolean => {
-    if (name.trim().length === 0)
-      setErrors((prevErrors) => ({
-        ...prevErrors,
-        name: "Name cannot be empty.",
-      }));
+    const formSubmissionErrors: SignupFormFields = {};
 
-    if (email.trim().length === 0)
-      setErrors((prevErrors) => ({
-        ...prevErrors,
-        email: "Email cannot be empty.",
-      }));
-    else if (!regexForEmailCheck.test(email.trim()))
-      setErrors((prevErrors) => ({
-        ...prevErrors,
-        email: "Please provide a valid email.",
-      }));
+    if (name.length === 0)
+      formSubmissionErrors["name"] = "Name cannot be empty.";
+
+    if (email.length === 0)
+      formSubmissionErrors["email"] = "Email cannot be empty.";
 
     if (password.length === 0)
-      setErrors((prevErrors) => ({
-        ...prevErrors,
-        password: "Please provide a password.",
-      }));
+      formSubmissionErrors["password"] = "Please provide a password.";
     else if (password.length < 6)
-      setErrors((prevErrors) => ({
-        ...prevErrors,
-        password: "Password must be at least 6 characters long.",
-      }));
+      formSubmissionErrors["password"] =
+        "Password must be at least 6 characters long.";
     else if (password !== confirmPassword)
-      setErrors((prevErrors) => ({
-        ...prevErrors,
-        confirmPassword: "Passwords must match.",
-      }));
+      formSubmissionErrors["confirmPassword"] = "Passwords must match.";
 
-    return Object.keys(errors).length === 0;
+    setErrors(formSubmissionErrors);
+
+    return Object.keys(formSubmissionErrors).length === 0;
   };
 
   const handleFormSubmit = async (event: React.SyntheticEvent) => {
     event.preventDefault();
+
+    setIsLoading(true);
 
     const { name, email, password, confirmPassword } = signupFormFields;
 
@@ -106,14 +105,77 @@ const SignupForm = () => {
       email === undefined ||
       password === undefined ||
       confirmPassword === undefined ||
-      !isFormSubmissionValid(name, email, password, confirmPassword)
+      !isFormSubmissionValid(
+        name.trim(),
+        email.trim(),
+        password,
+        confirmPassword
+      )
     )
       return;
+
+    const displayName = name.trim();
+    const trimmedEmail = email.trim();
+
+    try {
+      const userCredential = await createUserWithEmailAndPassword(
+        auth,
+        trimmedEmail,
+        password
+      );
+
+      let downloadUrl = "";
+
+      if (userImage) {
+        const firebaseStorageUrl = `userImages/${uuid()}`;
+        const storageRef = ref(storage, firebaseStorageUrl);
+
+        await uploadBytesResumable(storageRef, userImage as File);
+
+        downloadUrl = await getDownloadURL(storageRef);
+      }
+
+      const signedUpUser = userCredential.user;
+      const signedUpUserId = signedUpUser.uid;
+
+      await updateProfile(signedUpUser, {
+        displayName,
+        photoURL: downloadUrl,
+      });
+
+      // Add data to Firestore
+      await setDoc(doc(db, "users", signedUpUserId), {
+        uid: signedUpUserId,
+        displayName,
+        email: trimmedEmail,
+        photoUrl: downloadUrl,
+      });
+
+      navigate("/");
+    } catch (error: any) {
+      const errorCode: string = error.code;
+      switch (errorCode) {
+        case "auth/email-already-in-use":
+          setSignupError(
+            "An user with this email already exists. Please sign up with a different email."
+          );
+          break;
+        default:
+          setSignupError(
+            "An error occurred while signing up. Please try again."
+          );
+      }
+    }
+
+    setIsLoading(false);
   };
 
   return (
     <AuthFormContainer>
       <AuthFormHeader>Create an Account</AuthFormHeader>
+      {signupError.length > 0 && (
+        <AuthFormErrorMessage>{signupError}</AuthFormErrorMessage>
+      )}
       <AuthForm onSubmit={handleFormSubmit}>
         <TextField
           label="Name"
@@ -163,13 +225,32 @@ const SignupForm = () => {
           id="avatarInput"
           name="image"
           type="file"
+          accept=".png,.jpeg,.jpg"
+          onChange={handleFileUpload}
           style={{ display: "none" }}
         />
         <AuthFormAvatarUploadLabel htmlFor="avatarInput">
-          <AddAPhoto color="primary" fontSize="large" />
-          <AuthFormAvatarUploadText>Add an avatar</AuthFormAvatarUploadText>
+          {userImage ? (
+            <>
+              <CheckCircle color="success" fontSize="large" />
+              <AuthFormAvatarUploadText>
+                Avatar Uploaded
+              </AuthFormAvatarUploadText>
+            </>
+          ) : (
+            <>
+              <AddAPhoto color="primary" fontSize="large" />
+              <AuthFormAvatarUploadText>Add an avatar</AuthFormAvatarUploadText>
+            </>
+          )}
         </AuthFormAvatarUploadLabel>
-        <AuthFormSubmitButton type="submit">Sign Up</AuthFormSubmitButton>
+        <AuthFormSubmitButton type="submit">
+          {isLoading ? (
+            <CircularProgress color="inherit" size={25} />
+          ) : (
+            "Sign Up"
+          )}
+        </AuthFormSubmitButton>
       </AuthForm>
       <AuthFormFooter>
         Already have an account?{" "}

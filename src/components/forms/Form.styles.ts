@@ -3,6 +3,7 @@ import styled from "styled-components";
 import {
   appBackgroundColor,
   deepBlue,
+  errorMessageColor,
   lightBlue,
   white,
 } from "../../common/colors";
@@ -37,10 +38,17 @@ export const AuthFormContainer = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding: 50px 0;
-  width: 450px;
+  text-align: center;
+  padding: 50px 75px;
+  width: 300px;
   background-color: ${white};
-  box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
+`;
+
+export const AuthFormErrorMessage = styled.span`
+  margin-top: 20px;
+  color: ${errorMessageColor};
+  font-size: 0.9rem;
+  font-weight: 500;
 `;
 
 export const AuthFormFooter = styled.div`
@@ -65,8 +73,12 @@ export const AuthFormRedirectLinkStyles = {
 };
 
 export const AuthFormSubmitButton = styled.button`
+  display: flex;
+  align-items: center;
+  justify-content: center;
   margin-top: 20px;
   padding: 10px 0;
+  height: 50px;
   color: ${white};
   font-size: 1.1rem;
   font-weight: 600;

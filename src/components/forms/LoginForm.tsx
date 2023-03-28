@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
-import { TextField } from "@mui/material";
+import { CircularProgress, TextField } from "@mui/material";
 
 import {
   AuthForm,
@@ -22,8 +22,8 @@ const LoginForm = () => {
     email: "",
     password: "",
   });
-
   const [errors, setErrors] = useState<LoginFormFields>({});
+  const [isLoading, setIsLoading] = useState<boolean>(false);
 
   const handleFormChange = (
     event: React.FormEvent<HTMLTextAreaElement | HTMLInputElement>
@@ -60,6 +60,8 @@ const LoginForm = () => {
   const handleFormSubmit = async (event: React.SyntheticEvent) => {
     event.preventDefault();
 
+    setIsLoading(true);
+
     const { email, password } = loginFormFields;
 
     if (
@@ -68,6 +70,8 @@ const LoginForm = () => {
       !isFormSubmissionValid(email, password)
     )
       return;
+
+    setIsLoading(false);
   };
 
   return (
@@ -95,7 +99,13 @@ const LoginForm = () => {
           autoComplete="on"
           sx={AuthFormInputStyles}
         />
-        <AuthFormSubmitButton type="submit">Log In</AuthFormSubmitButton>
+        <AuthFormSubmitButton type="submit">
+          {isLoading ? (
+            <CircularProgress color="inherit" size={25} />
+          ) : (
+            "Log In"
+          )}
+        </AuthFormSubmitButton>
       </AuthForm>
       <AuthFormFooter>
         Don't have an account?{" "}

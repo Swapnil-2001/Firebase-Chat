@@ -23,35 +23,12 @@ const ChatWindow = () => {
         <ChatWindowNavbarImage src={Jerry} />
         <ChatWindowNavbarText>
           Conversation with {""}
-          <ChatWindowNavbarUserName>Srirupa Datta</ChatWindowNavbarUserName>
+          <ChatWindowNavbarUserName>Phil Dunphy</ChatWindowNavbarUserName>
         </ChatWindowNavbarText>
       </ChatWindowNavbar>
       <MessageWindow>
-        <MessageSentByUser>
-          Lorem Ipsum has been the industry's standard dummy text ever since the
-          1500s, when an unknown printer took a galley of type and scrambled it
-          to make a type specimen book.
-        </MessageSentByUser>
-        <MessageReceivedByUser>
-          Lorem Ipsum has been the industry's standard dummy text ever since the
-          1500s, when an unknown printer took a galley of type and scrambled it
-          to make a type specimen book.
-        </MessageReceivedByUser>
-        <MessageSentByUser>
-          Lorem Ipsum has been the industry's standard dummy text ever since the
-          1500s, when an unknown printer took a galley of type and scrambled it
-          to make a type specimen book.
-        </MessageSentByUser>
-        <MessageSentByUser>
-          Lorem Ipsum has been the industry's standard dummy text ever since the
-          1500s, when an unknown printer took a galley of type and scrambled it
-          to make a type specimen book.
-        </MessageSentByUser>
-        <MessageSentByUser>
-          Lorem Ipsum has been the industry's standard dummy text ever since the
-          1500s, when an unknown printer took a galley of type and scrambled it
-          to make a type specimen book.
-        </MessageSentByUser>
+        <MessageSentByUser>Congratulations!</MessageSentByUser>
+        <MessageReceivedByUser>Thank you! Feels good.</MessageReceivedByUser>
       </MessageWindow>
       <TypeMessageSection>
         <TypeMessageInputBox placeholder="Type a message..." />
