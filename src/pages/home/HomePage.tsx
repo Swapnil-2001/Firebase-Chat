@@ -1,4 +1,4 @@
-import ChatBox from "../../components/chat/chatbox/ChatBox";
+import ChatBox from "../../components/chat/chatBox/ChatBox";
 import { HomePageContainer } from "./HomePage.styles";
 
 const Home = () => {
