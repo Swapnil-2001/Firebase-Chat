@@ -2,12 +2,22 @@ import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { createUserWithEmailAndPassword, updateProfile } from "firebase/auth";
 import { doc, setDoc } from "firebase/firestore";
-import { ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
+import { getDownloadURL, ref, uploadBytesResumable } from "firebase/storage";
 import { v4 as uuid } from "uuid";
 import { AddAPhoto, CheckCircle } from "@mui/icons-material";
 import { CircularProgress, TextField } from "@mui/material";
 
 import { auth, db, storage } from "../../firebase";
+import {
+  EMAIL_ALREADY_IN_USE_ERROR_CODE,
+  EMAIL_FIELD_IS_EMPTY_ERROR,
+  NAME_FIELD_IS_EMPTY_ERROR,
+  PASSWORD_FIELD_IS_EMPTY_ERROR,
+  PASSWORD_IS_TOO_SHORT_ERROR,
+  PASSWORDS_DO_NOT_MATCH_ERROR,
+  SIGNUP_DEFAULT_ERROR_MESSAGE,
+  signupErrorMessages,
+} from "../../common/constants";
 import {
   AuthForm,
   AuthFormAvatarUploadLabel,
@@ -36,7 +46,8 @@ const SignupForm = () => {
     confirmPassword: "",
   });
   const [userImage, setUserImage] = useState<File | null>(null);
-  const [errors, setErrors] = useState<SignupFormFields>({});
+  const [formSubmissionErrors, setFormSubmissionErrors] =
+    useState<SignupFormFields>({});
   const [signupError, setSignupError] = useState<string>("");
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
@@ -52,9 +63,12 @@ const SignupForm = () => {
       [name]: value,
     }));
 
-    setErrors((prevErrors) => {
+    setFormSubmissionErrors((prevErrors) => {
       if (name in prevErrors) {
-        const { [name as keyof typeof errors]: _, ...otherErrors } = prevErrors;
+        const {
+          [name as keyof typeof formSubmissionErrors]: _,
+          ...otherErrors
+        } = prevErrors;
         return otherErrors;
       }
       return prevErrors;
@@ -75,28 +89,25 @@ const SignupForm = () => {
     const formSubmissionErrors: SignupFormFields = {};
 
     if (name.length === 0)
-      formSubmissionErrors["name"] = "Name cannot be empty.";
+      formSubmissionErrors["name"] = NAME_FIELD_IS_EMPTY_ERROR;
 
     if (email.length === 0)
-      formSubmissionErrors["email"] = "Email cannot be empty.";
+      formSubmissionErrors["email"] = EMAIL_FIELD_IS_EMPTY_ERROR;
 
     if (password.length === 0)
-      formSubmissionErrors["password"] = "Please provide a password.";
+      formSubmissionErrors["password"] = PASSWORD_FIELD_IS_EMPTY_ERROR;
     else if (password.length < 6)
-      formSubmissionErrors["password"] =
-        "Password must be at least 6 characters long.";
+      formSubmissionErrors["password"] = PASSWORD_IS_TOO_SHORT_ERROR;
     else if (password !== confirmPassword)
-      formSubmissionErrors["confirmPassword"] = "Passwords must match.";
+      formSubmissionErrors["confirmPassword"] = PASSWORDS_DO_NOT_MATCH_ERROR;
 
-    setErrors(formSubmissionErrors);
+    setFormSubmissionErrors(formSubmissionErrors);
 
     return Object.keys(formSubmissionErrors).length === 0;
   };
 
   const handleFormSubmit = async (event: React.SyntheticEvent) => {
     event.preventDefault();
-
-    setIsLoading(true);
 
     const { name, email, password, confirmPassword } = signupFormFields;
 
@@ -113,6 +124,8 @@ const SignupForm = () => {
       )
     )
       return;
+
+    setIsLoading(true);
 
     const displayName = name.trim();
     const trimmedEmail = email.trim();
@@ -155,15 +168,11 @@ const SignupForm = () => {
     } catch (error: any) {
       const errorCode: string = error.code;
       switch (errorCode) {
-        case "auth/email-already-in-use":
-          setSignupError(
-            "An user with this email already exists. Please sign up with a different email."
-          );
+        case EMAIL_ALREADY_IN_USE_ERROR_CODE:
+          setSignupError(signupErrorMessages[EMAIL_ALREADY_IN_USE_ERROR_CODE]);
           break;
         default:
-          setSignupError(
-            "An error occurred while signing up. Please try again."
-          );
+          setSignupError(SIGNUP_DEFAULT_ERROR_MESSAGE);
       }
     }
 
@@ -183,8 +192,12 @@ const SignupForm = () => {
           type="text"
           onChange={handleFormChange}
           value={signupFormFields.name}
-          error={errors.name ? errors.name.length > 0 : false}
-          helperText={errors.name}
+          error={
+            formSubmissionErrors.name
+              ? formSubmissionErrors.name.length > 0
+              : false
+          }
+          helperText={formSubmissionErrors.name}
           sx={AuthFormInputStyles}
         />
         <TextField
@@ -193,8 +206,12 @@ const SignupForm = () => {
           type="email"
           onChange={handleFormChange}
           value={signupFormFields.email}
-          error={errors.email ? errors.email.length > 0 : false}
-          helperText={errors.email}
+          error={
+            formSubmissionErrors.email
+              ? formSubmissionErrors.email.length > 0
+              : false
+          }
+          helperText={formSubmissionErrors.email}
           sx={AuthFormInputStyles}
         />
         <TextField
@@ -203,8 +220,12 @@ const SignupForm = () => {
           type="password"
           onChange={handleFormChange}
           value={signupFormFields.password}
-          error={errors.password ? errors.password.length > 0 : false}
-          helperText={errors.password}
+          error={
+            formSubmissionErrors.password
+              ? formSubmissionErrors.password.length > 0
+              : false
+          }
+          helperText={formSubmissionErrors.password}
           autoComplete="on"
           sx={AuthFormInputStyles}
         />
@@ -215,9 +236,11 @@ const SignupForm = () => {
           onChange={handleFormChange}
           value={signupFormFields.confirmPassword}
           error={
-            errors.confirmPassword ? errors.confirmPassword?.length > 0 : false
+            formSubmissionErrors.confirmPassword
+              ? formSubmissionErrors.confirmPassword?.length > 0
+              : false
           }
-          helperText={errors.confirmPassword}
+          helperText={formSubmissionErrors.confirmPassword}
           autoComplete="on"
           sx={AuthFormInputStyles}
         />

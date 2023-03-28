@@ -1,10 +1,21 @@
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { signInWithEmailAndPassword } from "firebase/auth";
 import { CircularProgress, TextField } from "@mui/material";
 
+import { auth } from "../../firebase";
+import {
+  EMAIL_FIELD_IS_EMPTY_ERROR,
+  loginErrorMessages,
+  LOGIN_DEFAULT_ERROR_MESSAGE,
+  PASSWORD_FIELD_IS_EMPTY_ERROR,
+  USER_NOT_FOUND_ERROR_CODE,
+  WRONG_PASSWORD_ERROR_CODE,
+} from "../../common/constants";
 import {
   AuthForm,
   AuthFormContainer,
+  AuthFormErrorMessage,
   AuthFormFooter,
   AuthFormHeader,
   AuthFormInputStyles,
@@ -23,7 +34,10 @@ const LoginForm = () => {
     password: "",
   });
   const [errors, setErrors] = useState<LoginFormFields>({});
+  const [loginError, setLoginError] = useState<string>("");
   const [isLoading, setIsLoading] = useState<boolean>(false);
+
+  const navigate = useNavigate();
 
   const handleFormChange = (
     event: React.FormEvent<HTMLTextAreaElement | HTMLInputElement>
@@ -43,33 +57,50 @@ const LoginForm = () => {
   };
 
   const isFormSubmissionValid = (email: string, password: string) => {
-    if (email.trim().length === 0)
-      setErrors((prevErrors) => ({
-        ...prevErrors,
-        email: "Email cannot be empty.",
-      }));
-    if (password.length === 0)
-      setErrors((prevErrors) => ({
-        ...prevErrors,
-        password: "Please provide the password.",
-      }));
+    const formSubmissionErrors: LoginFormFields = {};
 
-    return Object.keys(errors).length === 0;
+    if (email.length === 0)
+      formSubmissionErrors["email"] = EMAIL_FIELD_IS_EMPTY_ERROR;
+    if (password.length === 0)
+      formSubmissionErrors["password"] = PASSWORD_FIELD_IS_EMPTY_ERROR;
+
+    setErrors(formSubmissionErrors);
+
+    return Object.keys(formSubmissionErrors).length === 0;
   };
 
   const handleFormSubmit = async (event: React.SyntheticEvent) => {
     event.preventDefault();
-
-    setIsLoading(true);
 
     const { email, password } = loginFormFields;
 
     if (
       email === undefined ||
       password === undefined ||
-      !isFormSubmissionValid(email, password)
+      !isFormSubmissionValid(email.trim(), password)
     )
       return;
+
+    setIsLoading(true);
+
+    const trimmedEmail = email.trim();
+
+    try {
+      await signInWithEmailAndPassword(auth, trimmedEmail, password);
+      navigate("/");
+    } catch (error: any) {
+      const errorCode = error.code;
+      switch (errorCode) {
+        case USER_NOT_FOUND_ERROR_CODE:
+          setLoginError(loginErrorMessages[USER_NOT_FOUND_ERROR_CODE]);
+          break;
+        case WRONG_PASSWORD_ERROR_CODE:
+          setLoginError(loginErrorMessages[WRONG_PASSWORD_ERROR_CODE]);
+          break;
+        default:
+          setLoginError(LOGIN_DEFAULT_ERROR_MESSAGE);
+      }
+    }
 
     setIsLoading(false);
   };
@@ -77,6 +108,9 @@ const LoginForm = () => {
   return (
     <AuthFormContainer>
       <AuthFormHeader>Welcome Back</AuthFormHeader>
+      {loginError.length > 0 && (
+        <AuthFormErrorMessage>{loginError}</AuthFormErrorMessage>
+      )}
       <AuthForm onSubmit={handleFormSubmit}>
         <TextField
           label="Email"
