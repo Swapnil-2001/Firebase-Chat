@@ -9,4 +9,5 @@ export const deepBlue = "#002B5B";
 export const lightBlack = "#15171b";
 export const lightBlue = "#205295";
 export const lightGray = "#b2b2b2";
+export const darkRed = "#B46060";
 export const white = "#fff";
