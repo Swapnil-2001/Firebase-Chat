@@ -1,3 +1,5 @@
+import { useState } from "react";
+
 import { SearchedUser } from "../Sidebar";
 import {
   SidebarSearchResult,
@@ -19,13 +21,21 @@ const SidebarSearchResults: React.FC<SidebarSearchResultsProps> = ({
   hasSearched,
   searchResults,
 }): JSX.Element => {
+  const [selectedUserId, setSelectedUserId] = useState<string>("");
+
+  const handleSelectAnUser = (user: SearchedUser) => {
+    handleSelectSearchedUser(user);
+    setSelectedUserId(user.uid);
+  };
+
   return (
     <SidebarSearchResultsContainer>
       {searchResults.length > 0 ? (
         searchResults?.map((result) => (
           <SidebarSearchResult
             key={result.uid}
-            onClick={() => handleSelectSearchedUser(result)}
+            onClick={() => handleSelectAnUser(result)}
+            isSelected={result.uid === selectedUserId}
           >
             <SidebarSearchResultImage
               src={result.photoURL ? result.photoURL : defaultImage}

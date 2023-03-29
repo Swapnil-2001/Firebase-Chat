@@ -51,6 +51,8 @@ const ChatWindow: React.FC = (): JSX.Element => {
   const [{ messageRecipient, conversationId }] = useContext(ChatContext);
 
   useEffect(() => {
+    setConversationMessages([]);
+
     if (conversationId.length > 0) {
       const unsubscribe = onSnapshot(
         doc(db, ALL_MESSAGES_COLLECTION_NAME, conversationId),

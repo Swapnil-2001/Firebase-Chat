@@ -7,6 +7,10 @@ import {
   white,
 } from "../../../common/colors";
 
+interface SidebarConversationProps {
+  isSelected: boolean;
+}
+
 export const LinearProgressStyles = {
   width: "190px",
   margin: "auto 0",
@@ -19,20 +23,22 @@ export const SidebarContainer = styled.div`
   align-items: center;
 `;
 
-export const SidebarConversation = styled.div`
+export const SidebarConversation = styled.div<SidebarConversationProps>`
   display: flex;
   align-items: center;
   margin: 0 auto;
-  margin-bottom: 15px;
+  margin-bottom: 7px;
   padding: 10px 15px;
   height: 65px;
   width: 80%;
+  background-color: ${({ isSelected }) => (isSelected ? lightBlack : "")};
   border-radius: 10px;
   cursor: pointer;
   transition: background-color 0.3s;
 
   &:hover {
-    background-color: ${chatWindowBackgroundColor};
+    background-color: ${({ isSelected }) =>
+      isSelected ? lightBlack : chatWindowBackgroundColor};
   }
 `;
 
@@ -81,19 +87,21 @@ export const SidebarSearchInput = styled.input`
   border-radius: 15px;
 `;
 
-export const SidebarSearchResult = styled.div`
+export const SidebarSearchResult = styled.div<SidebarConversationProps>`
   display: flex;
   align-items: center;
   margin: 0 auto;
   margin-bottom: 15px;
   padding: 10px 15px;
   width: 75%;
+  background-color: ${({ isSelected }) => (isSelected ? lightBlack : "")};
   border-radius: 10px;
   cursor: pointer;
   transition: background-color 0.3s;
 
   &:hover {
-    background-color: ${chatWindowBackgroundColor};
+    background-color: ${({ isSelected }) =>
+      isSelected ? lightBlack : chatWindowBackgroundColor};
   }
 `;
 

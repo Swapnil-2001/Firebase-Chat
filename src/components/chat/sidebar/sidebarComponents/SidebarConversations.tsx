@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { v4 as uuid } from "uuid";
 
 import { MessageRecipient } from "../../../../common/types";
@@ -20,12 +21,20 @@ const SidebarConversations: React.FC<SidebarConversationsProps> = ({
   selectAnUser,
   userConversations,
 }): JSX.Element => {
+  const [selectedChatId, setSelectedChatId] = useState<string>("");
+
+  const handleSelectAnUser = (userInfo: MessageRecipient) => {
+    selectAnUser(userInfo);
+    setSelectedChatId(userInfo.uid);
+  };
+
   return (
     <SidebarConversationsContainer>
       {userConversations.map(({ userInfo, lastMessage }) => (
         <SidebarConversation
           key={uuid()}
-          onClick={() => selectAnUser(userInfo)}
+          onClick={() => handleSelectAnUser(userInfo)}
+          isSelected={userInfo.uid === selectedChatId}
         >
           <SidebarConversationImage src={userInfo.photoURL} alt="User Image" />
           <SidebarConversationInfoContainer>
