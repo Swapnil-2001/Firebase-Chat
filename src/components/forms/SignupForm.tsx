@@ -17,6 +17,8 @@ import {
   PASSWORDS_DO_NOT_MATCH_ERROR,
   SIGNUP_DEFAULT_ERROR_MESSAGE,
   signupErrorMessages,
+  USERS_COLLECTION_NAME,
+  USER_CHATS_COLLECTION_NAME,
 } from "../../common/constants";
 import {
   AuthForm,
@@ -38,7 +40,7 @@ interface SignupFormFields {
   confirmPassword?: string;
 }
 
-const SignupForm = () => {
+const SignupForm: React.FC = (): JSX.Element => {
   const [signupFormFields, setSignupFormFields] = useState<SignupFormFields>({
     name: "",
     email: "",
@@ -157,12 +159,14 @@ const SignupForm = () => {
       });
 
       // Add data to Firestore
-      await setDoc(doc(db, "users", signedUpUserId), {
+      await setDoc(doc(db, USERS_COLLECTION_NAME, signedUpUserId), {
         uid: signedUpUserId,
         displayName,
         email: trimmedEmail,
-        photoUrl: downloadUrl,
+        photoURL: downloadUrl,
       });
+
+      await setDoc(doc(db, USER_CHATS_COLLECTION_NAME, signedUpUserId), {});
 
       navigate("/");
     } catch (error: any) {

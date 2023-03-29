@@ -4,7 +4,7 @@ import Sidebar from "../sidebar/Sidebar";
 
 import { ChatBoxInnerContainer, ChatBoxOuterContainer } from "./ChatBox.styles";
 
-const ChatBox = () => {
+const ChatBox: React.FC = (): JSX.Element => {
   return (
     <ChatBoxOuterContainer>
       <ChatBoxNavbar />

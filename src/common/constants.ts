@@ -29,3 +29,23 @@ export const PASSWORD_FIELD_IS_EMPTY_ERROR = "Please provide a password.";
 export const PASSWORD_IS_TOO_SHORT_ERROR =
   "Password must be at least 6 characters long.";
 export const PASSWORDS_DO_NOT_MATCH_ERROR = "Passwords must match.";
+
+export const SET_NEW_MESSAGE_RECIPIENT = "SET_NEW_MESSAGE_RECIPIENT";
+
+export const USERS_COLLECTION_NAME = "users";
+export const ALL_MESSAGES_COLLECTION_NAME = "allMessages";
+export const USER_CHATS_COLLECTION_NAME = "chatsByUser";
+
+// userChats: list of uIDs
+// uID: list of combinedIDs
+// combinedID: {
+//    lastMessage: {
+//      text: string
+//    },
+//    date,
+//    userInfo: {
+//      displayName: string,
+//      photoURL: string,
+//      uid: string
+//    }
+// }

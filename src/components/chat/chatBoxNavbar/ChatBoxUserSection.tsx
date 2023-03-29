@@ -1,8 +1,10 @@
+import { useContext } from "react";
 import { signOut } from "firebase/auth";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import { Fade } from "@mui/material";
 
 import { auth } from "../../../firebase";
+import { UserContext } from "../../../context/UserContext";
 import {
   ArrowBackIconStyles,
   ChatBoxUserSectionContainer,
@@ -10,10 +12,11 @@ import {
   ChatBoxUserSectionImageContainer,
   ChatBoxUserSectionLogoutButton,
   ChatBoxUserSectionLogoutButtonContainer,
+  ChatBoxUserSectionNameContainer,
   ChatBoxUserSectionNavbar,
   ChatBoxUserSectionNavbarText,
 } from "./ChatBoxNavbar.styles";
-import Jerry from "../../../assets/Jerry.jpg";
+import defaultImage from "../../../assets/Default.png";
 
 interface ChatBoxUserSectionProps {
   openUserSection: boolean;
@@ -23,7 +26,9 @@ interface ChatBoxUserSectionProps {
 const ChatBoxUserSection: React.FC<ChatBoxUserSectionProps> = ({
   openUserSection,
   handleCloseUserSection,
-}) => {
+}): JSX.Element => {
+  const { currentUser } = useContext(UserContext);
+
   const handleLogout = () => {
     signOut(auth);
   };
@@ -41,8 +46,14 @@ const ChatBoxUserSection: React.FC<ChatBoxUserSectionProps> = ({
           <ChatBoxUserSectionNavbarText>Profile</ChatBoxUserSectionNavbarText>
         </ChatBoxUserSectionNavbar>
         <ChatBoxUserSectionImageContainer>
-          <ChatBoxUserSectionImage src={Jerry} />
+          <ChatBoxUserSectionImage
+            src={currentUser?.photoURL ? currentUser.photoURL : defaultImage}
+            alt="User Image"
+          />
         </ChatBoxUserSectionImageContainer>
+        <ChatBoxUserSectionNameContainer>
+          {currentUser?.displayName}
+        </ChatBoxUserSectionNameContainer>
         <ChatBoxUserSectionLogoutButtonContainer>
           <ChatBoxUserSectionLogoutButton onClick={handleLogout}>
             Logout

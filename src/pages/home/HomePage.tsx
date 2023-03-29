@@ -1,7 +1,7 @@
 import ChatBox from "../../components/chat/chatBox/ChatBox";
 import { HomePageContainer } from "./HomePage.styles";
 
-const Home = () => {
+const Home: React.FC = (): JSX.Element => {
   return (
     <HomePageContainer>
       <ChatBox />

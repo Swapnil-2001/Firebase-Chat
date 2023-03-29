@@ -5,6 +5,7 @@ import {
   chatWindowBackgroundColor,
   darkRed,
   lightBlack,
+  lightGray,
   messageByUserBackgroundColor,
   white,
 } from "../../../common/colors";
@@ -47,6 +48,12 @@ export const ChatBoxUserSectionContainer = styled.div`
   width: 24%;
   background-color: ${chatWindowBackgroundColor};
   border-top-left-radius: ${chatBoxBorderRadius};
+`;
+
+export const ChatBoxUserSectionNameContainer = styled.div`
+  text-align: center;
+  color: ${lightGray};
+  font-weight: 500;
 `;
 
 export const ChatBoxUserSectionImage = styled.img`

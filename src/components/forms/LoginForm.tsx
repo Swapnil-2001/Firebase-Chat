@@ -28,7 +28,7 @@ interface LoginFormFields {
   password?: string;
 }
 
-const LoginForm = () => {
+const LoginForm: React.FC = (): JSX.Element => {
   const [loginFormFields, setLoginFormFields] = useState<LoginFormFields>({
     email: "",
     password: "",

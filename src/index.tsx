@@ -2,6 +2,7 @@ import React from "react";
 import ReactDOM from "react-dom/client";
 
 import App from "./App";
+import ChatContextProvider from "./context/ChatContext";
 import UserContextProvider from "./context/UserContext";
 import "./index.css";
 
@@ -10,8 +11,10 @@ const root = ReactDOM.createRoot(
 );
 root.render(
   <UserContextProvider>
-    <React.StrictMode>
-      <App />
-    </React.StrictMode>
+    <ChatContextProvider>
+      <React.StrictMode>
+        <App />
+      </React.StrictMode>
+    </ChatContextProvider>
   </UserContextProvider>
 );

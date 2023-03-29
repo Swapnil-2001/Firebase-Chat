@@ -2,12 +2,12 @@ import { onAuthStateChanged, User } from "firebase/auth";
 import { createContext, PropsWithChildren, useEffect, useState } from "react";
 import { auth } from "../firebase";
 
-interface UserContextDefaultValues {
+interface UserContextInitialState {
   currentUser: User | null;
   hasCurrentUserBeenSet: boolean;
 }
 
-export const UserContext = createContext<UserContextDefaultValues>({
+export const UserContext = createContext<UserContextInitialState>({
   currentUser: null,
   hasCurrentUserBeenSet: false,
 });
@@ -15,7 +15,7 @@ export const UserContext = createContext<UserContextDefaultValues>({
 const UserContextProvider: React.FC<PropsWithChildren> = ({
   children,
 }): JSX.Element => {
-  const [userValues, setUserValues] = useState<UserContextDefaultValues>({
+  const [userValues, setUserValues] = useState<UserContextInitialState>({
     currentUser: null,
     hasCurrentUserBeenSet: false,
   });

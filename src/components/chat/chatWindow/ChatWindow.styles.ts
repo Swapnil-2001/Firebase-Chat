@@ -38,12 +38,14 @@ export const ChatWindowNavbarImage = styled.img`
 `;
 
 export const ChatWindowNavbarUserName = styled.span`
+  margin-left: 15px;
   color: #eaeaea;
+  font-size: 0.8rem;
   font-weight: 600;
 `;
 
 export const ChatWindowNavbarText = styled.div`
-  margin-left: 10px;
+  margin-left: 20px;
   color: ${lightGray};
   font-size: 0.8rem;
 `;
@@ -93,6 +95,7 @@ export const SendMessageIconWrapper = styled.div`
   padding: 7px 10px;
   background-color: ${messageByUserBackgroundColor};
   border-radius: 10px;
+  cursor: pointer;
 `;
 
 export const TypeMessageInputBox = styled.input`
