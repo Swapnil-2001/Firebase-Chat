@@ -33,7 +33,7 @@ const SidebarConversations: React.FC<SidebarConversationsProps> = ({
               {userInfo.displayName}
             </SidebarConversationUserName>
             <SidebarConversationLastMessage>
-              {lastMessage.messageText.substring(0, 25)}{" "}
+              {lastMessage.messageText.substring(0, 25)}
               {lastMessage.messageText.length > 25 && "..."}
             </SidebarConversationLastMessage>
           </SidebarConversationInfoContainer>

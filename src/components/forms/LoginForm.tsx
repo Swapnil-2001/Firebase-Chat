@@ -1,14 +1,16 @@
-import { useState } from "react";
+import { useContext, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { signInWithEmailAndPassword } from "firebase/auth";
 import { CircularProgress, TextField } from "@mui/material";
 
 import { auth } from "../../firebase";
+import { ChatContext } from "../../context/ChatContext";
 import {
   EMAIL_FIELD_IS_EMPTY_ERROR,
   loginErrorMessages,
   LOGIN_DEFAULT_ERROR_MESSAGE,
   PASSWORD_FIELD_IS_EMPTY_ERROR,
+  SET_NEW_MESSAGE_RECIPIENT,
   USER_NOT_FOUND_ERROR_CODE,
   WRONG_PASSWORD_ERROR_CODE,
 } from "../../common/constants";
@@ -36,6 +38,8 @@ const LoginForm: React.FC = (): JSX.Element => {
   const [errors, setErrors] = useState<LoginFormFields>({});
   const [loginError, setLoginError] = useState<string>("");
   const [isLoading, setIsLoading] = useState<boolean>(false);
+
+  const [, dispatch] = useContext(ChatContext);
 
   const navigate = useNavigate();
 
@@ -71,6 +75,11 @@ const LoginForm: React.FC = (): JSX.Element => {
 
   const handleFormSubmit = async (event: React.SyntheticEvent) => {
     event.preventDefault();
+
+    dispatch({
+      type: SET_NEW_MESSAGE_RECIPIENT,
+      payload: null,
+    });
 
     const { email, password } = loginFormFields;
 

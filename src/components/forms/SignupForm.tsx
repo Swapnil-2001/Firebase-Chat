@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useContext, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { createUserWithEmailAndPassword, updateProfile } from "firebase/auth";
 import { doc, setDoc } from "firebase/firestore";
@@ -8,6 +8,7 @@ import { AddAPhoto, CheckCircle } from "@mui/icons-material";
 import { CircularProgress, TextField } from "@mui/material";
 
 import { auth, db, storage } from "../../firebase";
+import { ChatContext } from "../../context/ChatContext";
 import {
   EMAIL_ALREADY_IN_USE_ERROR_CODE,
   EMAIL_FIELD_IS_EMPTY_ERROR,
@@ -19,6 +20,7 @@ import {
   signupErrorMessages,
   USERS_COLLECTION_NAME,
   USER_CHATS_COLLECTION_NAME,
+  SET_NEW_MESSAGE_RECIPIENT,
 } from "../../common/constants";
 import {
   AuthForm,
@@ -52,6 +54,8 @@ const SignupForm: React.FC = (): JSX.Element => {
     useState<SignupFormFields>({});
   const [signupError, setSignupError] = useState<string>("");
   const [isLoading, setIsLoading] = useState<boolean>(false);
+
+  const [, dispatch] = useContext(ChatContext);
 
   const navigate = useNavigate();
 
@@ -110,6 +114,11 @@ const SignupForm: React.FC = (): JSX.Element => {
 
   const handleFormSubmit = async (event: React.SyntheticEvent) => {
     event.preventDefault();
+
+    dispatch({
+      type: SET_NEW_MESSAGE_RECIPIENT,
+      payload: null,
+    });
 
     const { name, email, password, confirmPassword } = signupFormFields;
 
