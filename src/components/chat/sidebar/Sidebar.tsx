@@ -78,7 +78,12 @@ const Sidebar: React.FC = (): JSX.Element => {
                 arrayWithUserConversations.push(conversation);
               }
             );
-            setUserConversations(arrayWithUserConversations);
+            setUserConversations(
+              arrayWithUserConversations.sort(
+                (conversation1, conversation2) =>
+                  conversation2.date - conversation1.date
+              )
+            );
             setAreConversationsLoading(false);
           }
         }

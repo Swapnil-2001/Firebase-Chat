@@ -13,6 +13,15 @@ const chatWindowContainerMarginTop = "30px";
 const typeMessageSectionHeight = "85px";
 const messageWindowHeight = "485px"; // 650 - chatWindowNavbarHeight - chatWindowContainerMarginTop - typeMessageBoxHeight
 
+interface ConversationDateContainerProps {
+  showDate: boolean;
+}
+
+export const ConversationDateContainer = styled.div<ConversationDateContainerProps>`
+  margin: 15px auto;
+  display: ${({ showDate }) => (showDate ? "flex" : "none")};
+`;
+
 export const ChatWindowContainer = styled.div`
   flex: 3;
   margin-top: ${chatWindowContainerMarginTop};

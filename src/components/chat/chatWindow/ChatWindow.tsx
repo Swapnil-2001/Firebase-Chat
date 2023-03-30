@@ -21,6 +21,7 @@ import {
   ChatWindowNavbarImage,
   ChatWindowNavbarText,
   ChatWindowNavbarUserName,
+  ConversationDateContainer,
   MessageReceivedByUser,
   MessageSentByUser,
   MessageWindow,
@@ -38,8 +39,34 @@ interface ConversationMessage {
   id: string;
   senderId: string;
   messageText: string;
+  conversationDateString: string;
   date: any;
+  showDate: boolean;
 }
+
+interface ConversationDateProps {
+  conversationDateString: string | undefined;
+  showDate: boolean;
+}
+
+const ConversationDate: React.FC<ConversationDateProps> = ({
+  conversationDateString,
+  showDate,
+}): JSX.Element => {
+  const dateToday = new Date();
+  const day = dateToday.getDate();
+  const month = dateToday.getMonth();
+  const year = dateToday.getFullYear();
+  const fullDate = `${day}/${month}/${year}`;
+
+  return conversationDateString ? (
+    <ConversationDateContainer showDate={showDate}>
+      {fullDate === conversationDateString ? "Today" : conversationDateString}
+    </ConversationDateContainer>
+  ) : (
+    <></>
+  );
+};
 
 const ChatWindow: React.FC = (): JSX.Element => {
   const [typedMessage, setTypedMessage] = useState<string>("");
@@ -68,8 +95,39 @@ const ChatWindow: React.FC = (): JSX.Element => {
         doc(db, ALL_MESSAGES_COLLECTION_NAME, conversationId),
         (document) => {
           if (document.exists()) {
-            const conversationMessages = document.data().messages;
-            setConversationMessages(conversationMessages);
+            const conversationMessages = document.data()
+              .messages as ConversationMessage[];
+
+            const formattedMessages: ConversationMessage[] = [];
+
+            // Decide whether or not to show the date of the conversation
+            conversationMessages.forEach((message) => {
+              const conversationDate = message.date.toDate() as Date;
+              const conversationDateString =
+                conversationDate.toLocaleDateString();
+              const numMessagesLoaded = formattedMessages.length;
+              if (
+                numMessagesLoaded === 0 ||
+                formattedMessages[numMessagesLoaded - 1]
+                  .conversationDateString !== conversationDateString
+              )
+                formattedMessages.push({
+                  ...message,
+                  conversationDateString,
+                  showDate: true,
+                });
+              else if (
+                formattedMessages[numMessagesLoaded - 1]
+                  .conversationDateString === conversationDateString
+              )
+                formattedMessages.push({
+                  ...message,
+                  conversationDateString,
+                  showDate: false,
+                });
+            });
+
+            setConversationMessages(formattedMessages);
           }
         }
       );
@@ -165,13 +223,23 @@ const ChatWindow: React.FC = (): JSX.Element => {
       <MessageWindow>
         {conversationMessages.map((message) => {
           return message.senderId === currentUser?.uid ? (
-            <MessageSentByUser key={message.id}>
-              {message.messageText}
-            </MessageSentByUser>
+            <div key={message.id}>
+              <ConversationDate
+                conversationDateString={message.conversationDateString}
+                showDate={message.showDate}
+              />
+              <MessageSentByUser>{message.messageText}</MessageSentByUser>
+            </div>
           ) : (
-            <MessageReceivedByUser key={message.id}>
-              {message.messageText}
-            </MessageReceivedByUser>
+            <div key={message.id}>
+              <ConversationDate
+                conversationDateString={message.conversationDateString}
+                showDate={message.showDate}
+              />
+              <MessageReceivedByUser>
+                {message.messageText}
+              </MessageReceivedByUser>
+            </div>
           );
         })}
         <div ref={messagesEndRef} />

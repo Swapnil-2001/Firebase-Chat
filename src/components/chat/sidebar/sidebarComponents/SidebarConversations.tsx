@@ -30,32 +30,24 @@ const SidebarConversations: React.FC<SidebarConversationsProps> = ({
 
   return (
     <SidebarConversationsContainer>
-      {userConversations
-        .sort(
-          (conversation1, conversation2) =>
-            conversation2.date - conversation1.date
-        )
-        .map(({ userInfo, lastMessage }) => (
-          <SidebarConversation
-            key={uuid()}
-            onClick={() => handleSelectAnUser(userInfo)}
-            isSelected={userInfo.uid === messageRecipient?.uid}
-          >
-            <SidebarConversationImage
-              src={userInfo.photoURL}
-              alt="User Image"
-            />
-            <SidebarConversationInfoContainer>
-              <SidebarConversationUserName>
-                {userInfo.displayName}
-              </SidebarConversationUserName>
-              <SidebarConversationLastMessage>
-                {lastMessage.messageText.substring(0, 25)}
-                {lastMessage.messageText.length > 25 && "..."}
-              </SidebarConversationLastMessage>
-            </SidebarConversationInfoContainer>
-          </SidebarConversation>
-        ))}
+      {userConversations.map(({ userInfo, lastMessage }) => (
+        <SidebarConversation
+          key={uuid()}
+          onClick={() => handleSelectAnUser(userInfo)}
+          isSelected={userInfo.uid === messageRecipient?.uid}
+        >
+          <SidebarConversationImage src={userInfo.photoURL} alt="User Image" />
+          <SidebarConversationInfoContainer>
+            <SidebarConversationUserName>
+              {userInfo.displayName}
+            </SidebarConversationUserName>
+            <SidebarConversationLastMessage>
+              {lastMessage.messageText.substring(0, 25)}
+              {lastMessage.messageText.length > 25 && "..."}
+            </SidebarConversationLastMessage>
+          </SidebarConversationInfoContainer>
+        </SidebarConversation>
+      ))}
     </SidebarConversationsContainer>
   );
 };
