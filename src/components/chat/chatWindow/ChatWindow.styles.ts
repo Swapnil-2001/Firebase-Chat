@@ -43,7 +43,7 @@ export const ChatWindowContainer = styled.div`
   border-bottom-right-radius: 35px;
 `;
 
-export const ChatWindowNavbar = styled.div`
+export const ChatWindowNavbarContainer = styled.div`
   display: flex;
   align-items: center;
   height: ${chatWindowNavbarHeight};
@@ -110,7 +110,7 @@ export const MessageSendTimeContainer = styled.div<MessageTimeContainerProps>`
   font-size: 0.65rem;
 `;
 
-export const MessageWindow = styled.div`
+export const MessageWindowContainer = styled.div`
   display: flex;
   flex-direction: column;
   height: ${messageWindowHeight};
@@ -139,7 +139,7 @@ export const TypeMessageInputBox = styled.input`
   border-radius: 15px;
 `;
 
-export const TypeMessageSection = styled.div`
+export const TypeMessageSectionContainer = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
