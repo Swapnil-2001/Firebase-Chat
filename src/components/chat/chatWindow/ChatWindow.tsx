@@ -1,4 +1,4 @@
-import { useContext, useEffect, useState } from "react";
+import { useContext, useEffect, useRef, useState } from "react";
 import { v4 as uuid } from "uuid";
 import SendIcon from "@mui/icons-material/Send";
 import {
@@ -49,6 +49,18 @@ const ChatWindow: React.FC = (): JSX.Element => {
 
   const { currentUser } = useContext(UserContext);
   const [{ messageRecipient, conversationId }] = useContext(ChatContext);
+
+  const messagesEndRef = useRef<null | HTMLDivElement>(null);
+
+  const scrollToBottom = () => {
+    console.log("Here");
+
+    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+  };
+
+  useEffect(() => {
+    if (conversationMessages.length > 0) scrollToBottom();
+  }, [conversationMessages]);
 
   useEffect(() => {
     setConversationMessages([]);
@@ -164,6 +176,7 @@ const ChatWindow: React.FC = (): JSX.Element => {
             </MessageReceivedByUser>
           );
         })}
+        <div ref={messagesEndRef} />
       </MessageWindow>
       <TypeMessageSection>
         <TypeMessageInputBox
