@@ -1,7 +1,9 @@
 import styled from "styled-components";
 import {
   black,
+  chatBoxBackgroundColor,
   chatWindowBackgroundColor,
+  gray,
   lightBlack,
   lightGray,
   messageByUserBackgroundColor,
@@ -17,9 +19,20 @@ interface ConversationDateContainerProps {
   showDate: boolean;
 }
 
+interface MessageTimeContainerProps {
+  moveToLeft: boolean;
+}
+
 export const ConversationDateContainer = styled.div<ConversationDateContainerProps>`
-  margin: 15px auto;
   display: ${({ showDate }) => (showDate ? "flex" : "none")};
+  text-align: center;
+  margin: 15px auto;
+  padding: 5px 10px;
+  width: max-content;
+  color: ${gray};
+  font-size: 0.8rem;
+  background-color: ${chatBoxBackgroundColor};
+  border-radius: 10px;
 `;
 
 export const ChatWindowContainer = styled.div`
@@ -60,9 +73,10 @@ export const ChatWindowNavbarText = styled.div`
 `;
 
 export const MessageReceivedByUser = styled.div`
-  margin-top: 14px;
+  margin-top: 5px;
   margin-left: 25px;
   padding: 15px 20px;
+  padding-bottom: 5px;
   width: max-content;
   max-width: 35%;
   color: ${white};
@@ -74,8 +88,10 @@ export const MessageReceivedByUser = styled.div`
 `;
 
 export const MessageSentByUser = styled.div`
-  margin: 14px 25px 0 auto;
+  margin: 5px 25px 0 auto;
   padding: 15px 20px;
+  padding-bottom: 5px;
+  width: max-content;
   max-width: 35%;
   color: ${white};
   font-size: 0.8rem;
@@ -84,6 +100,14 @@ export const MessageSentByUser = styled.div`
   background-color: ${messageByUserBackgroundColor};
   border-radius: 20px;
   border-bottom-right-radius: 0;
+`;
+
+export const MessageSendTimeContainer = styled.div<MessageTimeContainerProps>`
+  margin-top: 3px;
+  margin-left: ${({ moveToLeft }) => (moveToLeft ? "0" : "auto")};
+  width: max-content;
+  color: ${lightGray};
+  font-size: 0.65rem;
 `;
 
 export const MessageWindow = styled.div`

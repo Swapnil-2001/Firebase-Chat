@@ -23,6 +23,7 @@ import {
   ChatWindowNavbarUserName,
   ConversationDateContainer,
   MessageReceivedByUser,
+  MessageSendTimeContainer,
   MessageSentByUser,
   MessageWindow,
   SendMessageIconWrapper,
@@ -49,22 +50,41 @@ interface ConversationDateProps {
   showDate: boolean;
 }
 
+interface MessageTimeProps {
+  time: string;
+  moveToLeft: boolean;
+}
+
 const ConversationDate: React.FC<ConversationDateProps> = ({
   conversationDateString,
   showDate,
 }): JSX.Element => {
   const dateToday = new Date();
+
   const day = dateToday.getDate();
   const month = dateToday.getMonth();
   const year = dateToday.getFullYear();
-  const fullDate = `${day}/${month}/${year}`;
+  const formattedDate =
+    ("0" + day).slice(-2) + "/" + ("0" + (month + 1)).slice(-2) + "/" + year;
 
-  return conversationDateString ? (
+  return (
     <ConversationDateContainer showDate={showDate}>
-      {fullDate === conversationDateString ? "Today" : conversationDateString}
+      {formattedDate === conversationDateString
+        ? "Today"
+        : conversationDateString}
     </ConversationDateContainer>
-  ) : (
-    <></>
+  );
+};
+
+const MessageTime: React.FC<MessageTimeProps> = ({
+  time,
+  moveToLeft,
+}): JSX.Element => {
+  const lengthOfTimeString = time.length;
+  return (
+    <MessageSendTimeContainer moveToLeft={moveToLeft}>
+      {time.substring(0, lengthOfTimeString - 3)}
+    </MessageSendTimeContainer>
   );
 };
 
@@ -84,7 +104,9 @@ const ChatWindow: React.FC = (): JSX.Element => {
   };
 
   useEffect(() => {
-    if (conversationMessages.length > 0) scrollToBottom();
+    if (conversationMessages.length > 0) {
+      scrollToBottom();
+    }
   }, [conversationMessages]);
 
   useEffect(() => {
@@ -148,16 +170,21 @@ const ChatWindow: React.FC = (): JSX.Element => {
   };
 
   const sendMessage = async () => {
-    if (currentUser === null || messageRecipient === null) return;
-
-    setTypedMessage("");
+    if (
+      currentUser === null ||
+      messageRecipient === null ||
+      typedMessage.trim().length === 0
+    )
+      return;
 
     const newMessageCreated = {
       id: uuid(),
-      messageText: typedMessage,
+      messageText: typedMessage.trim(),
       senderId: currentUser.uid,
       date: Timestamp.now(),
     };
+
+    setTypedMessage("");
 
     try {
       const docRef = doc(db, ALL_MESSAGES_COLLECTION_NAME, conversationId);
@@ -221,27 +248,46 @@ const ChatWindow: React.FC = (): JSX.Element => {
         )}
       </ChatWindowNavbar>
       <MessageWindow>
-        {conversationMessages.map((message) => {
-          return message.senderId === currentUser?.uid ? (
-            <div key={message.id}>
-              <ConversationDate
-                conversationDateString={message.conversationDateString}
-                showDate={message.showDate}
-              />
-              <MessageSentByUser>{message.messageText}</MessageSentByUser>
-            </div>
-          ) : (
-            <div key={message.id}>
-              <ConversationDate
-                conversationDateString={message.conversationDateString}
-                showDate={message.showDate}
-              />
-              <MessageReceivedByUser>
-                {message.messageText}
-              </MessageReceivedByUser>
-            </div>
-          );
-        })}
+        {conversationMessages.map(
+          ({
+            conversationDateString,
+            date,
+            messageText,
+            id,
+            senderId,
+            showDate,
+          }) => {
+            return senderId === currentUser?.uid ? (
+              <div key={id}>
+                <ConversationDate
+                  conversationDateString={conversationDateString}
+                  showDate={showDate}
+                />
+                <MessageSentByUser>
+                  {messageText}
+                  <MessageTime
+                    time={date.toDate().toLocaleTimeString()}
+                    moveToLeft={false}
+                  />
+                </MessageSentByUser>
+              </div>
+            ) : (
+              <div key={id}>
+                <ConversationDate
+                  conversationDateString={conversationDateString}
+                  showDate={showDate}
+                />
+                <MessageReceivedByUser>
+                  {messageText}
+                  <MessageTime
+                    time={date.toDate().toLocaleTimeString()}
+                    moveToLeft={true}
+                  />
+                </MessageReceivedByUser>
+              </div>
+            );
+          }
+        )}
         <div ref={messagesEndRef} />
       </MessageWindow>
       <TypeMessageSection>
