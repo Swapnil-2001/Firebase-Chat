@@ -143,16 +143,19 @@ const Sidebar: React.FC = (): JSX.Element => {
     if (!currentUser) return;
 
     const currentUserId = currentUser.uid;
-    const messageRecipientId = userToBeSelected.uid;
+    const selectedUserId = userToBeSelected.uid;
 
     const conversationId =
-      currentUserId > messageRecipientId
-        ? currentUserId + messageRecipientId
-        : messageRecipientId + currentUserId;
+      currentUserId > selectedUserId
+        ? currentUserId + selectedUserId
+        : selectedUserId + currentUserId;
 
     dispatch({
       type: SET_NEW_MESSAGE_RECIPIENT,
-      payload: { messageRecipient: userToBeSelected, conversationId },
+      payload: {
+        conversationId,
+        messageRecipient: userToBeSelected,
+      },
     });
   };
 

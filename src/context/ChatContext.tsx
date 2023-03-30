@@ -28,7 +28,7 @@ const ChatContextProvider: React.FC<PropsWithChildren> = ({
     switch (action.type) {
       case SET_NEW_MESSAGE_RECIPIENT:
         if (action.payload === null) return initialState;
-        const { messageRecipient, conversationId } = action.payload;
+        const { conversationId, messageRecipient } = action.payload;
         return {
           ...state,
           conversationId,

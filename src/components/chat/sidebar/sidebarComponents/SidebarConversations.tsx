@@ -1,8 +1,9 @@
-import { useState } from "react";
+import { useContext } from "react";
 import { v4 as uuid } from "uuid";
 
-import { MessageRecipient } from "../../../../common/types";
 import { UserConversation } from "../Sidebar";
+import { ChatContext } from "../../../../context/ChatContext";
+import { MessageRecipient } from "../../../../common/types";
 import {
   SidebarConversation,
   SidebarConversationImage,
@@ -21,33 +22,40 @@ const SidebarConversations: React.FC<SidebarConversationsProps> = ({
   selectAnUser,
   userConversations,
 }): JSX.Element => {
-  const [selectedChatId, setSelectedChatId] = useState<string>("");
+  const [{ messageRecipient }] = useContext(ChatContext);
 
   const handleSelectAnUser = (userInfo: MessageRecipient) => {
     selectAnUser(userInfo);
-    setSelectedChatId(userInfo.uid);
   };
 
   return (
     <SidebarConversationsContainer>
-      {userConversations.map(({ userInfo, lastMessage }) => (
-        <SidebarConversation
-          key={uuid()}
-          onClick={() => handleSelectAnUser(userInfo)}
-          isSelected={userInfo.uid === selectedChatId}
-        >
-          <SidebarConversationImage src={userInfo.photoURL} alt="User Image" />
-          <SidebarConversationInfoContainer>
-            <SidebarConversationUserName>
-              {userInfo.displayName}
-            </SidebarConversationUserName>
-            <SidebarConversationLastMessage>
-              {lastMessage.messageText.substring(0, 25)}
-              {lastMessage.messageText.length > 25 && "..."}
-            </SidebarConversationLastMessage>
-          </SidebarConversationInfoContainer>
-        </SidebarConversation>
-      ))}
+      {userConversations
+        .sort(
+          (conversation1, conversation2) =>
+            conversation2.date - conversation1.date
+        )
+        .map(({ userInfo, lastMessage }) => (
+          <SidebarConversation
+            key={uuid()}
+            onClick={() => handleSelectAnUser(userInfo)}
+            isSelected={userInfo.uid === messageRecipient?.uid}
+          >
+            <SidebarConversationImage
+              src={userInfo.photoURL}
+              alt="User Image"
+            />
+            <SidebarConversationInfoContainer>
+              <SidebarConversationUserName>
+                {userInfo.displayName}
+              </SidebarConversationUserName>
+              <SidebarConversationLastMessage>
+                {lastMessage.messageText.substring(0, 25)}
+                {lastMessage.messageText.length > 25 && "..."}
+              </SidebarConversationLastMessage>
+            </SidebarConversationInfoContainer>
+          </SidebarConversation>
+        ))}
     </SidebarConversationsContainer>
   );
 };

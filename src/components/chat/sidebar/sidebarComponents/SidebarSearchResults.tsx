@@ -1,6 +1,7 @@
-import { useState } from "react";
+import { useContext } from "react";
 
 import { SearchedUser } from "../Sidebar";
+import { ChatContext } from "../../../../context/ChatContext";
 import {
   SidebarSearchResult,
   SidebarSearchResultImage,
@@ -21,11 +22,10 @@ const SidebarSearchResults: React.FC<SidebarSearchResultsProps> = ({
   hasSearched,
   searchResults,
 }): JSX.Element => {
-  const [selectedUserId, setSelectedUserId] = useState<string>("");
+  const [{ messageRecipient }] = useContext(ChatContext);
 
   const handleSelectAnUser = (user: SearchedUser) => {
     handleSelectSearchedUser(user);
-    setSelectedUserId(user.uid);
   };
 
   return (
@@ -35,7 +35,7 @@ const SidebarSearchResults: React.FC<SidebarSearchResultsProps> = ({
           <SidebarSearchResult
             key={result.uid}
             onClick={() => handleSelectAnUser(result)}
-            isSelected={result.uid === selectedUserId}
+            isSelected={result.uid === messageRecipient?.uid}
           >
             <SidebarSearchResultImage
               src={result.photoURL ? result.photoURL : defaultImage}

@@ -53,8 +53,6 @@ const ChatWindow: React.FC = (): JSX.Element => {
   const messagesEndRef = useRef<null | HTMLDivElement>(null);
 
   const scrollToBottom = () => {
-    console.log("Here");
-
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   };
 
