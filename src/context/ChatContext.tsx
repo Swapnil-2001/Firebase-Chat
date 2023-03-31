@@ -1,16 +1,21 @@
 import { createContext, Dispatch, PropsWithChildren, useReducer } from "react";
 
 import { MessageRecipient } from "../common/types";
-import { SET_NEW_MESSAGE_RECIPIENT } from "../common/constants";
+import {
+  SET_NEW_MESSAGE_RECIPIENT,
+  UNHIDE_MESSAGE_WINDOW,
+} from "../common/constants";
 
 interface ChatInitialState {
   conversationId: string;
   messageRecipient: MessageRecipient | null;
+  hideMessageWindow: boolean;
 }
 
 const initialState: ChatInitialState = {
   conversationId: "",
   messageRecipient: null,
+  hideMessageWindow: true,
 };
 
 export const ChatContext = createContext<[ChatInitialState, Dispatch<any>]>([
@@ -33,6 +38,12 @@ const ChatContextProvider: React.FC<PropsWithChildren> = ({
           ...state,
           conversationId,
           messageRecipient,
+          hideMessageWindow: true,
+        };
+      case UNHIDE_MESSAGE_WINDOW:
+        return {
+          ...state,
+          hideMessageWindow: false,
         };
       default:
         return state;

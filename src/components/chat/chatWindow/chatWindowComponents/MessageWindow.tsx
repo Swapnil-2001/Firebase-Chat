@@ -4,7 +4,10 @@ import { doc, onSnapshot } from "firebase/firestore";
 import { db } from "../../../../firebase";
 import { ChatContext } from "../../../../context/ChatContext";
 import { UserContext } from "../../../../context/UserContext";
-import { ALL_MESSAGES_COLLECTION_NAME } from "../../../../common/constants";
+import {
+  ALL_MESSAGES_COLLECTION_NAME,
+  UNHIDE_MESSAGE_WINDOW,
+} from "../../../../common/constants";
 import {
   ConversationDateContainer,
   MessageReceivedByUser,
@@ -71,19 +74,53 @@ const MessageWindow: React.FC = (): JSX.Element => {
   >([]);
 
   const { currentUser } = useContext(UserContext);
-  const [{ conversationId }] = useContext(ChatContext);
+  const [{ conversationId }, dispatch] = useContext(ChatContext);
 
   const messagesEndRef = useRef<null | HTMLDivElement>(null);
 
-  const scrollToBottom = () => {
-    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+  const scrollToBottom = (): void => {
+    messagesEndRef.current?.scrollIntoView({ behavior: "auto" });
   };
 
   useEffect(() => {
     if (conversationMessages.length > 0) {
       scrollToBottom();
+      dispatch({ type: UNHIDE_MESSAGE_WINDOW });
     }
-  }, [conversationMessages]);
+  }, [conversationMessages, dispatch]);
+
+  const generateFormattedMessages = (
+    conversationMessages: ConversationMessage[]
+  ): ConversationMessage[] => {
+    const formattedMessages: ConversationMessage[] = [];
+
+    // Decide whether or not to show the date of the conversation
+    conversationMessages.forEach((message) => {
+      const conversationDate = message.date.toDate() as Date;
+      const conversationDateString = conversationDate.toLocaleDateString();
+      const numMessagesLoaded = formattedMessages.length;
+      if (
+        numMessagesLoaded === 0 ||
+        formattedMessages[numMessagesLoaded - 1].conversationDateString !==
+          conversationDateString
+      )
+        formattedMessages.push({
+          ...message,
+          conversationDateString,
+          showDate: true,
+        });
+      else if (
+        formattedMessages[numMessagesLoaded - 1].conversationDateString ===
+        conversationDateString
+      )
+        formattedMessages.push({
+          ...message,
+          conversationDateString,
+          showDate: false,
+        });
+    });
+    return formattedMessages;
+  };
 
   useEffect(() => {
     setConversationMessages([]);
@@ -96,34 +133,8 @@ const MessageWindow: React.FC = (): JSX.Element => {
             const conversationMessages = document.data()
               .messages as ConversationMessage[];
 
-            const formattedMessages: ConversationMessage[] = [];
-
-            // Decide whether or not to show the date of the conversation
-            conversationMessages.forEach((message) => {
-              const conversationDate = message.date.toDate() as Date;
-              const conversationDateString =
-                conversationDate.toLocaleDateString();
-              const numMessagesLoaded = formattedMessages.length;
-              if (
-                numMessagesLoaded === 0 ||
-                formattedMessages[numMessagesLoaded - 1]
-                  .conversationDateString !== conversationDateString
-              )
-                formattedMessages.push({
-                  ...message,
-                  conversationDateString,
-                  showDate: true,
-                });
-              else if (
-                formattedMessages[numMessagesLoaded - 1]
-                  .conversationDateString === conversationDateString
-              )
-                formattedMessages.push({
-                  ...message,
-                  conversationDateString,
-                  showDate: false,
-                });
-            });
+            const formattedMessages =
+              generateFormattedMessages(conversationMessages);
 
             setConversationMessages(formattedMessages);
           }

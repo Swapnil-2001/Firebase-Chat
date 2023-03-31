@@ -36,6 +36,7 @@ export const ConversationDateContainer = styled.div<ConversationDateContainerPro
 `;
 
 export const ChatWindowContainer = styled.div`
+  position: relative;
   flex: 3;
   margin-top: ${chatWindowContainerMarginTop};
   background-color: ${chatWindowBackgroundColor};
@@ -70,6 +71,15 @@ export const ChatWindowNavbarText = styled.div`
   margin-left: 20px;
   color: ${lightGray};
   font-size: 0.8rem;
+`;
+
+export const HideMessageWindow = styled.div`
+  position: absolute;
+  top: ${chatWindowNavbarHeight};
+  right: 0;
+  height: ${messageWindowHeight};
+  width: 100%;
+  background-color: ${chatWindowBackgroundColor};
 `;
 
 export const MessageReceivedByUser = styled.div`

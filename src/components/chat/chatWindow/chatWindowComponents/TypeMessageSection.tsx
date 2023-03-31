@@ -25,7 +25,7 @@ import {
   TypeMessageSectionContainer,
 } from "../ChatWindow.styles";
 
-const TypeMessageSection = () => {
+const TypeMessageSection: React.FC = (): JSX.Element => {
   const [typedMessage, setTypedMessage] = useState<string>("");
 
   const { currentUser } = useContext(UserContext);
