@@ -15,6 +15,7 @@ import EmojiPicker, {
 } from "emoji-picker-react";
 import SendIcon from "@mui/icons-material/Send";
 import SentimentSatisfiedOutlinedIcon from "@mui/icons-material/SentimentSatisfiedOutlined";
+import { Fade } from "@mui/material";
 
 import { db } from "../../../../firebase";
 import { ChatContext } from "../../../../context/ChatContext";
@@ -71,6 +72,8 @@ const TypeMessageSection: React.FC<TypeMessageSectionProps> = ({
       typedMessage.trim().length === 0
     )
       return;
+
+    setOpenEmojiPicker(false);
 
     const newMessageCreated = {
       id: uuid(),
@@ -134,18 +137,20 @@ const TypeMessageSection: React.FC<TypeMessageSectionProps> = ({
         onChange={handleMessageInput}
         onKeyDown={handleKeyPress}
       />
-      {openEmojiPicker && (
-        <EmojiPickerContainer>
-          <EmojiPicker
-            onEmojiClick={handleSelectEmoji}
-            autoFocusSearch={false}
-            emojiStyle={EmojiStyle.TWITTER}
-            height={350}
-            width={290}
-            theme={Theme.DARK}
-          />
-        </EmojiPickerContainer>
-      )}
+      {
+        <Fade in={openEmojiPicker} timeout={350}>
+          <EmojiPickerContainer>
+            <EmojiPicker
+              onEmojiClick={handleSelectEmoji}
+              autoFocusSearch={false}
+              emojiStyle={EmojiStyle.TWITTER}
+              height={350}
+              width={290}
+              theme={Theme.DARK}
+            />
+          </EmojiPickerContainer>
+        </Fade>
+      }
       <SelectEmojiIconWrapper onClick={handleOpenOrCloseEmojiPicker}>
         <SentimentSatisfiedOutlinedIcon sx={SelectEmojiIconStyles} />
       </SelectEmojiIconWrapper>

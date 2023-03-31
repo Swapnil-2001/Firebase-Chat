@@ -73,6 +73,12 @@ export const ChatWindowNavbarText = styled.div`
   font-size: 0.8rem;
 `;
 
+export const EmojiPickerContainer = styled.div`
+  position: absolute;
+  bottom: 85px;
+  right: 0;
+`;
+
 export const HideMessageWindow = styled.div`
   position: absolute;
   top: ${chatWindowNavbarHeight};
@@ -80,12 +86,6 @@ export const HideMessageWindow = styled.div`
   height: ${messageWindowHeight};
   width: 100%;
   background-color: ${chatWindowBackgroundColor};
-`;
-
-export const EmojiPickerContainer = styled.div`
-  position: absolute;
-  bottom: 85px;
-  right: 0;
 `;
 
 export const MessageReceivedByUser = styled.div`
