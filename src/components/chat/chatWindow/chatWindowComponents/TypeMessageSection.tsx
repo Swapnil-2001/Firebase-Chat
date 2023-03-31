@@ -3,13 +3,18 @@ import {
   arrayUnion,
   doc,
   getDoc,
-  serverTimestamp,
   setDoc,
   Timestamp,
   updateDoc,
 } from "firebase/firestore";
 import { v4 as uuid } from "uuid";
+import EmojiPicker, {
+  EmojiClickData,
+  EmojiStyle,
+  Theme,
+} from "emoji-picker-react";
 import SendIcon from "@mui/icons-material/Send";
+import SentimentSatisfiedOutlinedIcon from "@mui/icons-material/SentimentSatisfiedOutlined";
 
 import { db } from "../../../../firebase";
 import { ChatContext } from "../../../../context/ChatContext";
@@ -20,12 +25,23 @@ import {
 } from "../../../../common/constants";
 import { white } from "../../../../common/colors";
 import {
+  EmojiPickerContainer,
+  SelectEmojiIconStyles,
+  SelectEmojiIconWrapper,
   SendMessageIconWrapper,
   TypeMessageInputBox,
   TypeMessageSectionContainer,
 } from "../ChatWindow.styles";
 
-const TypeMessageSection: React.FC = (): JSX.Element => {
+interface TypeMessageSectionProps {
+  openEmojiPicker: boolean;
+  setOpenEmojiPicker: (_: any) => void;
+}
+
+const TypeMessageSection: React.FC<TypeMessageSectionProps> = ({
+  openEmojiPicker,
+  setOpenEmojiPicker,
+}): JSX.Element => {
   const [typedMessage, setTypedMessage] = useState<string>("");
 
   const { currentUser } = useContext(UserContext);
@@ -38,6 +54,14 @@ const TypeMessageSection: React.FC = (): JSX.Element => {
 
   const handleKeyPress = (event: React.KeyboardEvent<HTMLElement>): void => {
     if (event.code === "Enter") sendMessage();
+  };
+
+  const handleSelectEmoji = (emojiData: EmojiClickData) => {
+    setTypedMessage((prevValue) => prevValue + emojiData.emoji);
+  };
+
+  const handleOpenOrCloseEmojiPicker = () => {
+    setOpenEmojiPicker((prevValue: boolean) => !prevValue);
   };
 
   const sendMessage = async () => {
@@ -80,7 +104,7 @@ const TypeMessageSection: React.FC = (): JSX.Element => {
         [`${conversationId}.lastMessage`]: {
           messageText: typedMessage,
         },
-        [`${conversationId}.date`]: serverTimestamp(),
+        [`${conversationId}.date`]: Timestamp.now(),
       });
 
       await updateDoc(
@@ -94,7 +118,7 @@ const TypeMessageSection: React.FC = (): JSX.Element => {
           [`${conversationId}.lastMessage`]: {
             messageText: typedMessage,
           },
-          [`${conversationId}.date`]: serverTimestamp(),
+          [`${conversationId}.date`]: Timestamp.now(),
         }
       );
     } catch (error) {
@@ -110,6 +134,21 @@ const TypeMessageSection: React.FC = (): JSX.Element => {
         onChange={handleMessageInput}
         onKeyDown={handleKeyPress}
       />
+      {openEmojiPicker && (
+        <EmojiPickerContainer>
+          <EmojiPicker
+            onEmojiClick={handleSelectEmoji}
+            autoFocusSearch={false}
+            emojiStyle={EmojiStyle.TWITTER}
+            height={350}
+            width={290}
+            theme={Theme.DARK}
+          />
+        </EmojiPickerContainer>
+      )}
+      <SelectEmojiIconWrapper onClick={handleOpenOrCloseEmojiPicker}>
+        <SentimentSatisfiedOutlinedIcon sx={SelectEmojiIconStyles} />
+      </SelectEmojiIconWrapper>
       <SendMessageIconWrapper onClick={sendMessage}>
         <SendIcon sx={{ color: white }} />
       </SendMessageIconWrapper>

@@ -68,7 +68,13 @@ const MessageTime: React.FC<MessageTimeProps> = ({
   );
 };
 
-const MessageWindow: React.FC = (): JSX.Element => {
+interface MessageWindowProps {
+  setOpenEmojiPicker: (_: boolean) => void;
+}
+
+const MessageWindow: React.FC<MessageWindowProps> = ({
+  setOpenEmojiPicker,
+}): JSX.Element => {
   const [conversationMessages, setConversationMessages] = useState<
     ConversationMessage[]
   >([]);
@@ -78,16 +84,35 @@ const MessageWindow: React.FC = (): JSX.Element => {
 
   const messagesEndRef = useRef<null | HTMLDivElement>(null);
 
-  const scrollToBottom = (): void => {
-    messagesEndRef.current?.scrollIntoView({ behavior: "auto" });
-  };
-
   useEffect(() => {
     if (conversationMessages.length > 0) {
       scrollToBottom();
       dispatch({ type: UNHIDE_MESSAGE_WINDOW });
     }
   }, [conversationMessages, dispatch]);
+
+  useEffect(() => {
+    setConversationMessages([]);
+
+    if (conversationId.length > 0) {
+      const unsubscribe = onSnapshot(
+        doc(db, ALL_MESSAGES_COLLECTION_NAME, conversationId),
+        (document) => {
+          if (document.exists()) {
+            const conversationMessages = document.data()
+              .messages as ConversationMessage[];
+
+            const formattedMessages =
+              generateFormattedMessages(conversationMessages);
+
+            setConversationMessages(formattedMessages);
+          }
+        }
+      );
+      return () => unsubscribe();
+    }
+    return;
+  }, [conversationId]);
 
   const generateFormattedMessages = (
     conversationMessages: ConversationMessage[]
@@ -122,31 +147,19 @@ const MessageWindow: React.FC = (): JSX.Element => {
     return formattedMessages;
   };
 
-  useEffect(() => {
-    setConversationMessages([]);
+  const scrollToBottom = (): void => {
+    messagesEndRef.current?.scrollIntoView({ behavior: "auto" });
+  };
 
-    if (conversationId.length > 0) {
-      const unsubscribe = onSnapshot(
-        doc(db, ALL_MESSAGES_COLLECTION_NAME, conversationId),
-        (document) => {
-          if (document.exists()) {
-            const conversationMessages = document.data()
-              .messages as ConversationMessage[];
-
-            const formattedMessages =
-              generateFormattedMessages(conversationMessages);
-
-            setConversationMessages(formattedMessages);
-          }
-        }
-      );
-      return () => unsubscribe();
-    }
-    return;
-  }, [conversationId]);
+  const handleCloseEmojiPicker = () => {
+    setOpenEmojiPicker(false);
+  };
 
   return (
-    <MessageWindowContainer>
+    <MessageWindowContainer
+      onClick={handleCloseEmojiPicker}
+      className="messageWindowDiv"
+    >
       {conversationMessages.map(
         ({
           conversationDateString,

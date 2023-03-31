@@ -82,6 +82,12 @@ export const HideMessageWindow = styled.div`
   background-color: ${chatWindowBackgroundColor};
 `;
 
+export const EmojiPickerContainer = styled.div`
+  position: absolute;
+  bottom: 85px;
+  right: 0;
+`;
+
 export const MessageReceivedByUser = styled.div`
   margin-top: 5px;
   margin-left: 25px;
@@ -131,10 +137,26 @@ export const MessageWindowContainer = styled.div`
   }
 `;
 
+export const SelectEmojiIconStyles = {
+  color: gray,
+  fontSize: "30px",
+
+  "&:hover": {
+    color: lightGray,
+    cursor: "pointer",
+  },
+};
+
+export const SelectEmojiIconWrapper = styled.div`
+  display: flex;
+  align-items: center;
+  margin-left: 18px;
+`;
+
 export const SendMessageIconWrapper = styled.div`
   display: flex;
   align-items: center;
-  margin-left: 20px;
+  margin-left: 18px;
   padding: 7px 10px;
   background-color: ${messageByUserBackgroundColor};
   border-radius: 10px;
@@ -150,6 +172,7 @@ export const TypeMessageInputBox = styled.input`
 `;
 
 export const TypeMessageSectionContainer = styled.div`
+  position: relative;
   display: flex;
   align-items: center;
   justify-content: center;
