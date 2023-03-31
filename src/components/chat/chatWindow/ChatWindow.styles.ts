@@ -27,6 +27,7 @@ export const ConversationDateContainer = styled.div<ConversationDateContainerPro
   display: ${({ showDate }) => (showDate ? "flex" : "none")};
   text-align: center;
   margin: 15px auto;
+  margin-top: 10px;
   padding: 5px 10px;
   width: max-content;
   color: ${gray};
@@ -54,10 +55,17 @@ export const ChatWindowNavbarContainer = styled.div`
 
 export const ChatWindowNavbarImage = styled.img`
   margin-left: 20px;
-  height: 25px;
-  width: 25px;
+  height: 30px;
+  width: 30px;
   object-fit: cover;
   border-radius: 50%;
+`;
+
+export const ChatWindowNavbarText = styled.div`
+  margin-left: 20px;
+  color: ${lightGray};
+  font-size: 0.8rem;
+  font-weight: 600;
 `;
 
 export const ChatWindowNavbarUserName = styled.span`
@@ -65,12 +73,6 @@ export const ChatWindowNavbarUserName = styled.span`
   color: #eaeaea;
   font-size: 0.8rem;
   font-weight: 600;
-`;
-
-export const ChatWindowNavbarText = styled.div`
-  margin-left: 20px;
-  color: ${lightGray};
-  font-size: 0.8rem;
 `;
 
 export const EmojiPickerContainer = styled.div`
@@ -87,6 +89,10 @@ export const HideMessageWindow = styled.div`
   width: 100%;
   background-color: ${chatWindowBackgroundColor};
 `;
+
+export const LinearProgressStyles = {
+  zIndex: 100,
+};
 
 export const MessageReceivedByUser = styled.div`
   margin-top: 5px;

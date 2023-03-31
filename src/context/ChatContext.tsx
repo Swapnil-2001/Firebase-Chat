@@ -9,13 +9,18 @@ import {
 interface ChatInitialState {
   conversationId: string;
   messageRecipient: MessageRecipient | null;
-  hideMessageWindow: boolean;
+  hideMessageInput: boolean;
+  // < 2 --> hide message window
+  // === 1 --> show loading animation
+  // >= 2 --> show message window
+  hideMessageWindow: number;
 }
 
 const initialState: ChatInitialState = {
   conversationId: "",
   messageRecipient: null,
-  hideMessageWindow: true,
+  hideMessageInput: true,
+  hideMessageWindow: 0,
 };
 
 export const ChatContext = createContext<[ChatInitialState, Dispatch<any>]>([
@@ -38,12 +43,13 @@ const ChatContextProvider: React.FC<PropsWithChildren> = ({
           ...state,
           conversationId,
           messageRecipient,
-          hideMessageWindow: true,
+          hideMessageInput: false,
+          hideMessageWindow: 1,
         };
       case UNHIDE_MESSAGE_WINDOW:
         return {
           ...state,
-          hideMessageWindow: false,
+          hideMessageWindow: 2,
         };
       default:
         return state;

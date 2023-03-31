@@ -1,10 +1,15 @@
 import { useContext, useState } from "react";
+import { LinearProgress } from "@mui/material";
 
 import ChatWindowNavbar from "./chatWindowComponents/ChatWindowNavbar";
 import MessageWindow from "./chatWindowComponents/MessageWindow";
 import TypeMessageSection from "./chatWindowComponents/TypeMessageSection";
 import { ChatContext } from "../../../context/ChatContext";
-import { ChatWindowContainer, HideMessageWindow } from "./ChatWindow.styles";
+import {
+  ChatWindowContainer,
+  HideMessageWindow,
+  LinearProgressStyles,
+} from "./ChatWindow.styles";
 
 const ChatWindow: React.FC = (): JSX.Element => {
   const [openEmojiPicker, setOpenEmojiPicker] = useState<boolean>(false);
@@ -12,8 +17,13 @@ const ChatWindow: React.FC = (): JSX.Element => {
 
   return (
     <ChatWindowContainer>
-      {hideMessageWindow && <HideMessageWindow />}
+      {hideMessageWindow < 2 && <HideMessageWindow />}
       <ChatWindowNavbar />
+      {hideMessageWindow === 1 ? (
+        <LinearProgress sx={LinearProgressStyles} />
+      ) : (
+        <div style={{ height: "4px", backgroundColor: "black" }} />
+      )}
       <MessageWindow setOpenEmojiPicker={setOpenEmojiPicker} />
       <TypeMessageSection
         openEmojiPicker={openEmojiPicker}

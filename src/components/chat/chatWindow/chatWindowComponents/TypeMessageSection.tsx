@@ -46,7 +46,8 @@ const TypeMessageSection: React.FC<TypeMessageSectionProps> = ({
   const [typedMessage, setTypedMessage] = useState<string>("");
 
   const { currentUser } = useContext(UserContext);
-  const [{ conversationId, messageRecipient }] = useContext(ChatContext);
+  const [{ conversationId, messageRecipient, hideMessageInput }] =
+    useContext(ChatContext);
 
   const handleMessageInput = (event: React.FormEvent<HTMLInputElement>) => {
     const { value } = event.target as HTMLInputElement;
@@ -128,6 +129,9 @@ const TypeMessageSection: React.FC<TypeMessageSectionProps> = ({
       console.error(error);
     }
   };
+
+  if (hideMessageInput) return <></>;
+
   return (
     <TypeMessageSectionContainer>
       <TypeMessageInputBox
@@ -137,20 +141,18 @@ const TypeMessageSection: React.FC<TypeMessageSectionProps> = ({
         onChange={handleMessageInput}
         onKeyDown={handleKeyPress}
       />
-      {
-        <Fade in={openEmojiPicker} timeout={350}>
-          <EmojiPickerContainer>
-            <EmojiPicker
-              onEmojiClick={handleSelectEmoji}
-              autoFocusSearch={false}
-              emojiStyle={EmojiStyle.TWITTER}
-              height={350}
-              width={290}
-              theme={Theme.DARK}
-            />
-          </EmojiPickerContainer>
-        </Fade>
-      }
+      <Fade in={openEmojiPicker} timeout={250}>
+        <EmojiPickerContainer>
+          <EmojiPicker
+            onEmojiClick={handleSelectEmoji}
+            autoFocusSearch={false}
+            emojiStyle={EmojiStyle.TWITTER}
+            height={350}
+            width={290}
+            theme={Theme.DARK}
+          />
+        </EmojiPickerContainer>
+      </Fade>
       <SelectEmojiIconWrapper onClick={handleOpenOrCloseEmojiPicker}>
         <SentimentSatisfiedOutlinedIcon sx={SelectEmojiIconStyles} />
       </SelectEmojiIconWrapper>
