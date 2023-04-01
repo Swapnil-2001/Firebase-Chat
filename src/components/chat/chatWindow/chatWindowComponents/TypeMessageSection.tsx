@@ -130,36 +130,37 @@ const TypeMessageSection: React.FC<TypeMessageSectionProps> = ({
     }
   };
 
-  if (hideMessageInput)
-    return <div style={{ backgroundColor: "transparent", height: "85px" }} />;
-
   return (
     <TypeMessageSectionContainer>
-      <TypeMessageInputBox
-        type="text"
-        placeholder="Type a message..."
-        value={typedMessage}
-        onChange={handleMessageInput}
-        onKeyDown={handleKeyPress}
-      />
-      <Fade in={openEmojiPicker} timeout={250}>
-        <EmojiPickerContainer>
-          <EmojiPicker
-            onEmojiClick={handleSelectEmoji}
-            autoFocusSearch={false}
-            emojiStyle={EmojiStyle.TWITTER}
-            height={350}
-            width={290}
-            theme={Theme.DARK}
+      {!hideMessageInput && (
+        <>
+          <TypeMessageInputBox
+            type="text"
+            placeholder="Type a message..."
+            value={typedMessage}
+            onChange={handleMessageInput}
+            onKeyDown={handleKeyPress}
           />
-        </EmojiPickerContainer>
-      </Fade>
-      <SelectEmojiIconWrapper onClick={handleOpenOrCloseEmojiPicker}>
-        <SentimentSatisfiedOutlinedIcon sx={SelectEmojiIconStyles} />
-      </SelectEmojiIconWrapper>
-      <SendMessageIconWrapper onClick={sendMessage}>
-        <SendIcon sx={{ color: white }} />
-      </SendMessageIconWrapper>
+          <Fade in={openEmojiPicker} timeout={250}>
+            <EmojiPickerContainer>
+              <EmojiPicker
+                onEmojiClick={handleSelectEmoji}
+                autoFocusSearch={false}
+                emojiStyle={EmojiStyle.TWITTER}
+                height={350}
+                width={290}
+                theme={Theme.DARK}
+              />
+            </EmojiPickerContainer>
+          </Fade>
+          <SelectEmojiIconWrapper onClick={handleOpenOrCloseEmojiPicker}>
+            <SentimentSatisfiedOutlinedIcon sx={SelectEmojiIconStyles} />
+          </SelectEmojiIconWrapper>
+          <SendMessageIconWrapper onClick={sendMessage}>
+            <SendIcon sx={{ color: white }} />
+          </SendMessageIconWrapper>
+        </>
+      )}
     </TypeMessageSectionContainer>
   );
 };

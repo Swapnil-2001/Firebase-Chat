@@ -12,7 +12,7 @@ import {
 
 const chatWindowNavbarHeight = "50px";
 const chatWindowContainerMarginTop = "30px";
-const typeMessageSectionHeight = "85px";
+export const typeMessageSectionHeight = "85px";
 const messageWindowHeight = "485px"; // 650 - chatWindowNavbarHeight - chatWindowContainerMarginTop - typeMessageBoxHeight
 
 interface ConversationDateContainerProps {

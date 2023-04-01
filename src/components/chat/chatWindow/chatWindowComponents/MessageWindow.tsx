@@ -78,20 +78,17 @@ const MessageWindow: React.FC<MessageWindowProps> = ({
   const [conversationMessages, setConversationMessages] = useState<
     ConversationMessage[]
   >([]);
+  const [distanceFromBottom, setDistanceFromBottom] = useState<number>(0);
+  const [componentJustLoaded, setComponentJustLoaded] = useState<boolean>(true);
 
   const { currentUser } = useContext(UserContext);
   const [{ conversationId }, dispatch] = useContext(ChatContext);
 
   const messagesEndRef = useRef<null | HTMLDivElement>(null);
+  const containerRef = useRef<null | HTMLDivElement>(null);
 
   useEffect(() => {
-    if (conversationMessages.length > 0) {
-      scrollToBottom();
-      dispatch({ type: UNHIDE_MESSAGE_WINDOW });
-    }
-  }, [conversationMessages, dispatch]);
-
-  useEffect(() => {
+    setComponentJustLoaded(true);
     setConversationMessages([]);
 
     if (conversationId.length > 0) {
@@ -113,6 +110,38 @@ const MessageWindow: React.FC<MessageWindowProps> = ({
     }
     return;
   }, [conversationId]);
+
+  useEffect(() => {
+    console.log(componentJustLoaded);
+
+    const numConversations = conversationMessages.length;
+    if (numConversations > 0) {
+      if (componentJustLoaded) {
+        scrollToBottom();
+        setComponentJustLoaded(false);
+      } else if (
+        conversationMessages[numConversations - 1].senderId ===
+          currentUser?.uid ||
+        distanceFromBottom < 300
+      )
+        scrollToBottom();
+      dispatch({ type: UNHIDE_MESSAGE_WINDOW });
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [componentJustLoaded, conversationMessages, currentUser?.uid, dispatch]);
+
+  useEffect(() => {
+    const container = containerRef.current as Element;
+    container.addEventListener("scroll", () => handleScroll(container));
+    return () =>
+      container.removeEventListener("scroll", () => handleScroll(container));
+  }, []);
+
+  const handleScroll = (container: Element): void => {
+    const distanceFromBottom =
+      container.scrollHeight - container.scrollTop - container.clientHeight;
+    setDistanceFromBottom(distanceFromBottom);
+  };
 
   const generateFormattedMessages = (
     conversationMessages: ConversationMessage[]
@@ -158,6 +187,7 @@ const MessageWindow: React.FC<MessageWindowProps> = ({
   return (
     <MessageWindowContainer
       onClick={handleCloseEmojiPicker}
+      ref={containerRef}
       className="messageWindowDiv"
     >
       {conversationMessages.map(
