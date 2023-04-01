@@ -23,19 +23,6 @@ interface MessageTimeContainerProps {
   moveToLeft: boolean;
 }
 
-export const ConversationDateContainer = styled.div<ConversationDateContainerProps>`
-  display: ${({ showDate }) => (showDate ? "flex" : "none")};
-  text-align: center;
-  margin: 15px auto;
-  margin-top: 10px;
-  padding: 5px 10px;
-  width: max-content;
-  color: ${gray};
-  font-size: 0.8rem;
-  background-color: ${chatBoxBackgroundColor};
-  border-radius: 10px;
-`;
-
 export const ChatWindowContainer = styled.div`
   position: relative;
   flex: 3;
@@ -65,7 +52,7 @@ export const ChatWindowNavbarText = styled.div`
   margin-left: 20px;
   color: ${lightGray};
   font-size: 0.8rem;
-  font-weight: 600;
+  font-weight: 500;
 `;
 
 export const ChatWindowNavbarUserName = styled.span`
@@ -73,6 +60,19 @@ export const ChatWindowNavbarUserName = styled.span`
   color: #eaeaea;
   font-size: 0.8rem;
   font-weight: 600;
+`;
+
+export const ConversationDateContainer = styled.div<ConversationDateContainerProps>`
+  display: ${({ showDate }) => (showDate ? "flex" : "none")};
+  text-align: center;
+  margin: 15px auto;
+  margin-top: 10px;
+  padding: 5px 10px;
+  width: max-content;
+  color: ${gray};
+  font-size: 0.8rem;
+  background-color: ${chatBoxBackgroundColor};
+  border-radius: 10px;
 `;
 
 export const EmojiPickerContainer = styled.div`

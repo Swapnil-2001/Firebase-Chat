@@ -130,7 +130,8 @@ const TypeMessageSection: React.FC<TypeMessageSectionProps> = ({
     }
   };
 
-  if (hideMessageInput) return <></>;
+  if (hideMessageInput)
+    return <div style={{ backgroundColor: "transparent", height: "85px" }} />;
 
   return (
     <TypeMessageSectionContainer>

@@ -22,7 +22,7 @@ const ChatWindow: React.FC = (): JSX.Element => {
       {hideMessageWindow === 1 ? (
         <LinearProgress sx={LinearProgressStyles} />
       ) : (
-        <div style={{ height: "4px", backgroundColor: "black" }} />
+        <div style={{ height: "4px", backgroundColor: "transparent" }} />
       )}
       <MessageWindow setOpenEmojiPicker={setOpenEmojiPicker} />
       <TypeMessageSection
