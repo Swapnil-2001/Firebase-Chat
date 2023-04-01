@@ -4,7 +4,9 @@ import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import { Fade } from "@mui/material";
 
 import { auth } from "../../../firebase";
+import { ChatContext } from "../../../context/ChatContext";
 import { UserContext } from "../../../context/UserContext";
+import { RESET_TO_DEFAULT_VALUES } from "../../../common/constants";
 import {
   ArrowBackIconStyles,
   ChatBoxUserSectionContainer,
@@ -27,9 +29,11 @@ const ChatBoxUserSection: React.FC<ChatBoxUserSectionProps> = ({
   openUserSection,
   handleCloseUserSection,
 }): JSX.Element => {
+  const [, dispatch] = useContext(ChatContext);
   const { currentUser } = useContext(UserContext);
 
   const handleLogout = () => {
+    dispatch({ type: RESET_TO_DEFAULT_VALUES });
     signOut(auth);
   };
 

@@ -39,7 +39,7 @@ const SidebarSearchResults: React.FC<SidebarSearchResultsProps> = ({
           >
             <SidebarSearchResultImage
               src={result.photoURL ? result.photoURL : defaultImage}
-              alt="User Image"
+              alt="The user searched for."
             />
             <SidebarSearchResultName>
               {result.displayName}

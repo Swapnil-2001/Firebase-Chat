@@ -31,7 +31,9 @@ export const PASSWORD_IS_TOO_SHORT_ERROR =
 export const PASSWORDS_DO_NOT_MATCH_ERROR = "Passwords must match.";
 
 export const SET_NEW_MESSAGE_RECIPIENT = "SET_NEW_MESSAGE_RECIPIENT";
+export const SHOW_IMAGE = "SHOW_IMAGE";
 export const UNHIDE_MESSAGE_WINDOW = "UNHIDE_MESSAGE_WINDOW";
+export const RESET_TO_DEFAULT_VALUES = "RESET_TO_DEFAULT_VALUES";
 
 export const USERS_COLLECTION_NAME = "users";
 export const ALL_MESSAGES_COLLECTION_NAME = "allMessages";

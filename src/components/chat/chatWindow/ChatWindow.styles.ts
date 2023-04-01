@@ -152,6 +152,7 @@ export const MessageImageContainer = styled.div<MessageContainerProps>`
   margin-left: ${({ moveToLeft }) => (moveToLeft ? "25px" : "auto")};
   margin-right: ${({ moveToLeft }) => (moveToLeft ? "0" : "25px")};
   width: max-content;
+  cursor: pointer;
 `;
 
 export const MessageReceivedByUser = styled.div`

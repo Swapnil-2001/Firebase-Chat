@@ -196,6 +196,7 @@ const TypeMessageSection: React.FC<TypeMessageSectionProps> = ({
           <input
             id="imageInput"
             type="file"
+            accept=".png,.jpeg,.jpg"
             onChange={handleImageSelect}
             style={{ display: "none" }}
           />

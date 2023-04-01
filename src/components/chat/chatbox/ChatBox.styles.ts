@@ -48,6 +48,7 @@ export const ChatBoxNavbarImageContainer = styled.div`
 `;
 
 export const ChatBoxOuterContainer = styled.div`
+  position: relative;
   display: flex;
   flex-direction: column;
   height: ${chatBoxOuterContainerHeight};
@@ -110,4 +111,33 @@ export const ChatBoxUserSectionNavbar = styled.div`
 export const ChatBoxUserSectionNavbarText = styled.div`
   margin-left: 30px;
   font-weight: 500;
+`;
+
+export const MagnifiedImage = styled.img`
+  max-height: 90%;
+  max-width: 95%;
+  object-fit: contain;
+`;
+
+export const MagnifiedImageContainer = styled.div`
+  position: absolute;
+  top: 0;
+  left: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  width: 100%;
+  background-color: ${chatWindowBackgroundColor};
+  border-radius: ${chatBoxBorderRadius};
+  z-index: 100;
+`;
+
+export const MagnifiedImageContainerNavbar = styled.div`
+  height: 30px;
+  width: max-content;
+  color: ${white};
+  padding: 10px 0;
+  cursor: pointer;
 `;

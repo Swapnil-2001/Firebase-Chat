@@ -6,6 +6,7 @@ import { ChatContext } from "../../../../context/ChatContext";
 import { UserContext } from "../../../../context/UserContext";
 import {
   ALL_MESSAGES_COLLECTION_NAME,
+  SHOW_IMAGE,
   UNHIDE_MESSAGE_WINDOW,
 } from "../../../../common/constants";
 import {
@@ -85,7 +86,8 @@ const MessageWindow: React.FC<MessageWindowProps> = ({
   const [componentJustLoaded, setComponentJustLoaded] = useState<boolean>(true);
 
   const { currentUser } = useContext(UserContext);
-  const [{ conversationId }, dispatch] = useContext(ChatContext);
+  const [{ conversationId, hideMessageWindow }, dispatch] =
+    useContext(ChatContext);
 
   const messagesEndRef = useRef<null | HTMLDivElement>(null);
   const containerRef = useRef<null | HTMLDivElement>(null);
@@ -128,7 +130,13 @@ const MessageWindow: React.FC<MessageWindowProps> = ({
     }
     dispatch({ type: UNHIDE_MESSAGE_WINDOW });
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [componentJustLoaded, conversationMessages, currentUser?.uid, dispatch]);
+  }, [
+    componentJustLoaded,
+    conversationMessages,
+    currentUser?.uid,
+    dispatch,
+    hideMessageWindow,
+  ]);
 
   useEffect(() => {
     const container = containerRef.current as Element;
@@ -143,11 +151,14 @@ const MessageWindow: React.FC<MessageWindowProps> = ({
     setDistanceFromBottom(distanceFromBottom);
   };
 
+  const showMagnifiedImageView = (imageUrl: string) => {
+    dispatch({ type: SHOW_IMAGE, payload: imageUrl });
+  };
+
   const generateFormattedMessages = (
     conversationMessages: any[]
   ): ConversationMessage[] => {
     const formattedMessages: ConversationMessage[] = [];
-
     // Decide whether or not to show the date of the conversation
     conversationMessages.forEach((message) => {
       const conversationDate = message.date.toDate() as Date;
@@ -207,8 +218,14 @@ const MessageWindow: React.FC<MessageWindowProps> = ({
                 showDate={showDate}
               />
               {imageUrl.length > 0 && (
-                <MessageImageContainer moveToLeft={false}>
-                  <MessageImage src={imageUrl} />
+                <MessageImageContainer
+                  onClick={() => showMagnifiedImageView(imageUrl)}
+                  moveToLeft={false}
+                >
+                  <MessageImage
+                    src={imageUrl}
+                    alt="This message was sent by the current user in the conversation."
+                  />
                 </MessageImageContainer>
               )}
               <MessageSentByUser>
@@ -226,8 +243,14 @@ const MessageWindow: React.FC<MessageWindowProps> = ({
                 showDate={showDate}
               />
               {imageUrl.length > 0 && (
-                <MessageImageContainer moveToLeft={true}>
-                  <MessageImage src={imageUrl} />
+                <MessageImageContainer
+                  onClick={() => showMagnifiedImageView(imageUrl)}
+                  moveToLeft={true}
+                >
+                  <MessageImage
+                    src={imageUrl}
+                    alt="This message was sent by the other user in the conversation."
+                  />
                 </MessageImageContainer>
               )}
               <MessageReceivedByUser>
