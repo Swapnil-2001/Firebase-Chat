@@ -13,11 +13,13 @@ import EmojiPicker, {
   EmojiStyle,
   Theme,
 } from "emoji-picker-react";
+import AddPhotoAlternateOutlinedIcon from "@mui/icons-material/AddPhotoAlternateOutlined";
+import CancelIcon from "@mui/icons-material/Cancel";
 import SendIcon from "@mui/icons-material/Send";
 import SentimentSatisfiedOutlinedIcon from "@mui/icons-material/SentimentSatisfiedOutlined";
 import { Fade } from "@mui/material";
 
-import { db } from "../../../../firebase";
+import { db, storage } from "../../../../firebase";
 import { ChatContext } from "../../../../context/ChatContext";
 import { UserContext } from "../../../../context/UserContext";
 import {
@@ -26,13 +28,19 @@ import {
 } from "../../../../common/constants";
 import { white } from "../../../../common/colors";
 import {
+  CancelIconContainer,
+  CancelIconStyles,
   EmojiPickerContainer,
+  ImageInputLabelStyles,
+  ImageSelectPreview,
+  LabelForImageInput,
   SelectEmojiIconStyles,
   SelectEmojiIconWrapper,
   SendMessageIconWrapper,
   TypeMessageInputBox,
   TypeMessageSectionContainer,
 } from "../ChatWindow.styles";
+import { getDownloadURL, ref, uploadBytesResumable } from "firebase/storage";
 
 interface TypeMessageSectionProps {
   openEmojiPicker: boolean;
@@ -44,6 +52,7 @@ const TypeMessageSection: React.FC<TypeMessageSectionProps> = ({
   setOpenEmojiPicker,
 }): JSX.Element => {
   const [typedMessage, setTypedMessage] = useState<string>("");
+  const [selectedImage, setSelectedImage] = useState<File | null>(null);
 
   const { currentUser } = useContext(UserContext);
   const [{ conversationId, messageRecipient, hideMessageInput }] =
@@ -58,6 +67,14 @@ const TypeMessageSection: React.FC<TypeMessageSectionProps> = ({
     if (event.code === "Enter") sendMessage();
   };
 
+  const handleImageSelect = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setSelectedImage(event.target?.files && event.target.files[0]);
+  };
+
+  const handleRemoveSelectedImage = () => {
+    setSelectedImage(null);
+  };
+
   const handleSelectEmoji = (emojiData: EmojiClickData) => {
     setTypedMessage((prevValue) => prevValue + emojiData.emoji);
   };
@@ -70,22 +87,37 @@ const TypeMessageSection: React.FC<TypeMessageSectionProps> = ({
     if (
       currentUser === null ||
       messageRecipient === null ||
-      typedMessage.trim().length === 0
+      (typedMessage.trim().length === 0 && !selectedImage)
     )
       return;
 
     setOpenEmojiPicker(false);
 
-    const newMessageCreated = {
+    let newMessageCreated = {
       id: uuid(),
       messageText: typedMessage.trim(),
       senderId: currentUser.uid,
       date: Timestamp.now(),
+      imageUrl: "",
     };
 
     setTypedMessage("");
 
     try {
+      if (selectedImage) {
+        const firebaseStorageUrl = `messageImages/${uuid()}`;
+        const messageImageStorageRef = ref(storage, firebaseStorageUrl);
+
+        await uploadBytesResumable(
+          messageImageStorageRef,
+          selectedImage as File
+        );
+
+        const downloadUrl = await getDownloadURL(messageImageStorageRef);
+
+        newMessageCreated = { ...newMessageCreated, imageUrl: downloadUrl };
+      }
+
       const docRef = doc(db, ALL_MESSAGES_COLLECTION_NAME, conversationId);
       const docSnap = await getDoc(docRef);
 
@@ -134,6 +166,14 @@ const TypeMessageSection: React.FC<TypeMessageSectionProps> = ({
     <TypeMessageSectionContainer>
       {!hideMessageInput && (
         <>
+          {selectedImage && (
+            <ImageSelectPreview>
+              Image selected
+              <CancelIconContainer onClick={handleRemoveSelectedImage}>
+                <CancelIcon sx={CancelIconStyles} />
+              </CancelIconContainer>
+            </ImageSelectPreview>
+          )}
           <TypeMessageInputBox
             type="text"
             placeholder="Type a message..."
@@ -153,6 +193,15 @@ const TypeMessageSection: React.FC<TypeMessageSectionProps> = ({
               />
             </EmojiPickerContainer>
           </Fade>
+          <input
+            id="imageInput"
+            type="file"
+            onChange={handleImageSelect}
+            style={{ display: "none" }}
+          />
+          <LabelForImageInput htmlFor="imageInput">
+            <AddPhotoAlternateOutlinedIcon sx={ImageInputLabelStyles} />
+          </LabelForImageInput>
           <SelectEmojiIconWrapper onClick={handleOpenOrCloseEmojiPicker}>
             <SentimentSatisfiedOutlinedIcon sx={SelectEmojiIconStyles} />
           </SelectEmojiIconWrapper>

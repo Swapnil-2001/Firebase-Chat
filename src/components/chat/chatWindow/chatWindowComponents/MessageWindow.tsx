@@ -14,6 +14,8 @@ import {
   MessageSentByUser,
   MessageSendTimeContainer,
   MessageWindowContainer,
+  MessageImageContainer,
+  MessageImage,
 } from "../ChatWindow.styles";
 
 interface ConversationDateProps {
@@ -25,6 +27,7 @@ interface ConversationMessage {
   id: string;
   senderId: string;
   messageText: string;
+  imageUrl: string;
   conversationDateString: string;
   date: any;
   showDate: boolean;
@@ -96,8 +99,7 @@ const MessageWindow: React.FC<MessageWindowProps> = ({
         doc(db, ALL_MESSAGES_COLLECTION_NAME, conversationId),
         (document) => {
           if (document.exists()) {
-            const conversationMessages = document.data()
-              .messages as ConversationMessage[];
+            const conversationMessages: any[] = document.data().messages;
 
             const formattedMessages =
               generateFormattedMessages(conversationMessages);
@@ -112,8 +114,6 @@ const MessageWindow: React.FC<MessageWindowProps> = ({
   }, [conversationId]);
 
   useEffect(() => {
-    console.log(componentJustLoaded);
-
     const numConversations = conversationMessages.length;
     if (numConversations > 0) {
       if (componentJustLoaded) {
@@ -125,8 +125,8 @@ const MessageWindow: React.FC<MessageWindowProps> = ({
         distanceFromBottom < 300
       )
         scrollToBottom();
-      dispatch({ type: UNHIDE_MESSAGE_WINDOW });
     }
+    dispatch({ type: UNHIDE_MESSAGE_WINDOW });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [componentJustLoaded, conversationMessages, currentUser?.uid, dispatch]);
 
@@ -144,7 +144,7 @@ const MessageWindow: React.FC<MessageWindowProps> = ({
   };
 
   const generateFormattedMessages = (
-    conversationMessages: ConversationMessage[]
+    conversationMessages: any[]
   ): ConversationMessage[] => {
     const formattedMessages: ConversationMessage[] = [];
 
@@ -196,6 +196,7 @@ const MessageWindow: React.FC<MessageWindowProps> = ({
           date,
           messageText,
           id,
+          imageUrl,
           senderId,
           showDate,
         }) => {
@@ -205,6 +206,11 @@ const MessageWindow: React.FC<MessageWindowProps> = ({
                 conversationDateString={conversationDateString}
                 showDate={showDate}
               />
+              {imageUrl.length > 0 && (
+                <MessageImageContainer moveToLeft={false}>
+                  <MessageImage src={imageUrl} />
+                </MessageImageContainer>
+              )}
               <MessageSentByUser>
                 {messageText}
                 <MessageTime
@@ -219,6 +225,11 @@ const MessageWindow: React.FC<MessageWindowProps> = ({
                 conversationDateString={conversationDateString}
                 showDate={showDate}
               />
+              {imageUrl.length > 0 && (
+                <MessageImageContainer moveToLeft={true}>
+                  <MessageImage src={imageUrl} />
+                </MessageImageContainer>
+              )}
               <MessageReceivedByUser>
                 {messageText}
                 <MessageTime

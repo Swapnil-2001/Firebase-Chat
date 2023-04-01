@@ -19,9 +19,23 @@ interface ConversationDateContainerProps {
   showDate: boolean;
 }
 
-interface MessageTimeContainerProps {
+interface MessageContainerProps {
   moveToLeft: boolean;
 }
+
+export const CancelIconContainer = styled.div`
+  display: flex;
+  align-items: center;
+`;
+
+export const CancelIconStyles = {
+  transition: "color 0.3s",
+
+  "&:hover": {
+    color: lightGray,
+    cursor: "pointer",
+  },
+};
 
 export const ChatWindowContainer = styled.div`
   position: relative;
@@ -90,9 +104,55 @@ export const HideMessageWindow = styled.div`
   background-color: ${chatWindowBackgroundColor};
 `;
 
+export const ImageInputLabelStyles = {
+  color: gray,
+  fontSize: "30px",
+  transition: "color 0.3s",
+
+  "&:hover": {
+    color: lightGray,
+    cursor: "pointer",
+  },
+};
+
+export const ImageSelectPreview = styled.div`
+  position: absolute;
+  bottom: ${typeMessageSectionHeight};
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 20px;
+  height: 50px;
+  width: 95%;
+  color: ${gray};
+  font-size: 13px;
+  background-color: ${lightBlack};
+  border-top: 4px solid ${messageByUserBackgroundColor};
+  border-top-left-radius: 15px;
+  border-top-right-radius: 15px;
+`;
+
+export const LabelForImageInput = styled.label`
+  display: flex;
+  align-items: center;
+  margin-left: 20px;
+`;
+
 export const LinearProgressStyles = {
   zIndex: 100,
 };
+
+export const MessageImage = styled.img`
+  max-width: 250px;
+  max-height: 400px;
+  object-fit: contain;
+`;
+
+export const MessageImageContainer = styled.div<MessageContainerProps>`
+  margin-left: ${({ moveToLeft }) => (moveToLeft ? "25px" : "auto")};
+  margin-right: ${({ moveToLeft }) => (moveToLeft ? "0" : "25px")};
+  width: max-content;
+`;
 
 export const MessageReceivedByUser = styled.div`
   margin-top: 5px;
@@ -124,7 +184,7 @@ export const MessageSentByUser = styled.div`
   border-bottom-right-radius: 0;
 `;
 
-export const MessageSendTimeContainer = styled.div<MessageTimeContainerProps>`
+export const MessageSendTimeContainer = styled.div<MessageContainerProps>`
   margin-top: 3px;
   margin-left: ${({ moveToLeft }) => (moveToLeft ? "0" : "auto")};
   width: max-content;
@@ -146,6 +206,7 @@ export const MessageWindowContainer = styled.div`
 export const SelectEmojiIconStyles = {
   color: gray,
   fontSize: "30px",
+  transition: "color 0.3s",
 
   "&:hover": {
     color: lightGray,
@@ -156,7 +217,7 @@ export const SelectEmojiIconStyles = {
 export const SelectEmojiIconWrapper = styled.div`
   display: flex;
   align-items: center;
-  margin-left: 18px;
+  margin-left: 15px;
 `;
 
 export const SendMessageIconWrapper = styled.div`
