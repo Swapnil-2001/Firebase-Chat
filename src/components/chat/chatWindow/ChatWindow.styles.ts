@@ -10,8 +10,8 @@ import {
   white,
 } from "../../../common/colors";
 
-const chatWindowNavbarHeight = "50px";
 const chatWindowContainerMarginTop = "30px";
+const chatWindowNavbarHeight = "50px";
 export const typeMessageSectionHeight = "85px";
 const messageWindowHeight = "485px"; // 650 - chatWindowNavbarHeight - chatWindowContainerMarginTop - typeMessageBoxHeight
 
@@ -38,8 +38,8 @@ export const CancelIconStyles = {
 };
 
 export const ChatWindowContainer = styled.div`
-  position: relative;
   flex: 3;
+  position: relative;
   margin-top: ${chatWindowContainerMarginTop};
   background-color: ${chatWindowBackgroundColor};
   border-top-left-radius: 20px;
@@ -143,12 +143,14 @@ export const LinearProgressStyles = {
 };
 
 export const MessageImage = styled.img`
-  max-width: 250px;
   max-height: 400px;
+  max-width: 250px;
   object-fit: contain;
+  border-radius: 20px;
 `;
 
 export const MessageImageContainer = styled.div<MessageContainerProps>`
+  margin-top: 15px;
   margin-left: ${({ moveToLeft }) => (moveToLeft ? "25px" : "auto")};
   margin-right: ${({ moveToLeft }) => (moveToLeft ? "0" : "25px")};
   width: max-content;
@@ -170,6 +172,14 @@ export const MessageReceivedByUser = styled.div`
   border-top-left-radius: 0;
 `;
 
+export const MessageSendTimeContainer = styled.div<MessageContainerProps>`
+  margin-top: 3px;
+  margin-left: ${({ moveToLeft }) => (moveToLeft ? "0" : "auto")};
+  width: max-content;
+  color: ${lightGray};
+  font-size: 0.65rem;
+`;
+
 export const MessageSentByUser = styled.div`
   margin: 5px 25px 0 auto;
   padding: 15px 20px;
@@ -183,14 +193,6 @@ export const MessageSentByUser = styled.div`
   background-color: ${messageByUserBackgroundColor};
   border-radius: 20px;
   border-bottom-right-radius: 0;
-`;
-
-export const MessageSendTimeContainer = styled.div<MessageContainerProps>`
-  margin-top: 3px;
-  margin-left: ${({ moveToLeft }) => (moveToLeft ? "0" : "auto")};
-  width: max-content;
-  color: ${lightGray};
-  font-size: 0.65rem;
 `;
 
 export const MessageWindowContainer = styled.div`

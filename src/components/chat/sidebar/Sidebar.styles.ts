@@ -12,14 +12,14 @@ interface SidebarConversationProps {
 }
 
 export const LinearProgressStyles = {
-  width: "190px",
   margin: "auto 0",
+  width: "190px",
 };
 
 export const SidebarContainer = styled.div`
+  flex: 1;
   display: flex;
   flex-direction: column;
-  flex: 1;
   align-items: center;
 `;
 
@@ -55,13 +55,6 @@ export const SidebarConversationInfoContainer = styled.div`
   margin-left: 15px;
 `;
 
-export const SidebarConversationUserName = styled.span`
-  margin-bottom: 4px;
-  color: ${white};
-  font-size: 0.9rem;
-  font-weight: 500;
-`;
-
 export const SidebarConversationLastMessage = styled.span`
   color: ${gray};
   font-size: 0.75rem;
@@ -76,6 +69,13 @@ export const SidebarConversationsContainer = styled.div`
   &::-webkit-scrollbar {
     display: none;
   }
+`;
+
+export const SidebarConversationUserName = styled.span`
+  margin-bottom: 4px;
+  color: ${white};
+  font-size: 0.9rem;
+  font-weight: 500;
 `;
 
 export const SidebarSearchInput = styled.input`

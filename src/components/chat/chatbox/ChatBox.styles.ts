@@ -12,8 +12,8 @@ import {
 
 const chatBoxBorderRadius = "35px";
 
-const chatBoxOuterContainerHeight = "725px";
 const chatBoxNavbarHeight = "75px";
+const chatBoxOuterContainerHeight = "725px";
 const chatBoxInnerContainerHeight = "650px"; // chatBoxOuterContainerHeight - chatBoxNavbarHeight
 
 export const ArrowBackIconStyles = {
@@ -135,9 +135,9 @@ export const MagnifiedImageContainer = styled.div`
 `;
 
 export const MagnifiedImageContainerNavbar = styled.div`
+  padding: 10px 0;
   height: 30px;
   width: max-content;
   color: ${white};
-  padding: 10px 0;
   cursor: pointer;
 `;

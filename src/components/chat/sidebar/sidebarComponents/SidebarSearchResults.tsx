@@ -1,7 +1,7 @@
 import { useContext } from "react";
 
-import { SearchedUser } from "../Sidebar";
 import { ChatContext } from "../../../../context/ChatContext";
+import { SearchedUser } from "../Sidebar";
 import {
   SidebarSearchResult,
   SidebarSearchResultImage,

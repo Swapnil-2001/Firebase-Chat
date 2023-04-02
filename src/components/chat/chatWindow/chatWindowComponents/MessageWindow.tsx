@@ -145,6 +145,10 @@ const MessageWindow: React.FC<MessageWindowProps> = ({
       container.removeEventListener("scroll", () => handleScroll(container));
   }, []);
 
+  const handleImageLoaded = () => {
+    scrollToBottom();
+  };
+
   const handleScroll = (container: Element): void => {
     const distanceFromBottom =
       container.scrollHeight - container.scrollTop - container.clientHeight;
@@ -224,6 +228,7 @@ const MessageWindow: React.FC<MessageWindowProps> = ({
                 >
                   <MessageImage
                     src={imageUrl}
+                    onLoad={handleImageLoaded}
                     alt="This message was sent by the current user in the conversation."
                   />
                 </MessageImageContainer>
@@ -249,6 +254,7 @@ const MessageWindow: React.FC<MessageWindowProps> = ({
                 >
                   <MessageImage
                     src={imageUrl}
+                    onLoad={handleImageLoaded}
                     alt="This message was sent by the other user in the conversation."
                   />
                 </MessageImageContainer>

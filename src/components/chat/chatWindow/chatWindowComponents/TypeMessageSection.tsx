@@ -7,6 +7,7 @@ import {
   Timestamp,
   updateDoc,
 } from "firebase/firestore";
+import { getDownloadURL, ref, uploadBytesResumable } from "firebase/storage";
 import { v4 as uuid } from "uuid";
 import EmojiPicker, {
   EmojiClickData,
@@ -40,7 +41,6 @@ import {
   TypeMessageInputBox,
   TypeMessageSectionContainer,
 } from "../ChatWindow.styles";
-import { getDownloadURL, ref, uploadBytesResumable } from "firebase/storage";
 
 interface TypeMessageSectionProps {
   openEmojiPicker: boolean;
@@ -92,6 +92,7 @@ const TypeMessageSection: React.FC<TypeMessageSectionProps> = ({
       return;
 
     setOpenEmojiPicker(false);
+    setSelectedImage(null);
 
     let newMessageCreated = {
       id: uuid(),

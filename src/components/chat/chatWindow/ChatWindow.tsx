@@ -1,10 +1,10 @@
 import { useContext, useState } from "react";
 import { LinearProgress } from "@mui/material";
 
+import { ChatContext } from "../../../context/ChatContext";
 import ChatWindowNavbar from "./chatWindowComponents/ChatWindowNavbar";
 import MessageWindow from "./chatWindowComponents/MessageWindow";
 import TypeMessageSection from "./chatWindowComponents/TypeMessageSection";
-import { ChatContext } from "../../../context/ChatContext";
 import {
   ChatWindowContainer,
   HideMessageWindow,

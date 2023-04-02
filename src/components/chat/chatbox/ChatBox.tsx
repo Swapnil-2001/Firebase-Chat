@@ -7,7 +7,6 @@ import ChatBoxNavbar from "../chatBoxNavbar/ChatBoxNavbar";
 import ChatWindow from "../chatWindow/ChatWindow";
 import Sidebar from "../sidebar/Sidebar";
 import { SHOW_IMAGE } from "../../../common/constants";
-
 import {
   ChatBoxInnerContainer,
   ChatBoxOuterContainer,
@@ -16,23 +15,19 @@ import {
   MagnifiedImageContainerNavbar,
 } from "./ChatBox.styles";
 
-interface MagnifiedImageComponentProps {
-  magnifiedImageUrl: string;
-  dispatch: any;
-}
+const MagnifiedImageComponent: React.FC = (): JSX.Element => {
+  const [{ magnifiedImageUrl }, dispatch] = useContext(ChatContext);
 
-const MagnifiedImageComponent: React.FC<MagnifiedImageComponentProps> = ({
-  magnifiedImageUrl,
-  dispatch,
-}): JSX.Element => {
   const removeMagnifiedImage = () => {
     dispatch({ type: SHOW_IMAGE, payload: "" });
   };
 
-  if (magnifiedImageUrl.length === 0) return <></>;
+  const shouldShowImage = magnifiedImageUrl.length > 0;
+
+  if (!shouldShowImage) return <></>;
 
   return (
-    <Fade in={magnifiedImageUrl.length > 0} timeout={250}>
+    <Fade in={shouldShowImage} timeout={250}>
       <MagnifiedImageContainer>
         <MagnifiedImageContainerNavbar onClick={removeMagnifiedImage}>
           <CloseOutlinedIcon />
@@ -47,14 +42,9 @@ const MagnifiedImageComponent: React.FC<MagnifiedImageComponentProps> = ({
 };
 
 const ChatBox: React.FC = (): JSX.Element => {
-  const [{ magnifiedImageUrl }, dispatch] = useContext(ChatContext);
-
   return (
     <ChatBoxOuterContainer>
-      <MagnifiedImageComponent
-        magnifiedImageUrl={magnifiedImageUrl}
-        dispatch={dispatch}
-      />
+      <MagnifiedImageComponent />
       <ChatBoxNavbar />
       <ChatBoxInnerContainer>
         <Sidebar />

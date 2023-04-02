@@ -1,7 +1,7 @@
 import { useContext, useState } from "react";
 
-import ChatBoxUserSection from "./ChatBoxUserSection";
 import { UserContext } from "../../../context/UserContext";
+import ChatBoxUserSection from "./ChatBoxUserSection";
 import {
   ChatBoxNavbarContainer,
   ChatBoxNavbarImage,
@@ -27,7 +27,7 @@ const ChatBoxNavbar: React.FC = (): JSX.Element => {
       <ChatBoxNavbarImageContainer onClick={handleOpenUserSection}>
         <ChatBoxNavbarImage
           src={currentUser?.photoURL ? currentUser.photoURL : defaultImage}
-          alt="User Image on navbar"
+          alt="User image on navbar"
         />
       </ChatBoxNavbarImageContainer>
       <ChatBoxUserSection

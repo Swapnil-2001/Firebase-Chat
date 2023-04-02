@@ -1,8 +1,8 @@
 import { useContext } from "react";
 import { v4 as uuid } from "uuid";
 
-import { UserConversation } from "../Sidebar";
 import { ChatContext } from "../../../../context/ChatContext";
+import { UserConversation } from "../Sidebar";
 import { MessageRecipient } from "../../../../common/types";
 import {
   SidebarConversation,

@@ -9,14 +9,13 @@ import {
   query,
   startAt,
 } from "firebase/firestore";
-
 import LinearProgress from "@mui/material/LinearProgress";
 
 import { db } from "../../../firebase";
-import SidebarConversations from "./sidebarComponents/SidebarConversations";
-import SidebarSearchResults from "./sidebarComponents/SidebarSearchResults";
 import { ChatContext } from "../../../context/ChatContext";
 import { UserContext } from "../../../context/UserContext";
+import SidebarConversations from "./sidebarComponents/SidebarConversations";
+import SidebarSearchResults from "./sidebarComponents/SidebarSearchResults";
 import { MessageRecipient } from "../../../common/types";
 import {
   SET_NEW_MESSAGE_RECIPIENT,
@@ -29,18 +28,18 @@ import {
   SidebarSearchInput,
 } from "./Sidebar.styles";
 
+export interface SearchedUser {
+  uid: string;
+  displayName: string;
+  photoURL: string;
+}
+
 export interface UserConversation {
   userInfo: MessageRecipient;
   lastMessage: {
     messageText: string;
   };
   date: any;
-}
-
-export interface SearchedUser {
-  uid: string;
-  displayName: string;
-  photoURL: string;
 }
 
 const Sidebar: React.FC = (): JSX.Element => {

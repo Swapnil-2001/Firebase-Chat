@@ -12,8 +12,8 @@ import {
 
 const chatBoxBorderRadius = "35px";
 
-const chatBoxOuterContainerHeight = "725px";
 const chatBoxNavbarHeight = "75px";
+const chatBoxOuterContainerHeight = "725px";
 
 export const ArrowBackIconStyles = {
   marginLeft: "30px",
@@ -64,8 +64,8 @@ export const ChatBoxUserSectionImage = styled.img`
 `;
 
 export const ChatBoxUserSectionImageContainer = styled.div`
-  margin: 30px 20px;
   text-align: center;
+  margin: 30px 20px;
 `;
 
 export const ChatBoxUserSectionLogoutButton = styled.button`
