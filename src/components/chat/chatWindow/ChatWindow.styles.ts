@@ -99,7 +99,7 @@ export const HideMessageWindow = styled.div`
   position: absolute;
   top: ${chatWindowNavbarHeight};
   right: 0;
-  height: ${messageWindowHeight};
+  height: 490px;
   width: 100%;
   background-color: ${chatWindowBackgroundColor};
 `;

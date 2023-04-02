@@ -6,6 +6,7 @@ import { ChatContext } from "../../../../context/ChatContext";
 import { UserContext } from "../../../../context/UserContext";
 import {
   ALL_MESSAGES_COLLECTION_NAME,
+  SET_SENDING_MESSAGE_LOADING,
   SHOW_IMAGE,
   UNHIDE_MESSAGE_WINDOW,
 } from "../../../../common/constants";
@@ -128,7 +129,12 @@ const MessageWindow: React.FC<MessageWindowProps> = ({
       )
         scrollToBottom();
     }
-    dispatch({ type: UNHIDE_MESSAGE_WINDOW });
+    dispatch({ type: SET_SENDING_MESSAGE_LOADING, payload: false });
+    const timer = setTimeout(() => {
+      dispatch({ type: UNHIDE_MESSAGE_WINDOW });
+    }, 1800);
+
+    return () => clearTimeout(timer);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [
     componentJustLoaded,
@@ -192,7 +198,7 @@ const MessageWindow: React.FC<MessageWindowProps> = ({
   };
 
   const scrollToBottom = (): void => {
-    messagesEndRef.current?.scrollIntoView({ behavior: "auto" });
+    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   };
 
   const handleCloseEmojiPicker = () => {
@@ -233,13 +239,15 @@ const MessageWindow: React.FC<MessageWindowProps> = ({
                   />
                 </MessageImageContainer>
               )}
-              <MessageSentByUser>
-                {messageText}
-                <MessageTime
-                  time={date.toDate().toLocaleTimeString()}
-                  moveToLeft={false}
-                />
-              </MessageSentByUser>
+              {messageText.length > 0 && (
+                <MessageSentByUser>
+                  {messageText}
+                  <MessageTime
+                    time={date.toDate().toLocaleTimeString()}
+                    moveToLeft={false}
+                  />
+                </MessageSentByUser>
+              )}
             </div>
           ) : (
             <div key={id}>

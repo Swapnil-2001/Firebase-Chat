@@ -18,13 +18,14 @@ import AddPhotoAlternateOutlinedIcon from "@mui/icons-material/AddPhotoAlternate
 import CancelIcon from "@mui/icons-material/Cancel";
 import SendIcon from "@mui/icons-material/Send";
 import SentimentSatisfiedOutlinedIcon from "@mui/icons-material/SentimentSatisfiedOutlined";
-import { Fade } from "@mui/material";
+import { CircularProgress, Fade } from "@mui/material";
 
 import { db, storage } from "../../../../firebase";
 import { ChatContext } from "../../../../context/ChatContext";
 import { UserContext } from "../../../../context/UserContext";
 import {
   ALL_MESSAGES_COLLECTION_NAME,
+  SET_SENDING_MESSAGE_LOADING,
   USER_CHATS_COLLECTION_NAME,
 } from "../../../../common/constants";
 import { white } from "../../../../common/colors";
@@ -55,8 +56,15 @@ const TypeMessageSection: React.FC<TypeMessageSectionProps> = ({
   const [selectedImage, setSelectedImage] = useState<File | null>(null);
 
   const { currentUser } = useContext(UserContext);
-  const [{ conversationId, messageRecipient, hideMessageInput }] =
-    useContext(ChatContext);
+  const [
+    {
+      conversationId,
+      hideMessageInput,
+      messageRecipient,
+      sendingMessageLoading,
+    },
+    dispatch,
+  ] = useContext(ChatContext);
 
   const handleMessageInput = (event: React.FormEvent<HTMLInputElement>) => {
     const { value } = event.target as HTMLInputElement;
@@ -87,12 +95,14 @@ const TypeMessageSection: React.FC<TypeMessageSectionProps> = ({
     if (
       currentUser === null ||
       messageRecipient === null ||
+      sendingMessageLoading ||
       (typedMessage.trim().length === 0 && !selectedImage)
     )
       return;
 
     setOpenEmojiPicker(false);
     setSelectedImage(null);
+    dispatch({ type: SET_SENDING_MESSAGE_LOADING, payload: true });
 
     let newMessageCreated = {
       id: uuid(),
@@ -208,7 +218,11 @@ const TypeMessageSection: React.FC<TypeMessageSectionProps> = ({
             <SentimentSatisfiedOutlinedIcon sx={SelectEmojiIconStyles} />
           </SelectEmojiIconWrapper>
           <SendMessageIconWrapper onClick={sendMessage}>
-            <SendIcon sx={{ color: white }} />
+            {sendingMessageLoading ? (
+              <CircularProgress size={25} sx={{ color: white }} />
+            ) : (
+              <SendIcon sx={{ color: white }} />
+            )}
           </SendMessageIconWrapper>
         </>
       )}
