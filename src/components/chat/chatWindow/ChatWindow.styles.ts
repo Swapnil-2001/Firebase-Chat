@@ -157,7 +157,7 @@ export const MessageImageContainer = styled.div<MessageContainerProps>`
   cursor: pointer;
 `;
 
-export const MessageReceivedByUser = styled.div`
+export const MessageReceivedByUserContainer = styled.div`
   margin-top: 5px;
   margin-left: 25px;
   padding: 15px 20px;
@@ -180,7 +180,7 @@ export const MessageSendTimeContainer = styled.div<MessageContainerProps>`
   font-size: 0.65rem;
 `;
 
-export const MessageSentByUser = styled.div`
+export const MessageSentByUserContainer = styled.div`
   margin: 5px 25px 0 auto;
   padding: 15px 20px;
   padding-bottom: 5px;

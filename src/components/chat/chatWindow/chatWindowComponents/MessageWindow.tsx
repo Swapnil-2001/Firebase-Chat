@@ -4,74 +4,17 @@ import { doc, onSnapshot } from "firebase/firestore";
 import { db } from "../../../../firebase";
 import { ChatContext } from "../../../../context/ChatContext";
 import { UserContext } from "../../../../context/UserContext";
+import ConversationDate from "./message/ConversationDate";
+import MessageReceivedByUser from "./message/MessageReceivedByUser";
+import MessageSentByUser from "./message/MessageSentByUser";
+import { generateFormattedMessages } from "../../../../common/utils";
+import { ConversationMessage } from "../../../../common/types";
 import {
   ALL_MESSAGES_COLLECTION_NAME,
   SET_SENDING_MESSAGE_LOADING,
-  SHOW_IMAGE,
   UNHIDE_MESSAGE_WINDOW,
 } from "../../../../common/constants";
-import {
-  ConversationDateContainer,
-  MessageReceivedByUser,
-  MessageSentByUser,
-  MessageSendTimeContainer,
-  MessageWindowContainer,
-  MessageImageContainer,
-  MessageImage,
-} from "../ChatWindow.styles";
-
-interface ConversationDateProps {
-  conversationDateString: string | undefined;
-  showDate: boolean;
-}
-
-interface ConversationMessage {
-  id: string;
-  senderId: string;
-  messageText: string;
-  imageUrl: string;
-  conversationDateString: string;
-  date: any;
-  showDate: boolean;
-}
-
-interface MessageTimeProps {
-  time: string;
-  moveToLeft: boolean;
-}
-
-const ConversationDate: React.FC<ConversationDateProps> = ({
-  conversationDateString,
-  showDate,
-}): JSX.Element => {
-  const dateToday = new Date();
-
-  const day = dateToday.getDate();
-  const month = dateToday.getMonth();
-  const year = dateToday.getFullYear();
-  const formattedDate =
-    ("0" + day).slice(-2) + "/" + ("0" + (month + 1)).slice(-2) + "/" + year;
-
-  return (
-    <ConversationDateContainer showDate={showDate}>
-      {formattedDate === conversationDateString
-        ? "Today"
-        : conversationDateString}
-    </ConversationDateContainer>
-  );
-};
-
-const MessageTime: React.FC<MessageTimeProps> = ({
-  time,
-  moveToLeft,
-}): JSX.Element => {
-  const lengthOfTimeString = time.length;
-  return (
-    <MessageSendTimeContainer moveToLeft={moveToLeft}>
-      {time.substring(0, lengthOfTimeString - 3)}
-    </MessageSendTimeContainer>
-  );
-};
+import { MessageWindowContainer } from "../ChatWindow.styles";
 
 interface MessageWindowProps {
   setOpenEmojiPicker: (_: boolean) => void;
@@ -161,42 +104,6 @@ const MessageWindow: React.FC<MessageWindowProps> = ({
     setDistanceFromBottom(distanceFromBottom);
   };
 
-  const showMagnifiedImageView = (imageUrl: string) => {
-    dispatch({ type: SHOW_IMAGE, payload: imageUrl });
-  };
-
-  const generateFormattedMessages = (
-    conversationMessages: any[]
-  ): ConversationMessage[] => {
-    const formattedMessages: ConversationMessage[] = [];
-    // Decide whether or not to show the date of the conversation
-    conversationMessages.forEach((message) => {
-      const conversationDate = message.date.toDate() as Date;
-      const conversationDateString = conversationDate.toLocaleDateString();
-      const numMessagesLoaded = formattedMessages.length;
-      if (
-        numMessagesLoaded === 0 ||
-        formattedMessages[numMessagesLoaded - 1].conversationDateString !==
-          conversationDateString
-      )
-        formattedMessages.push({
-          ...message,
-          conversationDateString,
-          showDate: true,
-        });
-      else if (
-        formattedMessages[numMessagesLoaded - 1].conversationDateString ===
-        conversationDateString
-      )
-        formattedMessages.push({
-          ...message,
-          conversationDateString,
-          showDate: false,
-        });
-    });
-    return formattedMessages;
-  };
-
   const scrollToBottom = (): void => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   };
@@ -227,27 +134,12 @@ const MessageWindow: React.FC<MessageWindowProps> = ({
                 conversationDateString={conversationDateString}
                 showDate={showDate}
               />
-              {imageUrl.length > 0 && (
-                <MessageImageContainer
-                  onClick={() => showMagnifiedImageView(imageUrl)}
-                  moveToLeft={false}
-                >
-                  <MessageImage
-                    src={imageUrl}
-                    onLoad={handleImageLoaded}
-                    alt="This message was sent by the current user in the conversation."
-                  />
-                </MessageImageContainer>
-              )}
-              {messageText.length > 0 && (
-                <MessageSentByUser>
-                  {messageText}
-                  <MessageTime
-                    time={date.toDate().toLocaleTimeString()}
-                    moveToLeft={false}
-                  />
-                </MessageSentByUser>
-              )}
+              <MessageSentByUser
+                date={date}
+                handleImageLoaded={handleImageLoaded}
+                imageUrl={imageUrl}
+                messageText={messageText}
+              />
             </div>
           ) : (
             <div key={id}>
@@ -255,25 +147,12 @@ const MessageWindow: React.FC<MessageWindowProps> = ({
                 conversationDateString={conversationDateString}
                 showDate={showDate}
               />
-              {imageUrl.length > 0 && (
-                <MessageImageContainer
-                  onClick={() => showMagnifiedImageView(imageUrl)}
-                  moveToLeft={true}
-                >
-                  <MessageImage
-                    src={imageUrl}
-                    onLoad={handleImageLoaded}
-                    alt="This message was sent by the other user in the conversation."
-                  />
-                </MessageImageContainer>
-              )}
-              <MessageReceivedByUser>
-                {messageText}
-                <MessageTime
-                  time={date.toDate().toLocaleTimeString()}
-                  moveToLeft={true}
-                />
-              </MessageReceivedByUser>
+              <MessageReceivedByUser
+                date={date}
+                handleImageLoaded={handleImageLoaded}
+                imageUrl={imageUrl}
+                messageText={messageText}
+              />
             </div>
           );
         }
