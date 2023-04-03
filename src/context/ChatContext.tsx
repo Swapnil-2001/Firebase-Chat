@@ -46,7 +46,7 @@ const ChatContextProvider: React.FC<PropsWithChildren> = ({
       case RESET_TO_DEFAULT_VALUES:
         return initialState;
       case SET_NEW_MESSAGE_RECIPIENT:
-        if (action.payload === undefined) return state;
+        if (action.payload === null) return state;
         const { conversationId, messageRecipient } = action.payload;
         return {
           ...state,
@@ -56,13 +56,13 @@ const ChatContextProvider: React.FC<PropsWithChildren> = ({
           messageRecipient,
         };
       case SET_SENDING_MESSAGE_LOADING:
-        if (action.payload === undefined) return state;
+        if (action.payload === null) return state;
         return {
           ...state,
           sendingMessageLoading: action.payload,
         };
       case SHOW_IMAGE:
-        if (action.payload === undefined) return state;
+        if (action.payload === null) return state;
         return { ...state, magnifiedImageUrl: action.payload };
       case UNHIDE_MESSAGE_WINDOW:
         return {

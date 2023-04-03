@@ -16,6 +16,16 @@ export const LinearProgressStyles = {
   width: "190px",
 };
 
+export const NoConversationsMessage = styled.div`
+  display: flex;
+  align-items: center;
+  padding: 0 22px;
+  height: 100%;
+  color: ${gray};
+  font-size: 15px;
+  font-weight: 600;
+`;
+
 export const SidebarContainer = styled.div`
   flex: 1;
   display: flex;

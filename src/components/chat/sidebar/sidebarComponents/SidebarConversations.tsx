@@ -5,6 +5,7 @@ import { ChatContext } from "../../../../context/ChatContext";
 import { UserConversation } from "../Sidebar";
 import { MessageRecipient } from "../../../../common/types";
 import {
+  NoConversationsMessage,
   SidebarConversation,
   SidebarConversationImage,
   SidebarConversationInfoContainer,
@@ -30,6 +31,11 @@ const SidebarConversations: React.FC<SidebarConversationsProps> = ({
 
   return (
     <SidebarConversationsContainer>
+      {userConversations.length === 0 && (
+        <NoConversationsMessage>
+          Find an user and start a conversation.
+        </NoConversationsMessage>
+      )}
       {userConversations.map(({ userInfo, lastMessage }) => (
         <SidebarConversation
           key={uuid()}
