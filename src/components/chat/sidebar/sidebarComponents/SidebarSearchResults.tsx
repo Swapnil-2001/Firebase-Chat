@@ -2,6 +2,7 @@ import { useContext } from "react";
 
 import { ChatContext } from "../../../../context/ChatContext";
 import { SearchedUser } from "../Sidebar";
+import { MessageRecipient } from "../../../../common/types";
 import {
   SidebarSearchResult,
   SidebarSearchResultImage,
@@ -12,20 +13,28 @@ import {
 import defaultImage from "../../../../assets/Default.png";
 
 interface SidebarSearchResultsProps {
-  handleSelectSearchedUser: (_: any) => void;
   hasSearched: boolean;
   searchResults: SearchedUser[];
+  selectAnUser: (userToBeSelected: MessageRecipient) => void;
 }
 
 const SidebarSearchResults: React.FC<SidebarSearchResultsProps> = ({
-  handleSelectSearchedUser,
   hasSearched,
   searchResults,
+  selectAnUser,
 }): JSX.Element => {
   const [{ messageRecipient }] = useContext(ChatContext);
 
-  const handleSelectAnUser = (user: SearchedUser) => {
-    handleSelectSearchedUser(user);
+  const handleSelectSearchedUser = (user: SearchedUser): void => {
+    const { uid, displayName, photoURL } = user;
+
+    const userToBeSelected = {
+      uid,
+      displayName,
+      photoURL,
+    };
+
+    selectAnUser(userToBeSelected);
   };
 
   return (
@@ -34,7 +43,7 @@ const SidebarSearchResults: React.FC<SidebarSearchResultsProps> = ({
         searchResults?.map((result) => (
           <SidebarSearchResult
             key={result.uid}
-            onClick={() => handleSelectAnUser(result)}
+            onClick={() => handleSelectSearchedUser(result)}
             isSelected={result.uid === messageRecipient?.uid}
           >
             <SidebarSearchResultImage

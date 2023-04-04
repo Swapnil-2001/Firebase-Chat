@@ -5,6 +5,7 @@ import {
   chatWindowBackgroundColor,
   gray,
   lightBlack,
+  lightPurple,
   lightGray,
   messageByUserBackgroundColor,
   white,
@@ -230,7 +231,12 @@ export const SendMessageIconWrapper = styled.div`
   padding: 7px 10px;
   background-color: ${messageByUserBackgroundColor};
   border-radius: 10px;
-  cursor: pointer;
+  transition: background-color 0.3s;
+
+  &:hover {
+    background-color: ${lightPurple};
+    cursor: pointer;
+  }
 `;
 
 export const TypeMessageInputBox = styled.input`

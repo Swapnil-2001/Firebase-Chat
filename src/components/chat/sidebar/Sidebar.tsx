@@ -131,18 +131,6 @@ const Sidebar: React.FC = (): JSX.Element => {
     }
   };
 
-  const handleSelectSearchedUser = (user: any): void => {
-    const { uid, displayName, photoURL } = user;
-
-    const userToBeSelected = {
-      uid,
-      displayName,
-      photoURL,
-    };
-
-    selectAnUser(userToBeSelected);
-  };
-
   const selectAnUser = (userToBeSelected: MessageRecipient): void => {
     if (!currentUser) return;
 
@@ -174,9 +162,9 @@ const Sidebar: React.FC = (): JSX.Element => {
       />
       {searchedUser.length > 0 ? (
         <SidebarSearchResults
-          handleSelectSearchedUser={handleSelectSearchedUser}
           hasSearched={hasSearched}
           searchResults={searchResults}
+          selectAnUser={selectAnUser}
         />
       ) : areConversationsLoading ? (
         <LinearProgress sx={LinearProgressStyles} />
