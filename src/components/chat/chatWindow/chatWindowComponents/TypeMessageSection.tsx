@@ -1,13 +1,5 @@
 import { useContext, useState } from "react";
-import {
-  arrayUnion,
-  doc,
-  getDoc,
-  setDoc,
-  Timestamp,
-  updateDoc,
-} from "firebase/firestore";
-import { getDownloadURL, ref, uploadBytesResumable } from "firebase/storage";
+import { Timestamp } from "firebase/firestore";
 import { v4 as uuid } from "uuid";
 import EmojiPicker, {
   EmojiClickData,
@@ -20,14 +12,15 @@ import SendIcon from "@mui/icons-material/Send";
 import SentimentSatisfiedOutlinedIcon from "@mui/icons-material/SentimentSatisfiedOutlined";
 import { CircularProgress, Fade } from "@mui/material";
 
-import { db, storage } from "../../../../firebase";
 import { ChatContext } from "../../../../context/ChatContext";
 import { UserContext } from "../../../../context/UserContext";
 import {
-  ALL_MESSAGES_COLLECTION_NAME,
-  SET_SENDING_MESSAGE_LOADING,
-  USER_CHATS_COLLECTION_NAME,
-} from "../../../../common/constants";
+  addNewMessageToConversation,
+  getImageDownloadUrl,
+  updateUserChats,
+} from "../../../../common/firebaseFunctions";
+import { MessageRecipient } from "../../../../common/types";
+import { SET_SENDING_MESSAGE_LOADING } from "../../../../common/constants";
 import { white } from "../../../../common/colors";
 import {
   CancelIconContainer,
@@ -111,68 +104,33 @@ const TypeMessageSection: React.FC<TypeMessageSectionProps> = ({
       date: Timestamp.now(),
       imageUrl: "",
     };
-
     setTypedMessage("");
 
-    try {
-      if (selectedImage) {
-        const firebaseStorageUrl = `messageImages/${uuid()}`;
-        const messageImageStorageRef = ref(storage, firebaseStorageUrl);
-
-        await uploadBytesResumable(
-          messageImageStorageRef,
-          selectedImage as File
-        );
-
-        const downloadUrl = await getDownloadURL(messageImageStorageRef);
-
-        newMessageCreated = { ...newMessageCreated, imageUrl: downloadUrl };
-      }
-
-      const docRef = doc(db, ALL_MESSAGES_COLLECTION_NAME, conversationId);
-      const docSnap = await getDoc(docRef);
-
-      if (!docSnap.exists()) {
-        await setDoc(doc(db, ALL_MESSAGES_COLLECTION_NAME, conversationId), {
-          messages: [newMessageCreated],
-        });
-      } else {
-        await updateDoc(doc(db, ALL_MESSAGES_COLLECTION_NAME, conversationId), {
-          messages: arrayUnion(newMessageCreated),
-        });
-      }
-
-      await updateDoc(doc(db, USER_CHATS_COLLECTION_NAME, currentUser.uid), {
-        [`${conversationId}.userInfo`]: {
-          uid: messageRecipient.uid,
-          displayName: messageRecipient.displayName,
-          photoURL: messageRecipient.photoURL,
-        },
-        [`${conversationId}.lastMessage`]: {
-          messageText: typedMessage,
-        },
-        [`${conversationId}.date`]: Timestamp.now(),
-        [`${conversationId}.isRead`]: true,
-      });
-
-      await updateDoc(
-        doc(db, USER_CHATS_COLLECTION_NAME, messageRecipient.uid),
-        {
-          [`${conversationId}.userInfo`]: {
-            uid: currentUser.uid,
-            displayName: currentUser.displayName,
-            photoURL: currentUser.photoURL,
-          },
-          [`${conversationId}.lastMessage`]: {
-            messageText: typedMessage,
-          },
-          [`${conversationId}.date`]: Timestamp.now(),
-          [`${conversationId}.isRead`]: false,
-        }
+    if (selectedImage) {
+      const firebaseStorageUrl = `messageImages/${uuid()}`;
+      const downloadUrl = await getImageDownloadUrl(
+        firebaseStorageUrl,
+        selectedImage
       );
-    } catch (error) {
-      console.error(error);
+      newMessageCreated = { ...newMessageCreated, imageUrl: downloadUrl };
     }
+
+    await addNewMessageToConversation(conversationId, newMessageCreated);
+
+    await updateUserChats(
+      conversationId,
+      currentUser.uid,
+      messageRecipient,
+      typedMessage,
+      true
+    );
+    await updateUserChats(
+      conversationId,
+      messageRecipient.uid,
+      currentUser as MessageRecipient,
+      typedMessage,
+      false
+    );
   };
 
   return (

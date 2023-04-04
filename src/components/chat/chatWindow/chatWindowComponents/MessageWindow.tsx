@@ -85,7 +85,7 @@ const MessageWindow: React.FC<MessageWindowProps> = ({
     dispatch({ type: SET_SENDING_MESSAGE_LOADING, payload: false });
     const timer = setTimeout(() => {
       dispatch({ type: UNHIDE_MESSAGE_WINDOW });
-    }, 1800);
+    }, 1700);
 
     return () => clearTimeout(timer);
     // eslint-disable-next-line react-hooks/exhaustive-deps

@@ -1,14 +1,5 @@
 import { useContext, useEffect, useState } from "react";
-import {
-  collection,
-  doc,
-  endAt,
-  getDocs,
-  onSnapshot,
-  orderBy,
-  query,
-  startAt,
-} from "firebase/firestore";
+import { doc, onSnapshot } from "firebase/firestore";
 import LinearProgress from "@mui/material/LinearProgress";
 
 import { db } from "../../../firebase";
@@ -20,7 +11,6 @@ import { MessageRecipient } from "../../../common/types";
 import {
   SET_NEW_MESSAGE_RECIPIENT,
   SET_UNREAD_CONVERSATIONS,
-  USERS_COLLECTION_NAME,
   USER_CHATS_COLLECTION_NAME,
 } from "../../../common/constants";
 import {
@@ -28,6 +18,7 @@ import {
   SidebarContainer,
   SidebarSearchInput,
 } from "./Sidebar.styles";
+import { searchForUsers } from "../../../common/firebaseFunctions";
 
 export interface SearchedUser {
   uid: string;
@@ -104,7 +95,7 @@ const Sidebar: React.FC = (): JSX.Element => {
   }, [currentUser, dispatch]);
 
   const handleKeyPress = (event: React.KeyboardEvent<HTMLElement>): void => {
-    if (event.code === "Enter") searchForUser();
+    if (event.code === "Enter") handleSearchForUser();
   };
 
   const handleUserSearchInput = (
@@ -115,30 +106,16 @@ const Sidebar: React.FC = (): JSX.Element => {
     setHasSearched(false);
   };
 
-  const searchForUser = async () => {
+  const handleSearchForUser = async () => {
     setSearchResults([]);
-
-    const usersRef = collection(db, USERS_COLLECTION_NAME);
-
-    const searchQuery = query(
-      usersRef,
-      orderBy("displayName"),
-      startAt(searchedUser),
-      endAt(searchedUser + "\uf8ff")
-    );
-
-    try {
-      const querySnapshot = await getDocs(searchQuery);
-      querySnapshot.forEach((doc) => {
-        setSearchResults((prevState) => [
-          ...prevState,
-          doc.data() as SearchedUser,
-        ]);
-      });
-      setHasSearched(true);
-    } catch (error) {
-      console.error(error);
-    }
+    const querySnapshot = await searchForUsers(searchedUser);
+    querySnapshot?.forEach((doc) => {
+      setSearchResults((prevState) => [
+        ...prevState,
+        doc.data() as SearchedUser,
+      ]);
+    });
+    setHasSearched(true);
   };
 
   const selectAnUser = (userToBeSelected: MessageRecipient): void => {
