@@ -5,6 +5,7 @@ import {
   RESET_TO_DEFAULT_VALUES,
   SET_NEW_MESSAGE_RECIPIENT,
   SET_SENDING_MESSAGE_LOADING,
+  SET_UNREAD_CONVERSATIONS,
   SHOW_IMAGE,
   UNHIDE_MESSAGE_WINDOW,
 } from "../common/constants";
@@ -19,6 +20,9 @@ interface ChatInitialState {
   magnifiedImageUrl: string;
   messageRecipient: MessageRecipient | null;
   sendingMessageLoading: boolean;
+  unreadConversations: {
+    [key: string]: boolean;
+  };
 }
 
 const initialState: ChatInitialState = {
@@ -28,6 +32,7 @@ const initialState: ChatInitialState = {
   magnifiedImageUrl: "",
   messageRecipient: null,
   sendingMessageLoading: false,
+  unreadConversations: {},
 };
 
 export const ChatContext = createContext<[ChatInitialState, Dispatch<any>]>([
@@ -60,6 +65,12 @@ const ChatContextProvider: React.FC<PropsWithChildren> = ({
         return {
           ...state,
           sendingMessageLoading: action.payload,
+        };
+      case SET_UNREAD_CONVERSATIONS:
+        if (action.payload === null) return state;
+        return {
+          ...state,
+          unreadConversations: action.payload,
         };
       case SHOW_IMAGE:
         if (action.payload === null) return state;

@@ -12,6 +12,7 @@ import { ConversationMessage } from "../../../../common/types";
 import {
   ALL_MESSAGES_COLLECTION_NAME,
   SET_SENDING_MESSAGE_LOADING,
+  SET_UNREAD_CONVERSATIONS,
   UNHIDE_MESSAGE_WINDOW,
 } from "../../../../common/constants";
 import { MessageWindowContainer } from "../ChatWindow.styles";
@@ -30,8 +31,15 @@ const MessageWindow: React.FC<MessageWindowProps> = ({
   const [componentJustLoaded, setComponentJustLoaded] = useState<boolean>(true);
 
   const { currentUser } = useContext(UserContext);
-  const [{ conversationId, hideMessageWindow }, dispatch] =
-    useContext(ChatContext);
+  const [
+    {
+      conversationId,
+      hideMessageWindow,
+      messageRecipient,
+      unreadConversations,
+    },
+    dispatch,
+  ] = useContext(ChatContext);
 
   const messagesEndRef = useRef<null | HTMLDivElement>(null);
   const containerRef = useRef<null | HTMLDivElement>(null);
@@ -94,7 +102,19 @@ const MessageWindow: React.FC<MessageWindowProps> = ({
       container.removeEventListener("scroll", () => handleScroll(container));
   }, []);
 
-  const handleImageLoaded = () => {
+  useEffect(() => {
+    if (distanceFromBottom < 300 && messageRecipient) {
+      const messageRecipientId = messageRecipient.uid;
+      if (messageRecipientId in unreadConversations)
+        dispatch({
+          type: SET_UNREAD_CONVERSATIONS,
+          payload: { ...unreadConversations, [messageRecipientId]: false },
+        });
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [dispatch, distanceFromBottom]);
+
+  const handleImageLoaded = (): void => {
     scrollToBottom();
   };
 

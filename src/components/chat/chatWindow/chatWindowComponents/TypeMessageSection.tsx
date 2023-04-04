@@ -152,6 +152,7 @@ const TypeMessageSection: React.FC<TypeMessageSectionProps> = ({
           messageText: typedMessage,
         },
         [`${conversationId}.date`]: Timestamp.now(),
+        [`${conversationId}.isRead`]: true,
       });
 
       await updateDoc(
@@ -166,6 +167,7 @@ const TypeMessageSection: React.FC<TypeMessageSectionProps> = ({
             messageText: typedMessage,
           },
           [`${conversationId}.date`]: Timestamp.now(),
+          [`${conversationId}.isRead`]: false,
         }
       );
     } catch (error) {

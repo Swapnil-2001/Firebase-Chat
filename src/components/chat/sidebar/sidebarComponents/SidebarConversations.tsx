@@ -12,6 +12,7 @@ import {
   SidebarConversationLastMessage,
   SidebarConversationsContainer,
   SidebarConversationUserName,
+  SidebarUnreadNotification,
 } from "../Sidebar.styles";
 
 interface SidebarConversationsProps {
@@ -36,7 +37,7 @@ const SidebarConversations: React.FC<SidebarConversationsProps> = ({
           Find an user and start a conversation.
         </NoConversationsMessage>
       )}
-      {userConversations.map(({ userInfo, lastMessage }) => (
+      {userConversations.map(({ userInfo, lastMessage, isRead }) => (
         <SidebarConversation
           key={uuid()}
           onClick={() => handleSelectAnUser(userInfo)}
@@ -48,10 +49,11 @@ const SidebarConversations: React.FC<SidebarConversationsProps> = ({
               {userInfo.displayName}
             </SidebarConversationUserName>
             <SidebarConversationLastMessage>
-              {lastMessage.messageText.substring(0, 25)}
-              {lastMessage.messageText.length > 25 && "..."}
+              {lastMessage.messageText.substring(0, 20)}
+              {lastMessage.messageText.length > 20 && "..."}
             </SidebarConversationLastMessage>
           </SidebarConversationInfoContainer>
+          {!isRead && <SidebarUnreadNotification />}
         </SidebarConversation>
       ))}
     </SidebarConversationsContainer>

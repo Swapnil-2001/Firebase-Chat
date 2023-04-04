@@ -2,6 +2,7 @@ import styled from "styled-components";
 import {
   chatWindowBackgroundColor,
   gray,
+  green,
   lightBlack,
   lightGray,
   white,
@@ -63,6 +64,7 @@ export const SidebarConversationInfoContainer = styled.div`
   flex-direction: column;
   align-items: flex-start;
   margin-left: 15px;
+  width: 60%;
 `;
 
 export const SidebarConversationLastMessage = styled.span`
@@ -143,4 +145,12 @@ export const SidebarSearchResultsHelperText = styled.div`
   color: ${lightGray};
   font-size: 0.85rem;
   font-weight: 600;
+`;
+
+export const SidebarUnreadNotification = styled.div`
+  height: 12px;
+  width: 12px;
+  margin-left: 12px;
+  background-color: ${green};
+  border-radius: 50%;
 `;

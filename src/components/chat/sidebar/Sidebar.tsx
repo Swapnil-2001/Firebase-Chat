@@ -8,6 +8,7 @@ import {
   orderBy,
   query,
   startAt,
+  updateDoc,
 } from "firebase/firestore";
 import LinearProgress from "@mui/material/LinearProgress";
 
@@ -19,6 +20,7 @@ import SidebarSearchResults from "./sidebarComponents/SidebarSearchResults";
 import { MessageRecipient } from "../../../common/types";
 import {
   SET_NEW_MESSAGE_RECIPIENT,
+  SET_UNREAD_CONVERSATIONS,
   USERS_COLLECTION_NAME,
   USER_CHATS_COLLECTION_NAME,
 } from "../../../common/constants";
@@ -40,6 +42,7 @@ export interface UserConversation {
     messageText: string;
   };
   date: any;
+  isRead: boolean;
 }
 
 const Sidebar: React.FC = (): JSX.Element => {
@@ -55,7 +58,8 @@ const Sidebar: React.FC = (): JSX.Element => {
   const [areConversationsLoading, setAreConversationsLoading] =
     useState<boolean>(true);
 
-  const [, dispatch] = useContext(ChatContext);
+  const [{ conversationId, unreadConversations }, dispatch] =
+    useContext(ChatContext);
   const { currentUser } = useContext(UserContext);
 
   useEffect(() => {
@@ -70,10 +74,14 @@ const Sidebar: React.FC = (): JSX.Element => {
         (document) => {
           const objectWithUserConversations = document.data();
 
+          const unreadConversations: { [key: string]: boolean } = {};
+
           if (objectWithUserConversations) {
             const arrayWithUserConversations: UserConversation[] = [];
             Object.values(objectWithUserConversations).forEach(
-              (conversation) => {
+              (conversation: UserConversation) => {
+                if (!conversation.isRead)
+                  unreadConversations[conversation.userInfo.uid] = true;
                 arrayWithUserConversations.push(conversation);
               }
             );
@@ -83,6 +91,10 @@ const Sidebar: React.FC = (): JSX.Element => {
                   conversation2.date - conversation1.date
               )
             );
+            dispatch({
+              type: SET_UNREAD_CONVERSATIONS,
+              payload: unreadConversations,
+            });
             setAreConversationsLoading(false);
           }
         }
@@ -91,7 +103,27 @@ const Sidebar: React.FC = (): JSX.Element => {
       return () => unsubscribe();
     }
     return;
-  }, [currentUser]);
+  }, [currentUser, dispatch]);
+
+  useEffect(() => {
+    const userId = Object.keys(unreadConversations).find(
+      (userId) => unreadConversations[userId] === false
+    );
+    if (currentUser && userId) {
+      (async () => {
+        try {
+          await updateDoc(
+            doc(db, USER_CHATS_COLLECTION_NAME, currentUser.uid),
+            {
+              [`${conversationId}.isRead`]: true,
+            }
+          );
+        } catch (error) {
+          console.error(error);
+        }
+      })();
+    }
+  }, [conversationId, currentUser, unreadConversations]);
 
   const handleKeyPress = (event: React.KeyboardEvent<HTMLElement>): void => {
     if (event.code === "Enter") searchForUser();
