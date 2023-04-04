@@ -16,6 +16,7 @@ import {
   UNHIDE_MESSAGE_WINDOW,
 } from "../../../../common/constants";
 import { MessageWindowContainer } from "../ChatWindow.styles";
+import { setConversationAsRead } from "../../../../common/firebaseFunctions";
 
 interface MessageWindowProps {
   setOpenEmojiPicker: (_: boolean) => void;
@@ -27,7 +28,8 @@ const MessageWindow: React.FC<MessageWindowProps> = ({
   const [conversationMessages, setConversationMessages] = useState<
     ConversationMessage[]
   >([]);
-  const [distanceFromBottom, setDistanceFromBottom] = useState<number>(0);
+  const [isDistanceFromBottomAbove300, setIsDistanceFromBottomAbove300] =
+    useState<boolean>(false);
   const [componentJustLoaded, setComponentJustLoaded] = useState<boolean>(true);
 
   const { currentUser } = useContext(UserContext);
@@ -76,7 +78,7 @@ const MessageWindow: React.FC<MessageWindowProps> = ({
       } else if (
         conversationMessages[numConversations - 1].senderId ===
           currentUser?.uid ||
-        distanceFromBottom < 300
+        !isDistanceFromBottomAbove300
       )
         scrollToBottom();
     }
@@ -96,23 +98,39 @@ const MessageWindow: React.FC<MessageWindowProps> = ({
   ]);
 
   useEffect(() => {
+    const handleSetConversationAsRead = async () => {
+      const currentUserId = currentUser?.uid;
+      const messageRecipientId = messageRecipient?.uid;
+      if (
+        currentUserId &&
+        messageRecipientId &&
+        messageRecipientId in unreadConversations
+      ) {
+        const updatedUnreadConversations = unreadConversations;
+        delete updatedUnreadConversations[messageRecipientId];
+        dispatch({
+          type: SET_UNREAD_CONVERSATIONS,
+          payload: updatedUnreadConversations,
+        });
+        await setConversationAsRead(conversationId, currentUserId);
+      }
+    };
+    if (!isDistanceFromBottomAbove300) handleSetConversationAsRead();
+  }, [
+    conversationId,
+    currentUser?.uid,
+    dispatch,
+    isDistanceFromBottomAbove300,
+    messageRecipient?.uid,
+    unreadConversations,
+  ]);
+
+  useEffect(() => {
     const container = containerRef.current as Element;
     container.addEventListener("scroll", () => handleScroll(container));
     return () =>
       container.removeEventListener("scroll", () => handleScroll(container));
   }, []);
-
-  useEffect(() => {
-    if (distanceFromBottom < 300 && messageRecipient) {
-      const messageRecipientId = messageRecipient.uid;
-      if (messageRecipientId in unreadConversations)
-        dispatch({
-          type: SET_UNREAD_CONVERSATIONS,
-          payload: { ...unreadConversations, [messageRecipientId]: false },
-        });
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [dispatch, distanceFromBottom]);
 
   const handleImageLoaded = (): void => {
     scrollToBottom();
@@ -121,7 +139,7 @@ const MessageWindow: React.FC<MessageWindowProps> = ({
   const handleScroll = (container: Element): void => {
     const distanceFromBottom =
       container.scrollHeight - container.scrollTop - container.clientHeight;
-    setDistanceFromBottom(distanceFromBottom);
+    setIsDistanceFromBottomAbove300(distanceFromBottom > 300);
   };
 
   const scrollToBottom = (): void => {

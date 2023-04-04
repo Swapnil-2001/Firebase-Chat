@@ -28,7 +28,6 @@ import {
   SidebarContainer,
   SidebarSearchInput,
 } from "./Sidebar.styles";
-import { setConversationAsRead } from "../../../common/firebaseFunctions";
 
 export interface SearchedUser {
   uid: string;
@@ -58,8 +57,7 @@ const Sidebar: React.FC = (): JSX.Element => {
   const [areConversationsLoading, setAreConversationsLoading] =
     useState<boolean>(true);
 
-  const [{ conversationId, unreadConversations }, dispatch] =
-    useContext(ChatContext);
+  const [, dispatch] = useContext(ChatContext);
   const { currentUser } = useContext(UserContext);
 
   useEffect(() => {
@@ -104,23 +102,6 @@ const Sidebar: React.FC = (): JSX.Element => {
     }
     return;
   }, [currentUser, dispatch]);
-
-  useEffect(() => {
-    const userId = Object.keys(unreadConversations).find(
-      (userId) => unreadConversations[userId] === false
-    );
-    if (currentUser && userId) {
-      const updatedUnreadConversations = unreadConversations;
-      delete updatedUnreadConversations[userId];
-      dispatch({
-        type: SET_UNREAD_CONVERSATIONS,
-        payload: updatedUnreadConversations,
-      });
-      (async () => {
-        await setConversationAsRead(conversationId, currentUser.uid);
-      })();
-    }
-  }, [conversationId, currentUser, dispatch, unreadConversations]);
 
   const handleKeyPress = (event: React.KeyboardEvent<HTMLElement>): void => {
     if (event.code === "Enter") searchForUser();
