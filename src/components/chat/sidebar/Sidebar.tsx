@@ -8,7 +8,6 @@ import {
   orderBy,
   query,
   startAt,
-  updateDoc,
 } from "firebase/firestore";
 import LinearProgress from "@mui/material/LinearProgress";
 
@@ -29,6 +28,7 @@ import {
   SidebarContainer,
   SidebarSearchInput,
 } from "./Sidebar.styles";
+import { setConversationAsRead } from "../../../common/firebaseFunctions";
 
 export interface SearchedUser {
   uid: string;
@@ -110,20 +110,17 @@ const Sidebar: React.FC = (): JSX.Element => {
       (userId) => unreadConversations[userId] === false
     );
     if (currentUser && userId) {
+      const updatedUnreadConversations = unreadConversations;
+      delete updatedUnreadConversations[userId];
+      dispatch({
+        type: SET_UNREAD_CONVERSATIONS,
+        payload: updatedUnreadConversations,
+      });
       (async () => {
-        try {
-          await updateDoc(
-            doc(db, USER_CHATS_COLLECTION_NAME, currentUser.uid),
-            {
-              [`${conversationId}.isRead`]: true,
-            }
-          );
-        } catch (error) {
-          console.error(error);
-        }
+        await setConversationAsRead(conversationId, currentUser.uid);
       })();
     }
-  }, [conversationId, currentUser, unreadConversations]);
+  }, [conversationId, currentUser, dispatch, unreadConversations]);
 
   const handleKeyPress = (event: React.KeyboardEvent<HTMLElement>): void => {
     if (event.code === "Enter") searchForUser();
