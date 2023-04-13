@@ -73,6 +73,13 @@ export const SidebarConversationLastMessage = styled.span`
   font-size: 0.75rem;
 `;
 
+export const SidebarConversationLastMessageIsImage = styled.div`
+  display: flex;
+  align-items: center;
+  color: ${gray};
+  font-size: 0.75rem;
+`;
+
 export const SidebarConversationsContainer = styled.div`
   height: 100%;
   width: 100%;

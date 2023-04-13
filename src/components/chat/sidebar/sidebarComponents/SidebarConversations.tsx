@@ -1,15 +1,16 @@
 import { useContext } from "react";
 import { v4 as uuid } from "uuid";
+import ImageOutlinedIcon from "@mui/icons-material/ImageOutlined";
 
 import { ChatContext } from "../../../../context/ChatContext";
-import { UserConversation } from "../Sidebar";
-import { MessageRecipient } from "../../../../common/types";
+import { MessageRecipient, UserConversation } from "../../../../common/types";
 import {
   NoConversationsMessage,
   SidebarConversation,
   SidebarConversationImage,
   SidebarConversationInfoContainer,
   SidebarConversationLastMessage,
+  SidebarConversationLastMessageIsImage,
   SidebarConversationsContainer,
   SidebarConversationUserName,
   SidebarUnreadNotification,
@@ -48,10 +49,20 @@ const SidebarConversations: React.FC<SidebarConversationsProps> = ({
             <SidebarConversationUserName>
               {userInfo.displayName}
             </SidebarConversationUserName>
-            <SidebarConversationLastMessage>
-              {lastMessage.messageText.substring(0, 20)}
-              {lastMessage.messageText.length > 20 && "..."}
-            </SidebarConversationLastMessage>
+            {lastMessage.messageText.length > 0 ? (
+              <SidebarConversationLastMessage>
+                {lastMessage.messageText.substring(0, 20)}
+                {lastMessage.messageText.length > 20 && "..."}
+              </SidebarConversationLastMessage>
+            ) : (
+              <SidebarConversationLastMessageIsImage>
+                <ImageOutlinedIcon
+                  fontSize="small"
+                  sx={{ marginRight: "5px" }}
+                />
+                Photo
+              </SidebarConversationLastMessageIsImage>
+            )}
           </SidebarConversationInfoContainer>
           {!isRead && <SidebarUnreadNotification />}
         </SidebarConversation>

@@ -7,7 +7,7 @@ import { ChatContext } from "../../../context/ChatContext";
 import { UserContext } from "../../../context/UserContext";
 import SidebarConversations from "./sidebarComponents/SidebarConversations";
 import SidebarSearchResults from "./sidebarComponents/SidebarSearchResults";
-import { MessageRecipient } from "../../../common/types";
+import { MessageRecipient, UserConversation } from "../../../common/types";
 import {
   ARE_FRESH_CONVERSATIONS_LOADED,
   SET_NEW_MESSAGE_RECIPIENT,
@@ -24,15 +24,6 @@ export interface SearchedUser {
   uid: string;
   displayName: string;
   photoURL: string;
-}
-
-export interface UserConversation {
-  userInfo: MessageRecipient;
-  lastMessage: {
-    messageText: string;
-  };
-  date: any;
-  isRead: boolean;
 }
 
 const Sidebar: React.FC = (): JSX.Element => {

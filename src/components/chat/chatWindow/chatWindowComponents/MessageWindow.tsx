@@ -55,10 +55,8 @@ const MessageWindow: React.FC<MessageWindowProps> = ({
         (document) => {
           if (document.exists()) {
             const conversationMessages: any[] = document.data().messages;
-
             const formattedMessages =
               generateFormattedMessages(conversationMessages);
-
             setConversationMessages(formattedMessages);
           }
         }

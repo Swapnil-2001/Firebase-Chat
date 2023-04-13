@@ -20,3 +20,12 @@ export interface MessageRecipient {
   displayName: string;
   photoURL: string;
 }
+
+export interface UserConversation {
+  userInfo: MessageRecipient;
+  lastMessage: {
+    messageText: string;
+  };
+  date: any;
+  isRead: boolean;
+}
