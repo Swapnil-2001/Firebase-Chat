@@ -36,15 +36,13 @@ const MessageSentByUser: React.FC<MessageOnWindow> = ({
           />
         </MessageImageContainer>
       )}
-      {messageText.length > 0 && (
-        <MessageSentByUserContainer>
-          {messageText}
-          <MessageTime
-            time={date.toDate().toLocaleTimeString()}
-            moveToLeft={false}
-          />
-        </MessageSentByUserContainer>
-      )}
+      <MessageSentByUserContainer>
+        {messageText}
+        <MessageTime
+          time={date.toDate().toLocaleTimeString()}
+          moveToLeft={false}
+        />
+      </MessageSentByUserContainer>
     </>
   );
 };
