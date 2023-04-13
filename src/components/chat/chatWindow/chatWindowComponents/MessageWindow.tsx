@@ -11,8 +11,8 @@ import { generateFormattedMessages } from "../../../../common/utils";
 import { ConversationMessage } from "../../../../common/types";
 import {
   ALL_MESSAGES_COLLECTION_NAME,
+  ARE_FRESH_CONVERSATIONS_LOADED,
   SET_SENDING_MESSAGE_LOADING,
-  SET_UNREAD_CONVERSATIONS,
   UNHIDE_MESSAGE_WINDOW,
 } from "../../../../common/constants";
 import { MessageWindowContainer } from "../ChatWindow.styles";
@@ -36,9 +36,9 @@ const MessageWindow: React.FC<MessageWindowProps> = ({
   const [
     {
       conversationId,
+      freshConversationsLoaded,
       hideMessageWindow,
       messageRecipient,
-      unreadConversations,
     },
     dispatch,
   ] = useContext(ChatContext);
@@ -101,18 +101,9 @@ const MessageWindow: React.FC<MessageWindowProps> = ({
     const handleSetConversationAsRead = async () => {
       const currentUserId = currentUser?.uid;
       const messageRecipientId = messageRecipient?.uid;
-      if (
-        currentUserId &&
-        messageRecipientId &&
-        messageRecipientId in unreadConversations
-      ) {
-        const updatedUnreadConversations = unreadConversations;
-        delete updatedUnreadConversations[messageRecipientId];
-        dispatch({
-          type: SET_UNREAD_CONVERSATIONS,
-          payload: updatedUnreadConversations,
-        });
+      if (currentUserId && messageRecipientId && freshConversationsLoaded) {
         await setConversationAsRead(conversationId, currentUserId);
+        dispatch({ type: ARE_FRESH_CONVERSATIONS_LOADED, payload: false });
       }
     };
     if (!isDistanceFromBottomAbove300) handleSetConversationAsRead();
@@ -120,9 +111,9 @@ const MessageWindow: React.FC<MessageWindowProps> = ({
     conversationId,
     currentUser?.uid,
     dispatch,
+    freshConversationsLoaded,
     isDistanceFromBottomAbove300,
     messageRecipient?.uid,
-    unreadConversations,
   ]);
 
   useEffect(() => {

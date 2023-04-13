@@ -9,8 +9,8 @@ import SidebarConversations from "./sidebarComponents/SidebarConversations";
 import SidebarSearchResults from "./sidebarComponents/SidebarSearchResults";
 import { MessageRecipient } from "../../../common/types";
 import {
+  ARE_FRESH_CONVERSATIONS_LOADED,
   SET_NEW_MESSAGE_RECIPIENT,
-  SET_UNREAD_CONVERSATIONS,
   USER_CHATS_COLLECTION_NAME,
 } from "../../../common/constants";
 import {
@@ -62,15 +62,10 @@ const Sidebar: React.FC = (): JSX.Element => {
         doc(db, USER_CHATS_COLLECTION_NAME, currentUser.uid),
         (document) => {
           const objectWithUserConversations = document.data();
-
-          const unreadConversations: { [key: string]: boolean } = {};
-
           if (objectWithUserConversations) {
             const arrayWithUserConversations: UserConversation[] = [];
             Object.values(objectWithUserConversations).forEach(
               (conversation: UserConversation) => {
-                if (!conversation.isRead)
-                  unreadConversations[conversation.userInfo.uid] = true;
                 arrayWithUserConversations.push(conversation);
               }
             );
@@ -80,10 +75,7 @@ const Sidebar: React.FC = (): JSX.Element => {
                   conversation2.date - conversation1.date
               )
             );
-            dispatch({
-              type: SET_UNREAD_CONVERSATIONS,
-              payload: unreadConversations,
-            });
+            dispatch({ type: ARE_FRESH_CONVERSATIONS_LOADED, payload: true });
             setAreConversationsLoading(false);
           }
         }

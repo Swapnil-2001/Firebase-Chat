@@ -2,10 +2,10 @@ import { createContext, Dispatch, PropsWithChildren, useReducer } from "react";
 
 import { MessageRecipient } from "../common/types";
 import {
+  ARE_FRESH_CONVERSATIONS_LOADED,
   RESET_TO_DEFAULT_VALUES,
   SET_NEW_MESSAGE_RECIPIENT,
   SET_SENDING_MESSAGE_LOADING,
-  SET_UNREAD_CONVERSATIONS,
   SHOW_IMAGE,
   UNHIDE_MESSAGE_WINDOW,
 } from "../common/constants";
@@ -20,9 +20,7 @@ interface ChatInitialState {
   magnifiedImageUrl: string;
   messageRecipient: MessageRecipient | null;
   sendingMessageLoading: boolean;
-  unreadConversations: {
-    [key: string]: boolean;
-  };
+  freshConversationsLoaded: boolean;
 }
 
 const initialState: ChatInitialState = {
@@ -32,7 +30,7 @@ const initialState: ChatInitialState = {
   magnifiedImageUrl: "",
   messageRecipient: null,
   sendingMessageLoading: false,
-  unreadConversations: {},
+  freshConversationsLoaded: false,
 };
 
 export const ChatContext = createContext<[ChatInitialState, Dispatch<any>]>([
@@ -48,6 +46,12 @@ const ChatContextProvider: React.FC<PropsWithChildren> = ({
     action: { type: string; payload: any }
   ) => {
     switch (action.type) {
+      case ARE_FRESH_CONVERSATIONS_LOADED:
+        if (action.payload === null) return state;
+        return {
+          ...state,
+          freshConversationsLoaded: action.payload,
+        };
       case RESET_TO_DEFAULT_VALUES:
         return initialState;
       case SET_NEW_MESSAGE_RECIPIENT:
@@ -65,12 +69,6 @@ const ChatContextProvider: React.FC<PropsWithChildren> = ({
         return {
           ...state,
           sendingMessageLoading: action.payload,
-        };
-      case SET_UNREAD_CONVERSATIONS:
-        if (action.payload === null) return state;
-        return {
-          ...state,
-          unreadConversations: action.payload,
         };
       case SHOW_IMAGE:
         if (action.payload === null) return state;
