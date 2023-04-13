@@ -48,7 +48,7 @@ const Sidebar: React.FC = (): JSX.Element => {
   const [areConversationsLoading, setAreConversationsLoading] =
     useState<boolean>(true);
 
-  const [, dispatch] = useContext(ChatContext);
+  const [{ conversationId }, dispatch] = useContext(ChatContext);
   const { currentUser } = useContext(UserContext);
 
   useEffect(() => {
@@ -124,15 +124,17 @@ const Sidebar: React.FC = (): JSX.Element => {
     const currentUserId = currentUser.uid;
     const selectedUserId = userToBeSelected.uid;
 
-    const conversationId =
+    const newConversationId =
       currentUserId > selectedUserId
         ? currentUserId + selectedUserId
         : selectedUserId + currentUserId;
 
+    if (conversationId === newConversationId) return;
+
     dispatch({
       type: SET_NEW_MESSAGE_RECIPIENT,
       payload: {
-        conversationId,
+        conversationId: newConversationId,
         messageRecipient: userToBeSelected,
       },
     });

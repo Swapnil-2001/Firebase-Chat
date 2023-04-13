@@ -17,14 +17,14 @@ import { getDownloadURL, ref, uploadBytesResumable } from "firebase/storage";
 import { db, storage } from "../firebase";
 import { MessageRecipient } from "./types";
 import {
-  SET_CONVERSATION_AS_READ_ERROR_MESSAGE,
-  SEARCH_USERS_ERROR_MESSAGE,
-  USERS_COLLECTION_NAME,
-  USER_CHATS_COLLECTION_NAME,
   ALL_MESSAGES_COLLECTION_NAME,
   ADD_MESSAGE_TO_CONVERSATION_ERROR_MESSAGE,
   GET_IMAGE_DOWNLOAD_URL_ERROR_MESSAGE,
+  SET_CONVERSATION_AS_READ_ERROR_MESSAGE,
+  SEARCH_USERS_ERROR_MESSAGE,
+  USERS_COLLECTION_NAME,
   UPDATE_USER_CHATS_ERROR_MESSAGE,
+  USER_CHATS_COLLECTION_NAME,
 } from "./constants";
 
 export const addNewMessageToConversation = async (

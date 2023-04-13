@@ -42,6 +42,7 @@ export const ChatWindowContainer = styled.div`
   flex: 3;
   position: relative;
   margin-top: ${chatWindowContainerMarginTop};
+  max-width: 75%;
   background-color: ${chatWindowBackgroundColor};
   border-top-left-radius: 20px;
   border-bottom-right-radius: 35px;
@@ -146,7 +147,7 @@ export const LinearProgressStyles = {
 export const MessageImage = styled.img`
   max-height: 400px;
   max-width: 250px;
-  object-fit: contain;
+  object-fit: cover;
   border-radius: 20px;
 `;
 

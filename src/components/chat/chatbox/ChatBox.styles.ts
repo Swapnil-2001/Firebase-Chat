@@ -52,7 +52,7 @@ export const ChatBoxOuterContainer = styled.div`
   display: flex;
   flex-direction: column;
   height: ${chatBoxOuterContainerHeight};
-  width: 85%;
+  width: 90%;
   background-color: ${chatBoxBackgroundColor};
   border-radius: ${chatBoxBorderRadius};
 `;

@@ -56,6 +56,7 @@ export const SidebarConversation = styled.div<SidebarConversationProps>`
 export const SidebarConversationImage = styled.img`
   height: 50px;
   width: 50px;
+  object-fit: cover;
   border-radius: 50%;
 `;
 
@@ -120,6 +121,7 @@ export const SidebarSearchResult = styled.div<SidebarConversationProps>`
 export const SidebarSearchResultImage = styled.img`
   height: 50px;
   width: 50px;
+  object-fit: cover;
   border-radius: 50%;
 `;
 

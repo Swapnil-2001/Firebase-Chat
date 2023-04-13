@@ -50,12 +50,6 @@ export const ChatBoxUserSectionContainer = styled.div`
   border-top-left-radius: ${chatBoxBorderRadius};
 `;
 
-export const ChatBoxUserSectionNameContainer = styled.div`
-  text-align: center;
-  color: ${lightGray};
-  font-weight: 500;
-`;
-
 export const ChatBoxUserSectionImage = styled.img`
   height: 120px;
   width: 120px;
@@ -87,6 +81,12 @@ export const ChatBoxUserSectionLogoutButtonContainer = styled.div`
   &:hover {
     width: 90%;
   }
+`;
+
+export const ChatBoxUserSectionNameContainer = styled.div`
+  text-align: center;
+  color: ${lightGray};
+  font-weight: 500;
 `;
 
 export const ChatBoxUserSectionNavbar = styled.div`
