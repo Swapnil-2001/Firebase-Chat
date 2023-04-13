@@ -15,10 +15,10 @@ const MessageReceivedByUser: React.FC<MessageOnWindow> = ({
   handleImageLoaded,
   imageUrl,
   messageText,
-}) => {
+}): JSX.Element => {
   const [, dispatch] = useContext(ChatContext);
 
-  const showMagnifiedImageView = (imageUrl: string) => {
+  const showMagnifiedImageView = (imageUrl: string): void => {
     dispatch({ type: SHOW_IMAGE, payload: imageUrl });
   };
 

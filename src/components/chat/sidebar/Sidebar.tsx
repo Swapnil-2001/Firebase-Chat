@@ -98,7 +98,7 @@ const Sidebar: React.FC = (): JSX.Element => {
     setHasSearched(false);
   };
 
-  const handleSearchForUser = async () => {
+  const handleSearchForUser = async (): Promise<void> => {
     setSearchResults([]);
     const querySnapshot = await searchForUsers(searchedUser);
     querySnapshot?.forEach((doc) => {

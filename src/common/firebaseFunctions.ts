@@ -1,15 +1,17 @@
 import {
-  Timestamp,
   arrayUnion,
   collection,
   doc,
+  DocumentData,
   endAt,
   getDoc,
   getDocs,
   orderBy,
   query,
+  QuerySnapshot,
   setDoc,
   startAt,
+  Timestamp,
   updateDoc,
 } from "firebase/firestore";
 import { getDownloadURL, ref, uploadBytesResumable } from "firebase/storage";
@@ -30,7 +32,7 @@ import {
 export const addNewMessageToConversation = async (
   conversationId: string,
   newMessageCreated: any
-) => {
+): Promise<void> => {
   try {
     const docRef = doc(db, ALL_MESSAGES_COLLECTION_NAME, conversationId);
     const docSnap = await getDoc(docRef);
@@ -52,7 +54,7 @@ export const addNewMessageToConversation = async (
 export const getImageDownloadUrl = async (
   firebaseStorageUrl: string,
   selectedImage: File
-) => {
+): Promise<string> => {
   try {
     const messageImageStorageRef = ref(storage, firebaseStorageUrl);
 
@@ -66,7 +68,9 @@ export const getImageDownloadUrl = async (
   }
 };
 
-export const searchForUsers = async (searchedUser: string) => {
+export const searchForUsers = async (
+  searchedUser: string
+): Promise<QuerySnapshot<DocumentData> | null> => {
   const usersRef = collection(db, USERS_COLLECTION_NAME);
   const searchQuery = query(
     usersRef,
@@ -86,7 +90,7 @@ export const searchForUsers = async (searchedUser: string) => {
 export const setConversationAsRead = async (
   conversationId: string,
   currentUserId: string
-) => {
+): Promise<void> => {
   try {
     const docReference = doc(db, USER_CHATS_COLLECTION_NAME, currentUserId);
     await updateDoc(docReference, {
@@ -103,7 +107,7 @@ export const updateUserChats = async (
   user2: MessageRecipient,
   typedMessage: string,
   conversationReadStatus: boolean
-) => {
+): Promise<void> => {
   try {
     const docReference = doc(db, USER_CHATS_COLLECTION_NAME, idOfUser1);
     await updateDoc(docReference, {

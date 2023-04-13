@@ -26,7 +26,7 @@ const SidebarConversations: React.FC<SidebarConversationsProps> = ({
 }): JSX.Element => {
   const [{ messageRecipient }] = useContext(ChatContext);
 
-  const handleSelectAnUser = (userInfo: MessageRecipient) => {
+  const handleSelectAnUser = (userInfo: MessageRecipient): void => {
     selectAnUser(userInfo);
   };
 

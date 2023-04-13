@@ -49,7 +49,6 @@ const MessageWindow: React.FC<MessageWindowProps> = ({
   useEffect(() => {
     setComponentJustLoaded(true);
     setConversationMessages([]);
-
     if (conversationId.length > 0) {
       const unsubscribe = onSnapshot(
         doc(db, ALL_MESSAGES_COLLECTION_NAME, conversationId),
@@ -83,7 +82,7 @@ const MessageWindow: React.FC<MessageWindowProps> = ({
         scrollToBottom();
     }
     dispatch({ type: SET_SENDING_MESSAGE_LOADING, payload: false });
-    const timer = setTimeout(() => {
+    const timer: NodeJS.Timeout = setTimeout(() => {
       dispatch({ type: UNHIDE_MESSAGE_WINDOW });
     }, 1700);
 
@@ -98,7 +97,7 @@ const MessageWindow: React.FC<MessageWindowProps> = ({
   ]);
 
   useEffect(() => {
-    const handleSetConversationAsRead = async () => {
+    const handleSetConversationAsRead = async (): Promise<void> => {
       const currentUserId = currentUser?.uid;
       const messageRecipientId = messageRecipient?.uid;
       if (currentUserId && messageRecipientId && freshConversationsLoaded) {
@@ -123,6 +122,10 @@ const MessageWindow: React.FC<MessageWindowProps> = ({
       container.removeEventListener("scroll", () => handleScroll(container));
   }, []);
 
+  const handleCloseEmojiPicker = (): void => {
+    setOpenEmojiPicker(false);
+  };
+
   const handleImageLoaded = (): void => {
     scrollToBottom();
   };
@@ -135,10 +138,6 @@ const MessageWindow: React.FC<MessageWindowProps> = ({
 
   const scrollToBottom = (): void => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
-  };
-
-  const handleCloseEmojiPicker = () => {
-    setOpenEmojiPicker(false);
   };
 
   return (

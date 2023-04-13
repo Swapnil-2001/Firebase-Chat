@@ -59,9 +59,14 @@ const SignupForm: React.FC = (): JSX.Element => {
 
   const navigate = useNavigate();
 
+  const handleFileUpload = (event: React.FormEvent<HTMLInputElement>): void => {
+    const { files } = event.currentTarget;
+    if (files) setUserImage(files[0]);
+  };
+
   const handleFormChange = (
     event: React.FormEvent<HTMLTextAreaElement | HTMLInputElement>
-  ) => {
+  ): void => {
     const { name, value } = event.target as HTMLTextAreaElement;
 
     setSignupFormFields((prevFormFields) => ({
@@ -81,38 +86,9 @@ const SignupForm: React.FC = (): JSX.Element => {
     });
   };
 
-  const handleFileUpload = (event: React.FormEvent<HTMLInputElement>) => {
-    const { files } = event.currentTarget;
-    if (files) setUserImage(files[0]);
-  };
-
-  const isFormSubmissionValid = (
-    name: string,
-    email: string,
-    password: string,
-    confirmPassword: string
-  ): boolean => {
-    const formSubmissionErrors: SignupFormFields = {};
-
-    if (name.length === 0)
-      formSubmissionErrors["name"] = NAME_FIELD_IS_EMPTY_ERROR;
-
-    if (email.length === 0)
-      formSubmissionErrors["email"] = EMAIL_FIELD_IS_EMPTY_ERROR;
-
-    if (password.length === 0)
-      formSubmissionErrors["password"] = PASSWORD_FIELD_IS_EMPTY_ERROR;
-    else if (password.length < 6)
-      formSubmissionErrors["password"] = PASSWORD_IS_TOO_SHORT_ERROR;
-    else if (password !== confirmPassword)
-      formSubmissionErrors["confirmPassword"] = PASSWORDS_DO_NOT_MATCH_ERROR;
-
-    setFormSubmissionErrors(formSubmissionErrors);
-
-    return Object.keys(formSubmissionErrors).length === 0;
-  };
-
-  const handleFormSubmit = async (event: React.SyntheticEvent) => {
+  const handleFormSubmit = async (
+    event: React.SyntheticEvent
+  ): Promise<void> => {
     event.preventDefault();
 
     dispatch({
@@ -190,6 +166,32 @@ const SignupForm: React.FC = (): JSX.Element => {
     }
 
     setIsLoading(false);
+  };
+
+  const isFormSubmissionValid = (
+    name: string,
+    email: string,
+    password: string,
+    confirmPassword: string
+  ): boolean => {
+    const formSubmissionErrors: SignupFormFields = {};
+
+    if (name.length === 0)
+      formSubmissionErrors["name"] = NAME_FIELD_IS_EMPTY_ERROR;
+
+    if (email.length === 0)
+      formSubmissionErrors["email"] = EMAIL_FIELD_IS_EMPTY_ERROR;
+
+    if (password.length === 0)
+      formSubmissionErrors["password"] = PASSWORD_FIELD_IS_EMPTY_ERROR;
+    else if (password.length < 6)
+      formSubmissionErrors["password"] = PASSWORD_IS_TOO_SHORT_ERROR;
+    else if (password !== confirmPassword)
+      formSubmissionErrors["confirmPassword"] = PASSWORDS_DO_NOT_MATCH_ERROR;
+
+    setFormSubmissionErrors(formSubmissionErrors);
+
+    return Object.keys(formSubmissionErrors).length === 0;
   };
 
   return (

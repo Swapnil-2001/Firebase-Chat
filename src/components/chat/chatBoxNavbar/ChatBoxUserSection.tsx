@@ -32,7 +32,7 @@ const ChatBoxUserSection: React.FC<ChatBoxUserSectionProps> = ({
   const [, dispatch] = useContext(ChatContext);
   const { currentUser } = useContext(UserContext);
 
-  const handleLogout = () => {
+  const handleLogout = (): void => {
     dispatch({ type: RESET_TO_DEFAULT_VALUES });
     signOut(auth);
   };

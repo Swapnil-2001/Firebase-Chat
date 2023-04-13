@@ -59,32 +59,36 @@ const TypeMessageSection: React.FC<TypeMessageSectionProps> = ({
     dispatch,
   ] = useContext(ChatContext);
 
-  const handleMessageInput = (event: React.FormEvent<HTMLInputElement>) => {
-    const { value } = event.target as HTMLInputElement;
-    setTypedMessage(value);
-  };
-
   const handleKeyPress = (event: React.KeyboardEvent<HTMLElement>): void => {
     if (event.code === "Enter") sendMessage();
   };
 
-  const handleImageSelect = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const handleMessageInput = (
+    event: React.FormEvent<HTMLInputElement>
+  ): void => {
+    const { value } = event.target as HTMLInputElement;
+    setTypedMessage(value);
+  };
+
+  const handleImageSelect = (
+    event: React.ChangeEvent<HTMLInputElement>
+  ): void => {
     setSelectedImage(event.target?.files && event.target.files[0]);
   };
 
-  const handleRemoveSelectedImage = () => {
-    setSelectedImage(null);
-  };
-
-  const handleSelectEmoji = (emojiData: EmojiClickData) => {
-    setTypedMessage((prevValue) => prevValue + emojiData.emoji);
-  };
-
-  const handleOpenOrCloseEmojiPicker = () => {
+  const handleOpenOrCloseEmojiPicker = (): void => {
     setOpenEmojiPicker((prevValue: boolean) => !prevValue);
   };
 
-  const sendMessage = async () => {
+  const handleRemoveSelectedImage = (): void => {
+    setSelectedImage(null);
+  };
+
+  const handleSelectEmoji = (emojiData: EmojiClickData): void => {
+    setTypedMessage((prevValue) => prevValue + emojiData.emoji);
+  };
+
+  const sendMessage = async (): Promise<void> => {
     if (
       currentUser === null ||
       messageRecipient === null ||
@@ -92,11 +96,9 @@ const TypeMessageSection: React.FC<TypeMessageSectionProps> = ({
       (typedMessage.trim().length === 0 && !selectedImage)
     )
       return;
-
     setOpenEmojiPicker(false);
     setSelectedImage(null);
     dispatch({ type: SET_SENDING_MESSAGE_LOADING, payload: true });
-
     let newMessageCreated = {
       id: uuid(),
       messageText: typedMessage.trim(),
@@ -105,7 +107,6 @@ const TypeMessageSection: React.FC<TypeMessageSectionProps> = ({
       imageUrl: "",
     };
     setTypedMessage("");
-
     if (selectedImage) {
       const firebaseStorageUrl = `messageImages/${uuid()}`;
       const downloadUrl = await getImageDownloadUrl(
@@ -114,9 +115,7 @@ const TypeMessageSection: React.FC<TypeMessageSectionProps> = ({
       );
       newMessageCreated = { ...newMessageCreated, imageUrl: downloadUrl };
     }
-
     await addNewMessageToConversation(conversationId, newMessageCreated);
-
     await updateUserChats(
       conversationId,
       currentUser.uid,

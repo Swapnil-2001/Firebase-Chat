@@ -18,9 +18,10 @@ const MessageSentByUser: React.FC<MessageOnWindow> = ({
 }): JSX.Element => {
   const [, dispatch] = useContext(ChatContext);
 
-  const showMagnifiedImageView = (imageUrl: string) => {
+  const showMagnifiedImageView = (imageUrl: string): void => {
     dispatch({ type: SHOW_IMAGE, payload: imageUrl });
   };
+
   return (
     <>
       {imageUrl.length > 0 && (

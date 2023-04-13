@@ -18,11 +18,11 @@ import {
 const MagnifiedImageComponent: React.FC = (): JSX.Element => {
   const [{ magnifiedImageUrl }, dispatch] = useContext(ChatContext);
 
-  const removeMagnifiedImage = () => {
+  const removeMagnifiedImage = (): void => {
     dispatch({ type: SHOW_IMAGE, payload: "" });
   };
 
-  const shouldShowImage = magnifiedImageUrl.length > 0;
+  const shouldShowImage: boolean = magnifiedImageUrl.length > 0;
 
   if (!shouldShowImage) return <></>;
 

@@ -45,7 +45,7 @@ const LoginForm: React.FC = (): JSX.Element => {
 
   const handleFormChange = (
     event: React.FormEvent<HTMLTextAreaElement | HTMLInputElement>
-  ) => {
+  ): void => {
     const { name, value } = event.target as HTMLTextAreaElement;
     setLoginFormFields((prevFormFields) => ({
       ...prevFormFields,
@@ -60,7 +60,7 @@ const LoginForm: React.FC = (): JSX.Element => {
     });
   };
 
-  const isFormSubmissionValid = (email: string, password: string) => {
+  const isFormSubmissionValid = (email: string, password: string): boolean => {
     const formSubmissionErrors: LoginFormFields = {};
 
     if (email.length === 0)
@@ -73,7 +73,9 @@ const LoginForm: React.FC = (): JSX.Element => {
     return Object.keys(formSubmissionErrors).length === 0;
   };
 
-  const handleFormSubmit = async (event: React.SyntheticEvent) => {
+  const handleFormSubmit = async (
+    event: React.SyntheticEvent
+  ): Promise<void> => {
     event.preventDefault();
 
     dispatch({

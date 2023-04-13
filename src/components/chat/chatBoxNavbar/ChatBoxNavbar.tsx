@@ -14,11 +14,11 @@ const ChatBoxNavbar: React.FC = (): JSX.Element => {
 
   const { currentUser } = useContext(UserContext);
 
-  const handleOpenUserSection = () => {
+  const handleOpenUserSection = (): void => {
     setOpenUserSection(true);
   };
 
-  const handleCloseUserSection = () => {
+  const handleCloseUserSection = (): void => {
     setOpenUserSection(false);
   };
 
