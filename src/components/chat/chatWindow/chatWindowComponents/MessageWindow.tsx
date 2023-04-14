@@ -34,12 +34,7 @@ const MessageWindow: React.FC<MessageWindowProps> = ({
 
   const { currentUser } = useContext(UserContext);
   const [
-    {
-      conversationId,
-      freshConversationsLoaded,
-      hideMessageWindow,
-      messageRecipient,
-    },
+    { conversationId, freshConversationsLoaded, messageRecipient },
     dispatch,
   ] = useContext(ChatContext);
 
@@ -88,13 +83,7 @@ const MessageWindow: React.FC<MessageWindowProps> = ({
 
     return () => clearTimeout(timer);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [
-    componentJustLoaded,
-    conversationMessages,
-    currentUser?.uid,
-    dispatch,
-    hideMessageWindow,
-  ]);
+  }, [componentJustLoaded, conversationMessages, currentUser?.uid, dispatch]);
 
   useEffect(() => {
     const handleSetConversationAsRead = async (): Promise<void> => {
