@@ -117,23 +117,6 @@ export const ImageInputLabelStyles = {
   },
 };
 
-export const ImageSelectPreview = styled.div`
-  position: absolute;
-  bottom: ${typeMessageSectionHeight};
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 0 20px;
-  height: 50px;
-  width: 95%;
-  color: ${gray};
-  font-size: 13px;
-  background-color: ${lightBlack};
-  border-top: 4px solid ${messageByUserBackgroundColor};
-  border-top-left-radius: 15px;
-  border-top-right-radius: 15px;
-`;
-
 export const LabelForImageInput = styled.label`
   display: flex;
   align-items: center;
@@ -223,6 +206,23 @@ export const SelectEmojiIconWrapper = styled.div`
   display: flex;
   align-items: center;
   margin-left: 15px;
+`;
+
+export const SelectPreview = styled.div`
+  position: absolute;
+  bottom: ${typeMessageSectionHeight};
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 20px;
+  height: 50px;
+  width: 95%;
+  color: ${gray};
+  font-size: 13px;
+  background-color: ${lightBlack};
+  border-top: 4px solid ${messageByUserBackgroundColor};
+  border-top-left-radius: 15px;
+  border-top-right-radius: 15px;
 `;
 
 export const SendMessageIconWrapper = styled.div`

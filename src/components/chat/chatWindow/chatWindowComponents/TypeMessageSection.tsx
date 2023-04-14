@@ -27,10 +27,10 @@ import {
   CancelIconStyles,
   EmojiPickerContainer,
   ImageInputLabelStyles,
-  ImageSelectPreview,
   LabelForImageInput,
   SelectEmojiIconStyles,
   SelectEmojiIconWrapper,
+  SelectPreview,
   SendMessageIconWrapper,
   TypeMessageInputBox,
   TypeMessageSectionContainer,
@@ -46,6 +46,7 @@ const TypeMessageSection: React.FC<TypeMessageSectionProps> = ({
   setOpenEmojiPicker,
 }): JSX.Element => {
   const [typedMessage, setTypedMessage] = useState<string>("");
+  const [repliedTo, setRepliedTo] = useState<string>("");
   const [selectedImage, setSelectedImage] = useState<File | null>(null);
 
   const imageInputRef = useRef<HTMLInputElement>(null);
@@ -109,7 +110,7 @@ const TypeMessageSection: React.FC<TypeMessageSectionProps> = ({
       date: Timestamp.now(),
       imageUrl: "",
       messageText: typedMessage.trim(),
-      repliedTo: "",
+      repliedTo,
       senderId: currentUser.uid,
     };
     setTypedMessage("");
@@ -143,12 +144,12 @@ const TypeMessageSection: React.FC<TypeMessageSectionProps> = ({
       {!hideMessageInput && (
         <>
           {selectedImage && (
-            <ImageSelectPreview>
+            <SelectPreview>
               Image selected
               <CancelIconContainer onClick={handleRemoveSelectedImage}>
                 <CancelIcon sx={CancelIconStyles} />
               </CancelIconContainer>
-            </ImageSelectPreview>
+            </SelectPreview>
           )}
           <TypeMessageInputBox
             type="text"

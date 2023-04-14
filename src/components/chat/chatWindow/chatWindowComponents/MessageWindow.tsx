@@ -100,9 +100,9 @@ const MessageWindow: React.FC<MessageWindowProps> = ({
       !isDistanceFromBottomAbove300
     )
       handleSetConversationAsRead();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [
     conversationId,
+    conversationMessages.length,
     currentUser?.uid,
     dispatch,
     freshConversationsLoaded,
@@ -132,7 +132,7 @@ const MessageWindow: React.FC<MessageWindowProps> = ({
   };
 
   const scrollToBottom = (): void => {
-    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+    messagesEndRef.current?.scrollIntoView({ behavior: "auto" });
   };
 
   return (
