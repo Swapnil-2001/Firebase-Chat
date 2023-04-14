@@ -39,9 +39,9 @@ const MessageWindow: React.FC<MessageWindowProps> = ({
   ] = useContext(ChatContext);
 
   const messagesEndRef: React.MutableRefObject<HTMLDivElement | null> =
-    useRef<null | HTMLDivElement>(null);
+    useRef<HTMLDivElement>(null);
   const containerRef: React.MutableRefObject<HTMLDivElement | null> =
-    useRef<null | HTMLDivElement>(null);
+    useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     setComponentJustLoaded(true);
@@ -95,9 +95,9 @@ const MessageWindow: React.FC<MessageWindowProps> = ({
       }
     };
     if (
-      !isDistanceFromBottomAbove300 &&
       conversationMessages.length > 0 &&
-      freshConversationsLoaded
+      freshConversationsLoaded &&
+      !isDistanceFromBottomAbove300
     )
       handleSetConversationAsRead();
     // eslint-disable-next-line react-hooks/exhaustive-deps

@@ -1,4 +1,4 @@
-import { useContext, useState } from "react";
+import { useContext, useRef, useState } from "react";
 import { Timestamp } from "firebase/firestore";
 import { v4 as uuid } from "uuid";
 import EmojiPicker, {
@@ -48,6 +48,8 @@ const TypeMessageSection: React.FC<TypeMessageSectionProps> = ({
   const [typedMessage, setTypedMessage] = useState<string>("");
   const [selectedImage, setSelectedImage] = useState<File | null>(null);
 
+  const imageInputRef = useRef<HTMLInputElement>(null);
+
   const { currentUser } = useContext(UserContext);
   const [
     {
@@ -81,6 +83,8 @@ const TypeMessageSection: React.FC<TypeMessageSectionProps> = ({
   };
 
   const handleRemoveSelectedImage = (): void => {
+    const imageInput = imageInputRef.current as HTMLInputElement;
+    imageInput.value = "";
     setSelectedImage(null);
   };
 
@@ -98,13 +102,15 @@ const TypeMessageSection: React.FC<TypeMessageSectionProps> = ({
       return;
     setOpenEmojiPicker(false);
     setSelectedImage(null);
+    handleRemoveSelectedImage();
     dispatch({ type: SET_SENDING_MESSAGE_LOADING, payload: true });
     let newMessageCreated = {
       id: uuid(),
-      messageText: typedMessage.trim(),
-      senderId: currentUser.uid,
       date: Timestamp.now(),
       imageUrl: "",
+      messageText: typedMessage.trim(),
+      repliedTo: "",
+      senderId: currentUser.uid,
     };
     setTypedMessage("");
     if (selectedImage) {
@@ -167,6 +173,7 @@ const TypeMessageSection: React.FC<TypeMessageSectionProps> = ({
             id="imageInput"
             type="file"
             accept=".png,.jpeg,.jpg"
+            ref={imageInputRef}
             onChange={handleImageSelect}
             style={{ display: "none" }}
           />
