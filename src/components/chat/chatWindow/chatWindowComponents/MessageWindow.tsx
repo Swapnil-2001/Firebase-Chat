@@ -89,12 +89,18 @@ const MessageWindow: React.FC<MessageWindowProps> = ({
     const handleSetConversationAsRead = async (): Promise<void> => {
       const currentUserId = currentUser?.uid;
       const messageRecipientId = messageRecipient?.uid;
-      if (currentUserId && messageRecipientId && freshConversationsLoaded) {
+      if (currentUserId && messageRecipientId) {
         await setConversationAsRead(conversationId, currentUserId);
         dispatch({ type: ARE_FRESH_CONVERSATIONS_LOADED, payload: false });
       }
     };
-    if (!isDistanceFromBottomAbove300) handleSetConversationAsRead();
+    if (
+      !isDistanceFromBottomAbove300 &&
+      conversationMessages.length > 0 &&
+      freshConversationsLoaded
+    )
+      handleSetConversationAsRead();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [
     conversationId,
     currentUser?.uid,
