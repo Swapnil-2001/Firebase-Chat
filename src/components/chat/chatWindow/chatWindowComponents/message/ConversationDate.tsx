@@ -9,12 +9,12 @@ const ConversationDate: React.FC<ConversationDateProps> = ({
   conversationDateString,
   showDate,
 }): JSX.Element => {
-  const dateToday = new Date();
+  const dateToday: Date = new Date();
 
-  const day = dateToday.getDate();
-  const month = dateToday.getMonth();
-  const year = dateToday.getFullYear();
-  const formattedDate =
+  const day: number = dateToday.getDate();
+  const month: number = dateToday.getMonth();
+  const year: number = dateToday.getFullYear();
+  const formattedDate: string =
     ("0" + day).slice(-2) + "/" + ("0" + (month + 1)).slice(-2) + "/" + year;
 
   return (

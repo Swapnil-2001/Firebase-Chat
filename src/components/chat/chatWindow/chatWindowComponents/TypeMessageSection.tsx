@@ -59,6 +59,12 @@ const TypeMessageSection: React.FC<TypeMessageSectionProps> = ({
     dispatch,
   ] = useContext(ChatContext);
 
+  const handleImageSelect = (
+    event: React.ChangeEvent<HTMLInputElement>
+  ): void => {
+    setSelectedImage(event.target?.files && event.target.files[0]);
+  };
+
   const handleKeyPress = (event: React.KeyboardEvent<HTMLElement>): void => {
     if (event.code === "Enter") sendMessage();
   };
@@ -68,12 +74,6 @@ const TypeMessageSection: React.FC<TypeMessageSectionProps> = ({
   ): void => {
     const { value } = event.target as HTMLInputElement;
     setTypedMessage(value);
-  };
-
-  const handleImageSelect = (
-    event: React.ChangeEvent<HTMLInputElement>
-  ): void => {
-    setSelectedImage(event.target?.files && event.target.files[0]);
   };
 
   const handleOpenOrCloseEmojiPicker = (): void => {
@@ -120,14 +120,14 @@ const TypeMessageSection: React.FC<TypeMessageSectionProps> = ({
       conversationId,
       currentUser.uid,
       messageRecipient,
-      typedMessage,
+      typedMessage.trim(),
       true
     );
     await updateUserChats(
       conversationId,
       messageRecipient.uid,
       currentUser as MessageRecipient,
-      typedMessage,
+      typedMessage.trim(),
       false
     );
   };

@@ -7,6 +7,7 @@ import { ChatContext } from "../../../context/ChatContext";
 import { UserContext } from "../../../context/UserContext";
 import SidebarConversations from "./sidebarComponents/SidebarConversations";
 import SidebarSearchResults from "./sidebarComponents/SidebarSearchResults";
+import { searchForUsers } from "../../../common/firebaseFunctions";
 import { MessageRecipient, UserConversation } from "../../../common/types";
 import {
   ARE_FRESH_CONVERSATIONS_LOADED,
@@ -18,7 +19,6 @@ import {
   SidebarContainer,
   SidebarSearchInput,
 } from "./Sidebar.styles";
-import { searchForUsers } from "../../../common/firebaseFunctions";
 
 export interface SearchedUser {
   uid: string;

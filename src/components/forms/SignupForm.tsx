@@ -1,14 +1,16 @@
 import { useContext, useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, NavigateFunction, useNavigate } from "react-router-dom";
 import { createUserWithEmailAndPassword, updateProfile } from "firebase/auth";
-import { doc, setDoc } from "firebase/firestore";
-import { getDownloadURL, ref, uploadBytesResumable } from "firebase/storage";
 import { v4 as uuid } from "uuid";
 import { AddAPhoto, CheckCircle } from "@mui/icons-material";
 import { CircularProgress, TextField } from "@mui/material";
 
-import { auth, db, storage } from "../../firebase";
+import { auth } from "../../firebase";
 import { ChatContext } from "../../context/ChatContext";
+import {
+  createNewUser,
+  getImageDownloadUrl,
+} from "../../common/firebaseFunctions";
 import {
   EMAIL_ALREADY_IN_USE_ERROR_CODE,
   EMAIL_FIELD_IS_EMPTY_ERROR,
@@ -18,8 +20,6 @@ import {
   PASSWORDS_DO_NOT_MATCH_ERROR,
   SIGNUP_DEFAULT_ERROR_MESSAGE,
   signupErrorMessages,
-  USERS_COLLECTION_NAME,
-  USER_CHATS_COLLECTION_NAME,
   SET_NEW_MESSAGE_RECIPIENT,
 } from "../../common/constants";
 import {
@@ -57,7 +57,7 @@ const SignupForm: React.FC = (): JSX.Element => {
 
   const [, dispatch] = useContext(ChatContext);
 
-  const navigate = useNavigate();
+  const navigate: NavigateFunction = useNavigate();
 
   const handleFileUpload = (event: React.FormEvent<HTMLInputElement>): void => {
     const { files } = event.currentTarget;
@@ -125,33 +125,25 @@ const SignupForm: React.FC = (): JSX.Element => {
       );
 
       let downloadUrl = "";
-
       if (userImage) {
         const firebaseStorageUrl = `userImages/${uuid()}`;
-        const storageRef = ref(storage, firebaseStorageUrl);
-
-        await uploadBytesResumable(storageRef, userImage as File);
-
-        downloadUrl = await getDownloadURL(storageRef);
+        downloadUrl = await getImageDownloadUrl(firebaseStorageUrl, userImage);
       }
 
       const signedUpUser = userCredential.user;
       const signedUpUserId = signedUpUser.uid;
-
       await updateProfile(signedUpUser, {
         displayName,
         photoURL: downloadUrl,
       });
 
       // Add data to Firestore
-      await setDoc(doc(db, USERS_COLLECTION_NAME, signedUpUserId), {
-        uid: signedUpUserId,
+      await createNewUser(
         displayName,
-        email: trimmedEmail,
-        photoURL: downloadUrl,
-      });
-
-      await setDoc(doc(db, USER_CHATS_COLLECTION_NAME, signedUpUserId), {});
+        downloadUrl,
+        signedUpUserId,
+        trimmedEmail
+      );
 
       navigate("/");
     } catch (error: any) {

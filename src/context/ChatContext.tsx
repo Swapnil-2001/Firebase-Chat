@@ -12,6 +12,7 @@ import {
 
 interface ChatInitialState {
   conversationId: string;
+  freshConversationsLoaded: boolean;
   hideMessageInput: boolean;
   // < 2 --> hide message window
   // === 1 --> show loading animation
@@ -20,17 +21,16 @@ interface ChatInitialState {
   magnifiedImageUrl: string;
   messageRecipient: MessageRecipient | null;
   sendingMessageLoading: boolean;
-  freshConversationsLoaded: boolean;
 }
 
 const initialState: ChatInitialState = {
   conversationId: "",
+  freshConversationsLoaded: false,
   hideMessageInput: true,
   hideMessageWindow: 0,
   magnifiedImageUrl: "",
   messageRecipient: null,
   sendingMessageLoading: false,
-  freshConversationsLoaded: false,
 };
 
 export const ChatContext = createContext<[ChatInitialState, Dispatch<any>]>([

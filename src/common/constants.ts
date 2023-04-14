@@ -33,6 +33,8 @@ export const PASSWORDS_DO_NOT_MATCH_ERROR = "Passwords must match.";
 // firestore async call errors
 export const ADD_MESSAGE_TO_CONVERSATION_ERROR_MESSAGE =
   "An error occurred while adding a new message to the conversation.";
+export const CREATE_NEW_USER_ERROR_MESSAGE =
+  "An error occurred while creating a new user.";
 export const GET_IMAGE_DOWNLOAD_URL_ERROR_MESSAGE =
   "An error occurred while get the download URL for the image.";
 export const SEARCH_USERS_ERROR_MESSAGE =

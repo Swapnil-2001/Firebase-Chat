@@ -1,5 +1,5 @@
 import { useContext, useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, NavigateFunction, useNavigate } from "react-router-dom";
 import { signInWithEmailAndPassword } from "firebase/auth";
 import { CircularProgress, TextField } from "@mui/material";
 
@@ -41,7 +41,7 @@ const LoginForm: React.FC = (): JSX.Element => {
 
   const [, dispatch] = useContext(ChatContext);
 
-  const navigate = useNavigate();
+  const navigate: NavigateFunction = useNavigate();
 
   const handleFormChange = (
     event: React.FormEvent<HTMLTextAreaElement | HTMLInputElement>

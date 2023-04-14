@@ -7,6 +7,7 @@ import { UserContext } from "../../../../context/UserContext";
 import ConversationDate from "./message/ConversationDate";
 import MessageReceivedByUser from "./message/MessageReceivedByUser";
 import MessageSentByUser from "./message/MessageSentByUser";
+import { setConversationAsRead } from "../../../../common/firebaseFunctions";
 import { generateFormattedMessages } from "../../../../common/utils";
 import { ConversationMessage } from "../../../../common/types";
 import {
@@ -16,7 +17,6 @@ import {
   UNHIDE_MESSAGE_WINDOW,
 } from "../../../../common/constants";
 import { MessageWindowContainer } from "../ChatWindow.styles";
-import { setConversationAsRead } from "../../../../common/firebaseFunctions";
 
 interface MessageWindowProps {
   setOpenEmojiPicker: (_: boolean) => void;
@@ -43,8 +43,10 @@ const MessageWindow: React.FC<MessageWindowProps> = ({
     dispatch,
   ] = useContext(ChatContext);
 
-  const messagesEndRef = useRef<null | HTMLDivElement>(null);
-  const containerRef = useRef<null | HTMLDivElement>(null);
+  const messagesEndRef: React.MutableRefObject<HTMLDivElement | null> =
+    useRef<null | HTMLDivElement>(null);
+  const containerRef: React.MutableRefObject<HTMLDivElement | null> =
+    useRef<null | HTMLDivElement>(null);
 
   useEffect(() => {
     setComponentJustLoaded(true);

@@ -9,7 +9,7 @@ const MessageTime: React.FC<MessageTimeProps> = ({
   time,
   moveToLeft,
 }): JSX.Element => {
-  const lengthOfTimeString = time.length;
+  const lengthOfTimeString: number = time.length;
   return (
     <MessageSendTimeContainer moveToLeft={moveToLeft}>
       {time.substring(0, lengthOfTimeString - 3)}

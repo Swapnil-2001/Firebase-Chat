@@ -27,6 +27,7 @@ import {
   USERS_COLLECTION_NAME,
   UPDATE_USER_CHATS_ERROR_MESSAGE,
   USER_CHATS_COLLECTION_NAME,
+  CREATE_NEW_USER_ERROR_MESSAGE,
 } from "./constants";
 
 export const addNewMessageToConversation = async (
@@ -51,16 +52,41 @@ export const addNewMessageToConversation = async (
   }
 };
 
+export const createNewUser = async (
+  displayName: string,
+  downloadUrl: string,
+  signedUpUserId: string,
+  trimmedEmail: string
+) => {
+  try {
+    const usersDocReference = doc(db, USERS_COLLECTION_NAME, signedUpUserId);
+    await setDoc(usersDocReference, {
+      uid: signedUpUserId,
+      displayName,
+      email: trimmedEmail,
+      photoURL: downloadUrl,
+    });
+    const userChatsDocReference = doc(
+      db,
+      USER_CHATS_COLLECTION_NAME,
+      signedUpUserId
+    );
+    await setDoc(userChatsDocReference, {});
+  } catch (error) {
+    console.error(CREATE_NEW_USER_ERROR_MESSAGE);
+  }
+};
+
 export const getImageDownloadUrl = async (
   firebaseStorageUrl: string,
   selectedImage: File
 ): Promise<string> => {
   try {
-    const messageImageStorageRef = ref(storage, firebaseStorageUrl);
+    const imageStorageRef = ref(storage, firebaseStorageUrl);
 
-    await uploadBytesResumable(messageImageStorageRef, selectedImage);
+    await uploadBytesResumable(imageStorageRef, selectedImage);
 
-    const downloadUrl = await getDownloadURL(messageImageStorageRef);
+    const downloadUrl = await getDownloadURL(imageStorageRef);
     return downloadUrl;
   } catch (error) {
     console.error(GET_IMAGE_DOWNLOAD_URL_ERROR_MESSAGE);
