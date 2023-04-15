@@ -43,26 +43,35 @@ const MessageWindow: React.FC<MessageWindowProps> = ({
   const containerRef: React.MutableRefObject<HTMLDivElement | null> =
     useRef<HTMLDivElement>(null);
 
+  // Fetch all messages in the conversation and format them. Should
+  // run only once, if a conversationId exists.
   useEffect(() => {
     setComponentJustLoaded(true);
     setConversationMessages([]);
     if (conversationId.length > 0) {
-      const unsubscribe = onSnapshot(
-        doc(db, ALL_MESSAGES_COLLECTION_NAME, conversationId),
-        (document) => {
-          if (document.exists()) {
-            const conversationMessages: any[] = document.data().messages;
-            const formattedMessages =
-              generateFormattedMessages(conversationMessages);
-            setConversationMessages(formattedMessages);
-          }
-        }
+      const docReference = doc(
+        db,
+        ALL_MESSAGES_COLLECTION_NAME,
+        conversationId
       );
+      const unsubscribe = onSnapshot(docReference, (document) => {
+        if (document.exists()) {
+          const conversationMessages: any[] = document.data().messages;
+          const formattedMessages =
+            generateFormattedMessages(conversationMessages);
+          setConversationMessages(formattedMessages);
+        }
+      });
       return () => unsubscribe();
     }
     return;
   }, [conversationId]);
 
+  // Handle scrolling to bottom
+  // We want to scroll to bottom if:
+  // 1. The component just loaded, or
+  // 2. The last message was sent by the current user, or
+  // 3. The user has not scrolled too far up when the new message arrives
   useEffect(() => {
     const numConversations = conversationMessages.length;
     if (numConversations > 0) {
@@ -85,6 +94,10 @@ const MessageWindow: React.FC<MessageWindowProps> = ({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [componentJustLoaded, conversationMessages, currentUser?.uid, dispatch]);
 
+  // Handle setting the conversation as 'READ'
+  // 1. There should be messages in the conversation
+  // 2. Should run when new message(s) have been added to the conversation
+  // 3. The user shouldn't have scrolled too far up
   useEffect(() => {
     const handleSetConversationAsRead = async (): Promise<void> => {
       const currentUserId = currentUser?.uid;
