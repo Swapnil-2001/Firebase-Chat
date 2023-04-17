@@ -14,3 +14,4 @@ export const lightBlue = "#205295";
 export const lightGray = "#b2b2b2";
 export const lightPurple = "#865DFF";
 export const white = "#fff";
+export const yellow = "#F3E99F";

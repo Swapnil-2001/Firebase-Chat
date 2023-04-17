@@ -1,5 +1,6 @@
 import { useContext } from "react";
 
+import { AppContext } from "../../../../../context/AppContext";
 import { ChatContext } from "../../../../../context/ChatContext";
 import MessageTime from "./MessageTime";
 import { MessageOnWindow } from "../../../../../common/types";
@@ -16,6 +17,7 @@ const MessageSentByUser: React.FC<MessageOnWindow> = ({
   imageUrl,
   messageText,
 }): JSX.Element => {
+  const [{ appThemeColor }] = useContext(AppContext);
   const [, dispatch] = useContext(ChatContext);
 
   const showMagnifiedImageView = (imageUrl: string): void => {
@@ -36,7 +38,7 @@ const MessageSentByUser: React.FC<MessageOnWindow> = ({
           />
         </MessageImageContainer>
       )}
-      <MessageSentByUserContainer>
+      <MessageSentByUserContainer background={appThemeColor}>
         {messageText}
         <MessageTime
           time={date.toDate().toLocaleTimeString()}

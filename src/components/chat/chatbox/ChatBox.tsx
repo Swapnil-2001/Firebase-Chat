@@ -5,6 +5,7 @@ import { Fade } from "@mui/material";
 import { ChatContext } from "../../../context/ChatContext";
 import ChatBoxNavbar from "../chatBoxNavbar/ChatBoxNavbar";
 import ChatWindow from "../chatWindow/ChatWindow";
+import SettingsModal from "../../modals/settings/SettingsModal";
 import Sidebar from "../sidebar/Sidebar";
 import { SHOW_IMAGE } from "../../../common/constants";
 import {
@@ -43,14 +44,17 @@ const MagnifiedImageComponent: React.FC = (): JSX.Element => {
 
 const ChatBox: React.FC = (): JSX.Element => {
   return (
-    <ChatBoxOuterContainer>
-      <MagnifiedImageComponent />
-      <ChatBoxNavbar />
-      <ChatBoxInnerContainer>
-        <Sidebar />
-        <ChatWindow />
-      </ChatBoxInnerContainer>
-    </ChatBoxOuterContainer>
+    <>
+      <SettingsModal />
+      <ChatBoxOuterContainer>
+        <MagnifiedImageComponent />
+        <ChatBoxNavbar />
+        <ChatBoxInnerContainer>
+          <Sidebar />
+          <ChatWindow />
+        </ChatBoxInnerContainer>
+      </ChatBoxOuterContainer>
+    </>
   );
 };
 

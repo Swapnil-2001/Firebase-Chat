@@ -7,7 +7,6 @@ import {
   lightBlack,
   lightPurple,
   lightGray,
-  messageByUserBackgroundColor,
   white,
 } from "../../../common/colors";
 
@@ -22,6 +21,18 @@ interface ConversationDateContainerProps {
 
 interface MessageContainerProps {
   moveToLeft: boolean;
+}
+
+interface MessageSentByUserContainerProps {
+  background: string;
+}
+
+interface SelectPreviewProps {
+  borderColor: string;
+}
+
+interface SendMessageIconWrapperProps {
+  background: string;
 }
 
 export const CancelIconContainer = styled.div`
@@ -165,7 +176,7 @@ export const MessageSendTimeContainer = styled.div<MessageContainerProps>`
   font-size: 0.65rem;
 `;
 
-export const MessageSentByUserContainer = styled.div`
+export const MessageSentByUserContainer = styled.div<MessageSentByUserContainerProps>`
   margin: 5px 25px 0 auto;
   padding: 15px 20px;
   padding-bottom: 5px;
@@ -175,7 +186,7 @@ export const MessageSentByUserContainer = styled.div`
   font-size: 0.8rem;
   font-weight: 500;
   line-height: 1.8;
-  background-color: ${messageByUserBackgroundColor};
+  background-color: ${({ background }) => background};
   border-radius: 20px;
   border-bottom-right-radius: 0;
 `;
@@ -208,7 +219,7 @@ export const SelectEmojiIconWrapper = styled.div`
   margin-left: 15px;
 `;
 
-export const SelectPreview = styled.div`
+export const SelectPreview = styled.div<SelectPreviewProps>`
   position: absolute;
   bottom: ${typeMessageSectionHeight};
   display: flex;
@@ -220,17 +231,17 @@ export const SelectPreview = styled.div`
   color: ${gray};
   font-size: 13px;
   background-color: ${lightBlack};
-  border-top: 4px solid ${messageByUserBackgroundColor};
+  border-top: 4px solid ${({ borderColor }) => borderColor};
   border-top-left-radius: 15px;
   border-top-right-radius: 15px;
 `;
 
-export const SendMessageIconWrapper = styled.div`
+export const SendMessageIconWrapper = styled.div<SendMessageIconWrapperProps>`
   display: flex;
   align-items: center;
   margin-left: 18px;
   padding: 7px 10px;
-  background-color: ${messageByUserBackgroundColor};
+  background-color: ${({ background }) => background};
   border-radius: 10px;
   transition: background-color 0.3s;
 

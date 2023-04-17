@@ -44,7 +44,11 @@ export const SET_CONVERSATION_AS_READ_ERROR_MESSAGE =
 export const UPDATE_USER_CHATS_ERROR_MESSAGE =
   "An error occurred while updating user chats.";
 
-// dispatch constants
+// AppContext dispatch constants
+export const OPEN_SETTINGS_MODAL = "OPEN_SETTINGS_MODAL";
+export const SET_APP_THEME_COLOR = "SET_APP_THEME_COLOR";
+
+// ChatContext dispatch constants
 export const RESET_TO_DEFAULT_VALUES = "RESET_TO_DEFAULT_VALUES";
 export const SET_NEW_MESSAGE_RECIPIENT = "SET_NEW_MESSAGE_RECIPIENT";
 export const SET_SENDING_MESSAGE_LOADING = "SET_SENDING_MESSAGE_LOADING";

@@ -12,6 +12,7 @@ import SendIcon from "@mui/icons-material/Send";
 import SentimentSatisfiedOutlinedIcon from "@mui/icons-material/SentimentSatisfiedOutlined";
 import { CircularProgress, Fade } from "@mui/material";
 
+import { AppContext } from "../../../../context/AppContext";
 import { ChatContext } from "../../../../context/ChatContext";
 import { UserContext } from "../../../../context/UserContext";
 import {
@@ -46,12 +47,11 @@ const TypeMessageSection: React.FC<TypeMessageSectionProps> = ({
   setOpenEmojiPicker,
 }): JSX.Element => {
   const [typedMessage, setTypedMessage] = useState<string>("");
-  const [repliedTo, setRepliedTo] = useState<string>("");
   const [selectedImage, setSelectedImage] = useState<File | null>(null);
 
   const imageInputRef = useRef<HTMLInputElement>(null);
 
-  const { currentUser } = useContext(UserContext);
+  const [{ appThemeColor }] = useContext(AppContext);
   const [
     {
       conversationId,
@@ -61,6 +61,7 @@ const TypeMessageSection: React.FC<TypeMessageSectionProps> = ({
     },
     dispatch,
   ] = useContext(ChatContext);
+  const { currentUser } = useContext(UserContext);
 
   const handleImageSelect = (
     event: React.ChangeEvent<HTMLInputElement>
@@ -110,7 +111,6 @@ const TypeMessageSection: React.FC<TypeMessageSectionProps> = ({
       date: Timestamp.now(),
       imageUrl: "",
       messageText: typedMessage.trim(),
-      repliedTo,
       senderId: currentUser.uid,
     };
     setTypedMessage("");
@@ -144,7 +144,7 @@ const TypeMessageSection: React.FC<TypeMessageSectionProps> = ({
       {!hideMessageInput && (
         <>
           {selectedImage && (
-            <SelectPreview>
+            <SelectPreview borderColor={appThemeColor}>
               Image selected
               <CancelIconContainer onClick={handleRemoveSelectedImage}>
                 <CancelIcon sx={CancelIconStyles} />
@@ -184,7 +184,10 @@ const TypeMessageSection: React.FC<TypeMessageSectionProps> = ({
           <SelectEmojiIconWrapper onClick={handleOpenOrCloseEmojiPicker}>
             <SentimentSatisfiedOutlinedIcon sx={SelectEmojiIconStyles} />
           </SelectEmojiIconWrapper>
-          <SendMessageIconWrapper onClick={sendMessage}>
+          <SendMessageIconWrapper
+            background={appThemeColor}
+            onClick={sendMessage}
+          >
             {sendingMessageLoading ? (
               <CircularProgress size={25} sx={{ color: white }} />
             ) : (

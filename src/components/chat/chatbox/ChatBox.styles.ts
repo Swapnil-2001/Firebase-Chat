@@ -6,7 +6,6 @@ import {
   chatWindowBackgroundColor,
   darkRed,
   lightBlack,
-  messageByUserBackgroundColor,
   white,
 } from "../../../common/colors";
 
@@ -97,20 +96,6 @@ export const ChatBoxUserSectionLogoutButtonContainer = styled.div`
   &:hover {
     width: 90%;
   }
-`;
-
-export const ChatBoxUserSectionNavbar = styled.div`
-  display: flex;
-  align-items: center;
-  height: ${chatBoxNavbarHeight};
-  color: ${white};
-  background-color: ${messageByUserBackgroundColor};
-  border-top-left-radius: ${chatBoxBorderRadius};
-`;
-
-export const ChatBoxUserSectionNavbarText = styled.div`
-  margin-left: 30px;
-  font-weight: 500;
 `;
 
 export const MagnifiedImage = styled.img`

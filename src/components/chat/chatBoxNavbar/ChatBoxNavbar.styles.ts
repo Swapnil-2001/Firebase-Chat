@@ -6,14 +6,22 @@ import {
   darkRed,
   lightBlack,
   lightGray,
-  messageByUserBackgroundColor,
   white,
+  yellow,
 } from "../../../common/colors";
 
 const chatBoxBorderRadius = "35px";
 
 const chatBoxNavbarHeight = "75px";
 const chatBoxOuterContainerHeight = "725px";
+
+interface ChatBoxNavbarSettingsButtonProps {
+  openSettingsModal: boolean;
+}
+
+interface ChatBoxUserSectionNavbarProps {
+  background: string;
+}
 
 export const ArrowBackIconStyles = {
   marginLeft: "30px",
@@ -39,6 +47,26 @@ export const ChatBoxNavbarImageContainer = styled.div`
   display: flex;
   align-items: center;
   margin-left: 30px;
+`;
+
+export const ChatBoxNavbarSettingsButton = styled.div<ChatBoxNavbarSettingsButtonProps>`
+  display: flex;
+  align-items: center;
+  margin-left: 30px;
+  color: ${({ openSettingsModal }) => (openSettingsModal ? yellow : lightGray)};
+  border-top: ${({ openSettingsModal }) =>
+    `3px solid ${openSettingsModal ? yellow : "transparent"}`};
+  cursor: pointer;
+  transition: color 0.3s;
+
+  &:hover {
+    color: ${({ openSettingsModal }) => (openSettingsModal ? yellow : white)};
+  }
+`;
+
+export const ChatBoxNavbarSettingsText = styled.p`
+  margin-left: 10px;
+  font-size: 0.85rem;
 `;
 
 export const ChatBoxUserSectionContainer = styled.div`
@@ -89,12 +117,12 @@ export const ChatBoxUserSectionNameContainer = styled.div`
   font-weight: 500;
 `;
 
-export const ChatBoxUserSectionNavbar = styled.div`
+export const ChatBoxUserSectionNavbar = styled.div<ChatBoxUserSectionNavbarProps>`
   display: flex;
   align-items: center;
   height: ${chatBoxNavbarHeight};
   color: ${white};
-  background-color: ${messageByUserBackgroundColor};
+  background-color: ${({ background }) => background};
   border-top-left-radius: ${chatBoxBorderRadius};
 `;
 
