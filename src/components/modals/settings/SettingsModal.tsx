@@ -5,35 +5,17 @@ import { ColorChangeHandler, ColorResult, TwitterPicker } from "react-color";
 
 import { AppContext } from "../../../context/AppContext";
 import {
+  COLOR_PICKER_COLORS,
   OPEN_SETTINGS_MODAL,
   SET_APP_THEME_COLOR,
+  TWITTER_STYLE,
 } from "../../../common/constants";
-import { lightBlack } from "../../../common/colors";
 import {
   SettingsModalContainer,
   SettingsModalCurrentTheme,
   SettingsModalCurrentThemeContainer,
   SettingsModalText,
 } from "./SettingsModal.styles";
-
-const twitterStyle = {
-  default: {
-    input: {
-      display: "none",
-    },
-    hash: {
-      display: "none",
-    },
-    card: {
-      display: "flex",
-      justifyContent: "center",
-      alignItems: "center",
-      height: "70px",
-      backgroundColor: lightBlack,
-      boxShadow: "rgba(0, 0, 0, 0.35) 0px 5px 15px",
-    },
-  },
-};
 
 const SettingsModal: React.FC = (): JSX.Element => {
   const [{ appThemeColor, openSettingsModal }, dispatch] =
@@ -64,11 +46,11 @@ const SettingsModal: React.FC = (): JSX.Element => {
             }}
           >
             <TwitterPicker
-              colors={["#655DBB", "#0A4D68", "#3C486B"]}
+              colors={COLOR_PICKER_COLORS}
               width="150px"
               triangle="hide"
               onChangeComplete={handlePickAppThemeColor}
-              styles={twitterStyle}
+              styles={TWITTER_STYLE}
             />
             <SettingsModalCurrentThemeContainer>
               Current theme{" "}

@@ -131,6 +131,7 @@ export const updateUserChats = async (
   conversationId: string,
   idOfUser1: string,
   user2: MessageRecipient,
+  idOfSender: string,
   typedMessage: string,
   conversationReadStatus: boolean
 ): Promise<void> => {
@@ -144,6 +145,7 @@ export const updateUserChats = async (
       },
       [`${conversationId}.lastMessage`]: {
         messageText: typedMessage,
+        idOfSender,
       },
       [`${conversationId}.date`]: Timestamp.now(),
       [`${conversationId}.isRead`]: conversationReadStatus,

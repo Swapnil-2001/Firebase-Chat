@@ -25,6 +25,7 @@ export interface UserConversation {
   userInfo: MessageRecipient;
   lastMessage: {
     messageText: string;
+    idOfSender: string;
   };
   date: any;
   isRead: boolean;

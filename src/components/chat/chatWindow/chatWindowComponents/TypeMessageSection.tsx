@@ -102,6 +102,8 @@ const TypeMessageSection: React.FC<TypeMessageSectionProps> = ({
       (typedMessage.trim().length === 0 && !selectedImage)
     )
       return;
+
+    const currentUserId = currentUser.uid;
     setOpenEmojiPicker(false);
     setSelectedImage(null);
     handleRemoveSelectedImage();
@@ -111,7 +113,7 @@ const TypeMessageSection: React.FC<TypeMessageSectionProps> = ({
       date: Timestamp.now(),
       imageUrl: "",
       messageText: typedMessage.trim(),
-      senderId: currentUser.uid,
+      senderId: currentUserId,
     };
     setTypedMessage("");
     if (selectedImage) {
@@ -125,8 +127,9 @@ const TypeMessageSection: React.FC<TypeMessageSectionProps> = ({
     await addNewMessageToConversation(conversationId, newMessageCreated);
     await updateUserChats(
       conversationId,
-      currentUser.uid,
+      currentUserId,
       messageRecipient,
+      currentUserId,
       typedMessage.trim(),
       true
     );
@@ -134,6 +137,7 @@ const TypeMessageSection: React.FC<TypeMessageSectionProps> = ({
       conversationId,
       messageRecipient.uid,
       currentUser as MessageRecipient,
+      currentUserId,
       typedMessage.trim(),
       false
     );

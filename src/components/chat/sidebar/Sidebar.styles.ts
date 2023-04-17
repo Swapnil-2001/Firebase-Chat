@@ -12,6 +12,11 @@ interface SidebarConversationProps {
   isSelected: boolean;
 }
 
+export const DoneAllOutlinedIconStyles = {
+  fontSize: "15px",
+  marginRight: "5px",
+};
+
 export const LinearProgressStyles = {
   margin: "auto 0",
   width: "190px",
@@ -69,6 +74,8 @@ export const SidebarConversationInfoContainer = styled.div`
 `;
 
 export const SidebarConversationLastMessage = styled.span`
+  display: flex;
+  align-items: center;
   color: ${gray};
   font-size: 0.75rem;
 `;

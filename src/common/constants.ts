@@ -1,3 +1,5 @@
+import { lightBlack } from "./colors";
+
 // Login errors
 export const LOGIN_DEFAULT_ERROR_MESSAGE =
   "An error occurred while logging in. Please try again.";
@@ -60,3 +62,23 @@ export const UNHIDE_MESSAGE_WINDOW = "UNHIDE_MESSAGE_WINDOW";
 export const ALL_MESSAGES_COLLECTION_NAME = "allMessages";
 export const USER_CHATS_COLLECTION_NAME = "chatsByUser";
 export const USERS_COLLECTION_NAME = "users";
+
+// Settings modal constants
+export const COLOR_PICKER_COLORS = ["#655DBB", "#0A4D68", "#3C486B", "#CE5959"];
+export const TWITTER_STYLE = {
+  default: {
+    input: {
+      display: "none",
+    },
+    hash: {
+      display: "none",
+    },
+    card: {
+      display: "flex",
+      justifyContent: "center",
+      width: "200px",
+      backgroundColor: lightBlack,
+      boxShadow: "rgba(0, 0, 0, 0.35) 0px 5px 15px",
+    },
+  },
+};
