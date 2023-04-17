@@ -12,6 +12,17 @@ interface SidebarConversationProps {
   isSelected: boolean;
 }
 
+export const CloseSearchSectionButton = styled.div`
+  text-align: center;
+  color: ${gray};
+  cursor: pointer;
+  transition: color 0.3s;
+
+  &:hover {
+    color: ${lightGray};
+  }
+`;
+
 export const DoneAllOutlinedIconStyles = {
   fontSize: "15px",
   marginRight: "5px",
@@ -158,6 +169,7 @@ export const SidebarSearchResultsContainer = styled.div`
 `;
 
 export const SidebarSearchResultsHelperText = styled.div`
+  margin-top: 20px;
   color: ${lightGray};
   font-size: 0.85rem;
   font-weight: 600;

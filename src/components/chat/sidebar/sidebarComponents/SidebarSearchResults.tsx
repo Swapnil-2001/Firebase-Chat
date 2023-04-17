@@ -1,9 +1,11 @@
 import { useContext } from "react";
+import CloseOutlinedIcon from "@mui/icons-material/CloseOutlined";
 
 import { ChatContext } from "../../../../context/ChatContext";
 import { SearchedUser } from "../Sidebar";
 import { MessageRecipient } from "../../../../common/types";
 import {
+  CloseSearchSectionButton,
   SidebarSearchResult,
   SidebarSearchResultImage,
   SidebarSearchResultName,
@@ -14,12 +16,14 @@ import defaultImage from "../../../../assets/Default.png";
 
 interface SidebarSearchResultsProps {
   hasSearched: boolean;
+  removeSearchTerm: () => void;
   searchResults: SearchedUser[];
   selectAnUser: (userToBeSelected: MessageRecipient) => void;
 }
 
 const SidebarSearchResults: React.FC<SidebarSearchResultsProps> = ({
   hasSearched,
+  removeSearchTerm,
   searchResults,
   selectAnUser,
 }): JSX.Element => {
@@ -39,6 +43,9 @@ const SidebarSearchResults: React.FC<SidebarSearchResultsProps> = ({
 
   return (
     <SidebarSearchResultsContainer>
+      <CloseSearchSectionButton onClick={removeSearchTerm}>
+        <CloseOutlinedIcon />
+      </CloseSearchSectionButton>
       {searchResults.length > 0 ? (
         searchResults?.map((result) => (
           <SidebarSearchResult
@@ -48,7 +55,7 @@ const SidebarSearchResults: React.FC<SidebarSearchResultsProps> = ({
           >
             <SidebarSearchResultImage
               src={result.photoURL ? result.photoURL : defaultImage}
-              alt="The user searched for."
+              alt="The user searched for"
             />
             <SidebarSearchResultName>
               {result.displayName}

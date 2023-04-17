@@ -108,6 +108,10 @@ const Sidebar: React.FC = (): JSX.Element => {
     setHasSearched(true);
   };
 
+  const removeSearchTerm = (): void => {
+    setSearchedUser("");
+  };
+
   const selectAnUser = (userToBeSelected: MessageRecipient): void => {
     if (!currentUser) return;
 
@@ -142,6 +146,7 @@ const Sidebar: React.FC = (): JSX.Element => {
       {searchedUser.length > 0 ? (
         <SidebarSearchResults
           hasSearched={hasSearched}
+          removeSearchTerm={removeSearchTerm}
           searchResults={searchResults}
           selectAnUser={selectAnUser}
         />
