@@ -12,8 +12,8 @@ import { generateFormattedMessages } from "../../../../common/utils";
 import { ConversationMessage } from "../../../../common/types";
 import {
   ALL_MESSAGES_COLLECTION_NAME,
-  ARE_FRESH_CONVERSATIONS_LOADED,
   SET_SENDING_MESSAGE_LOADING,
+  SET_UNREAD_CONVERSATIONS,
   UNHIDE_MESSAGE_WINDOW,
 } from "../../../../common/constants";
 import { MessageWindowContainer } from "../ChatWindow.styles";
@@ -33,10 +33,11 @@ const MessageWindow: React.FC<MessageWindowProps> = ({
   const [componentJustLoaded, setComponentJustLoaded] = useState<boolean>(true);
 
   const { currentUser } = useContext(UserContext);
-  const [
-    { conversationId, freshConversationsLoaded, messageRecipient },
-    dispatch,
-  ] = useContext(ChatContext);
+  const [{ conversationId, messageRecipient, unreadConversations }, dispatch] =
+    useContext(ChatContext);
+
+  const currentUserId = currentUser?.uid;
+  const messageRecipientId = messageRecipient?.uid;
 
   const messagesEndRef: React.MutableRefObject<HTMLDivElement | null> =
     useRef<HTMLDivElement>(null);
@@ -79,8 +80,7 @@ const MessageWindow: React.FC<MessageWindowProps> = ({
         scrollToBottom();
         setComponentJustLoaded(false);
       } else if (
-        conversationMessages[numConversations - 1].senderId ===
-          currentUser?.uid ||
+        conversationMessages[numConversations - 1].senderId === currentUserId ||
         !isDistanceFromBottomAbove300
       )
         scrollToBottom();
@@ -92,7 +92,7 @@ const MessageWindow: React.FC<MessageWindowProps> = ({
 
     return () => clearTimeout(timer);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [componentJustLoaded, conversationMessages, currentUser?.uid, dispatch]);
+  }, [componentJustLoaded, conversationMessages, currentUserId, dispatch]);
 
   // Handle setting the conversation as 'READ'
   // 1. There should be messages in the conversation
@@ -100,27 +100,30 @@ const MessageWindow: React.FC<MessageWindowProps> = ({
   // 3. The user shouldn't have scrolled too far up
   useEffect(() => {
     const handleSetConversationAsRead = async (): Promise<void> => {
-      const currentUserId = currentUser?.uid;
-      const messageRecipientId = messageRecipient?.uid;
-      if (currentUserId && messageRecipientId) {
+      if (currentUserId)
         await setConversationAsRead(conversationId, currentUserId);
-        dispatch({ type: ARE_FRESH_CONVERSATIONS_LOADED, payload: false });
-      }
     };
     if (
       conversationMessages.length > 0 &&
-      freshConversationsLoaded &&
+      messageRecipientId &&
+      unreadConversations.has(messageRecipientId) &&
       !isDistanceFromBottomAbove300
-    )
+    ) {
+      unreadConversations.delete(messageRecipientId);
+      dispatch({
+        type: SET_UNREAD_CONVERSATIONS,
+        payload: unreadConversations,
+      });
       handleSetConversationAsRead();
+    }
   }, [
     conversationId,
     conversationMessages.length,
-    currentUser?.uid,
+    currentUserId,
     dispatch,
-    freshConversationsLoaded,
     isDistanceFromBottomAbove300,
-    messageRecipient?.uid,
+    messageRecipientId,
+    unreadConversations,
   ]);
 
   useEffect(() => {
@@ -164,7 +167,7 @@ const MessageWindow: React.FC<MessageWindowProps> = ({
           senderId,
           showDate,
         }) => {
-          return senderId === currentUser?.uid ? (
+          return senderId === currentUserId ? (
             <div key={id}>
               <ConversationDate
                 conversationDateString={conversationDateString}

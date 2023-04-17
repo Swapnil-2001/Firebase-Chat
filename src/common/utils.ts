@@ -1,4 +1,4 @@
-import { ConversationMessage } from "./types";
+import { ConversationMessage, UserConversation } from "./types";
 
 export const generateFormattedMessages = (
   conversationMessages: any[]
@@ -30,4 +30,14 @@ export const generateFormattedMessages = (
       });
   });
   return formattedMessages;
+};
+
+export const getUnreadConversations = (
+  arrayWithUserConversations: UserConversation[]
+): Set<string> => {
+  const unreadConversations: Set<string> = new Set();
+  arrayWithUserConversations.forEach(({ isRead, userInfo }) => {
+    if (!isRead) unreadConversations.add(userInfo.uid);
+  });
+  return unreadConversations;
 };

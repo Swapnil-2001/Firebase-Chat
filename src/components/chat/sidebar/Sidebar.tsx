@@ -8,10 +8,11 @@ import { UserContext } from "../../../context/UserContext";
 import SidebarConversations from "./sidebarComponents/SidebarConversations";
 import SidebarSearchResults from "./sidebarComponents/SidebarSearchResults";
 import { searchForUsers } from "../../../common/firebaseFunctions";
+import { getUnreadConversations } from "../../../common/utils";
 import { MessageRecipient, UserConversation } from "../../../common/types";
 import {
-  ARE_FRESH_CONVERSATIONS_LOADED,
   SET_NEW_MESSAGE_RECIPIENT,
+  SET_UNREAD_CONVERSATIONS,
   USER_CHATS_COLLECTION_NAME,
 } from "../../../common/constants";
 import {
@@ -66,7 +67,13 @@ const Sidebar: React.FC = (): JSX.Element => {
                   conversation2.date - conversation1.date
               )
             );
-            dispatch({ type: ARE_FRESH_CONVERSATIONS_LOADED, payload: true });
+            const unreadConversations: Set<string> = getUnreadConversations(
+              arrayWithUserConversations
+            );
+            dispatch({
+              type: SET_UNREAD_CONVERSATIONS,
+              payload: unreadConversations,
+            });
             setAreConversationsLoading(false);
           }
         }
