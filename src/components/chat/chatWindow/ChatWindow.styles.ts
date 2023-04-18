@@ -161,6 +161,7 @@ export const LikedMessageSentIconStyles = {
   bottom: "-14px",
   right: "18px",
   color: darkRed,
+  stroke: white,
   zIndex: 50,
 };
 
