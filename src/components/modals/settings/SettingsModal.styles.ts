@@ -17,9 +17,8 @@ export const SettingsModalContainer = styled.div`
   transform: translate(-50%, -50%);
   display: flex;
   flex-direction: column;
-  padding: 50px;
-  min-height: 70%;
-  min-width: 50%;
+  justify-content: center;
+  padding: 50px 75px;
   background-color: ${chatBoxBackgroundColor};
   border-radius: 10px;
   outline: none;

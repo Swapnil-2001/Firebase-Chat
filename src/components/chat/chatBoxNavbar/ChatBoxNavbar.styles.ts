@@ -52,7 +52,7 @@ export const ChatBoxNavbarImageContainer = styled.div`
 export const ChatBoxNavbarSettingsButton = styled.div<ChatBoxNavbarSettingsButtonProps>`
   display: flex;
   align-items: center;
-  margin-left: 30px;
+  margin-left: 19%;
   color: ${({ openSettingsModal }) => (openSettingsModal ? yellow : lightGray)};
   border-top: ${({ openSettingsModal }) =>
     `3px solid ${openSettingsModal ? yellow : "transparent"}`};

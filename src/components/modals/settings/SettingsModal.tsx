@@ -37,7 +37,7 @@ const SettingsModal: React.FC = (): JSX.Element => {
     >
       <Fade in={openSettingsModal}>
         <SettingsModalContainer>
-          <SettingsModalText>Pick the chat theme</SettingsModalText>
+          <SettingsModalText>Change the chat theme</SettingsModalText>
           <div
             style={{
               display: "flex",
