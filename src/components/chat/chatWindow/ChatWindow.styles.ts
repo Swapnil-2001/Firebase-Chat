@@ -153,6 +153,7 @@ export const LikedMessageReceivedIconStyles = {
   bottom: "-14px",
   left: "18px",
   color: darkRed,
+  zIndex: 50,
 };
 
 export const LikedMessageSentIconStyles = {
@@ -160,6 +161,7 @@ export const LikedMessageSentIconStyles = {
   bottom: "-14px",
   right: "18px",
   color: darkRed,
+  zIndex: 50,
 };
 
 export const LinearProgressStyles = {
