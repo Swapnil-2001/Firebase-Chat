@@ -1,22 +1,32 @@
 import { useContext } from "react";
+import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
+import FavoriteOutlinedIcon from "@mui/icons-material/FavoriteOutlined";
 
 import { ChatContext } from "../../../../../context/ChatContext";
 import MessageTime from "./MessageTime";
 import { MessageOnWindow } from "../../../../../common/types";
 import { SHOW_IMAGE } from "../../../../../common/constants";
 import {
+  LikeButtonContainer,
+  LikeButtonStyles,
+  LikedMessageReceivedIconStyles,
   MessageImage,
   MessageImageContainer,
   MessageReceivedByUserContainer,
+  MessageReceivedByUserDiv,
 } from "../../ChatWindow.styles";
+import { likeMessage } from "../../../../../common/firebaseFunctions";
 
 const MessageReceivedByUser: React.FC<MessageOnWindow> = ({
-  date,
+  handleHoverOnMessage,
   handleImageLoaded,
-  imageUrl,
-  messageText,
+  idOfMessageHoveredOver,
+  isLiked,
+  message,
 }): JSX.Element => {
-  const [, dispatch] = useContext(ChatContext);
+  const { date, id, imageUrl, messageText } = message;
+
+  const [{ conversationId }, dispatch] = useContext(ChatContext);
 
   const showMagnifiedImageView = (imageUrl: string): void => {
     dispatch({ type: SHOW_IMAGE, payload: imageUrl });
@@ -36,13 +46,33 @@ const MessageReceivedByUser: React.FC<MessageOnWindow> = ({
           />
         </MessageImageContainer>
       )}
-      <MessageReceivedByUserContainer>
-        {messageText}
-        <MessageTime
-          time={date.toDate().toLocaleTimeString()}
-          moveToLeft={true}
-        />
-      </MessageReceivedByUserContainer>
+      <MessageReceivedByUserDiv
+        onMouseEnter={() => handleHoverOnMessage(id)}
+        onMouseLeave={() => handleHoverOnMessage("")}
+      >
+        <MessageReceivedByUserContainer>
+          {isLiked && (
+            <FavoriteOutlinedIcon
+              fontSize="small"
+              sx={LikedMessageReceivedIconStyles}
+            />
+          )}
+          {messageText}
+          <MessageTime
+            time={date.toDate().toLocaleTimeString()}
+            moveToLeft={true}
+          />
+        </MessageReceivedByUserContainer>
+        {id === idOfMessageHoveredOver && (
+          <LikeButtonContainer onClick={() => likeMessage(conversationId, id)}>
+            {isLiked ? (
+              <FavoriteOutlinedIcon fontSize="small" sx={LikeButtonStyles} />
+            ) : (
+              <FavoriteBorderIcon fontSize="small" sx={LikeButtonStyles} />
+            )}
+          </LikeButtonContainer>
+        )}
+      </MessageReceivedByUserDiv>
     </>
   );
 };

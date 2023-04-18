@@ -39,6 +39,8 @@ export const CREATE_NEW_USER_ERROR_MESSAGE =
   "An error occurred while creating a new user.";
 export const GET_IMAGE_DOWNLOAD_URL_ERROR_MESSAGE =
   "An error occurred while get the download URL for the image.";
+export const LIKE_MESSAGE_ERROR_MESSAGE =
+  "An error occurred while liking the message.";
 export const SEARCH_USERS_ERROR_MESSAGE =
   "An error occurred while searching for users.";
 export const SET_CONVERSATION_AS_READ_ERROR_MESSAGE =

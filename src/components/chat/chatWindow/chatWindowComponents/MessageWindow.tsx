@@ -31,6 +31,8 @@ const MessageWindow: React.FC<MessageWindowProps> = ({
   const [isDistanceFromBottomAbove300, setIsDistanceFromBottomAbove300] =
     useState<boolean>(false);
   const [componentJustLoaded, setComponentJustLoaded] = useState<boolean>(true);
+  const [idOfMessageHoveredOver, setIdOfMessageHoveredOver] =
+    useState<string>("");
 
   const { currentUser } = useContext(UserContext);
   const [{ conversationId, messageRecipient, unreadConversations }, dispatch] =
@@ -137,6 +139,10 @@ const MessageWindow: React.FC<MessageWindowProps> = ({
     setOpenEmojiPicker(false);
   };
 
+  const handleHoverOnMessage = (messageId: string): void => {
+    setIdOfMessageHoveredOver(messageId);
+  };
+
   const handleImageLoaded = (): void => {
     scrollToBottom();
   };
@@ -157,45 +163,38 @@ const MessageWindow: React.FC<MessageWindowProps> = ({
       ref={containerRef}
       className="messageWindowDiv"
     >
-      {conversationMessages.map(
-        ({
-          conversationDateString,
-          date,
-          messageText,
-          id,
-          imageUrl,
-          senderId,
-          showDate,
-        }) => {
-          return senderId === currentUserId ? (
-            <div key={id}>
-              <ConversationDate
-                conversationDateString={conversationDateString}
-                showDate={showDate}
-              />
-              <MessageSentByUser
-                date={date}
-                handleImageLoaded={handleImageLoaded}
-                imageUrl={imageUrl}
-                messageText={messageText}
-              />
-            </div>
-          ) : (
-            <div key={id}>
-              <ConversationDate
-                conversationDateString={conversationDateString}
-                showDate={showDate}
-              />
-              <MessageReceivedByUser
-                date={date}
-                handleImageLoaded={handleImageLoaded}
-                imageUrl={imageUrl}
-                messageText={messageText}
-              />
-            </div>
-          );
-        }
-      )}
+      {conversationMessages.map((message) => {
+        const { conversationDateString, id, isLiked, senderId, showDate } =
+          message;
+        return senderId === currentUserId ? (
+          <div key={id}>
+            <ConversationDate
+              conversationDateString={conversationDateString}
+              showDate={showDate}
+            />
+            <MessageSentByUser
+              handleHoverOnMessage={handleHoverOnMessage}
+              handleImageLoaded={handleImageLoaded}
+              isLiked={isLiked}
+              message={message}
+            />
+          </div>
+        ) : (
+          <div key={id}>
+            <ConversationDate
+              conversationDateString={conversationDateString}
+              showDate={showDate}
+            />
+            <MessageReceivedByUser
+              handleHoverOnMessage={handleHoverOnMessage}
+              handleImageLoaded={handleImageLoaded}
+              idOfMessageHoveredOver={idOfMessageHoveredOver}
+              isLiked={isLiked}
+              message={message}
+            />
+          </div>
+        );
+      })}
       <div ref={messagesEndRef} />
     </MessageWindowContainer>
   );

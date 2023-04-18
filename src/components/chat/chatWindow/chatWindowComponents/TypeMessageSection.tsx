@@ -112,6 +112,7 @@ const TypeMessageSection: React.FC<TypeMessageSectionProps> = ({
       id: uuid(),
       date: Timestamp.now(),
       imageUrl: "",
+      isLiked: false,
       messageText: typedMessage.trim(),
       senderId: currentUserId,
     };

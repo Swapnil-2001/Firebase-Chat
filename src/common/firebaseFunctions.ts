@@ -28,6 +28,7 @@ import {
   UPDATE_USER_CHATS_ERROR_MESSAGE,
   USER_CHATS_COLLECTION_NAME,
   CREATE_NEW_USER_ERROR_MESSAGE,
+  LIKE_MESSAGE_ERROR_MESSAGE,
 } from "./constants";
 
 export const addNewMessageToConversation = async (
@@ -39,11 +40,11 @@ export const addNewMessageToConversation = async (
     const docSnap = await getDoc(docRef);
 
     if (!docSnap.exists()) {
-      await setDoc(doc(db, ALL_MESSAGES_COLLECTION_NAME, conversationId), {
+      await setDoc(docRef, {
         messages: [newMessageCreated],
       });
     } else {
-      await updateDoc(doc(db, ALL_MESSAGES_COLLECTION_NAME, conversationId), {
+      await updateDoc(docRef, {
         messages: arrayUnion(newMessageCreated),
       });
     }
@@ -91,6 +92,30 @@ export const getImageDownloadUrl = async (
   } catch (error) {
     console.error(GET_IMAGE_DOWNLOAD_URL_ERROR_MESSAGE);
     return "";
+  }
+};
+
+export const likeMessage = async (
+  conversationId: string,
+  messageId: string
+) => {
+  try {
+    const docRef = doc(db, ALL_MESSAGES_COLLECTION_NAME, conversationId);
+    const docSnap = await getDoc(docRef);
+
+    if (docSnap.exists()) {
+      const messagesInConversation = docSnap.get("messages");
+
+      const modifiedMessages = messagesInConversation.map((message: any) => {
+        if (message.id === messageId) message.isLiked = !message.isLiked;
+        return message;
+      });
+      await setDoc(docRef, {
+        messages: modifiedMessages,
+      });
+    }
+  } catch (error) {
+    console.error(LIKE_MESSAGE_ERROR_MESSAGE);
   }
 };
 

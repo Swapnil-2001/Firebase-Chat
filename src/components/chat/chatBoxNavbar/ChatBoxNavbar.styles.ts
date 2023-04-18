@@ -3,9 +3,9 @@ import styled from "styled-components";
 import {
   black,
   chatWindowBackgroundColor,
-  darkRed,
   lightBlack,
   lightGray,
+  lightRed,
   white,
   yellow,
 } from "../../../common/colors";
@@ -76,6 +76,7 @@ export const ChatBoxUserSectionContainer = styled.div`
   width: 24%;
   background-color: ${chatWindowBackgroundColor};
   border-top-left-radius: ${chatBoxBorderRadius};
+  z-index: 100;
 `;
 
 export const ChatBoxUserSectionImage = styled.img`
@@ -93,7 +94,7 @@ export const ChatBoxUserSectionImageContainer = styled.div`
 export const ChatBoxUserSectionLogoutButton = styled.button`
   padding: 15px 0;
   width: 100%;
-  color: ${darkRed};
+  color: ${lightRed};
   background-color: ${lightBlack};
   border-radius: 10px;
 `;

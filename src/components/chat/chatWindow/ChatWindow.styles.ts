@@ -3,6 +3,7 @@ import {
   black,
   chatBoxBackgroundColor,
   chatWindowBackgroundColor,
+  darkRed,
   gray,
   lightBlack,
   lightGray,
@@ -114,6 +115,7 @@ export const HideMessageWindow = styled.div`
   height: 490px;
   width: 100%;
   background-color: ${chatWindowBackgroundColor};
+  z-index: 100;
 `;
 
 export const ImageInputLabelStyles = {
@@ -132,6 +134,33 @@ export const LabelForImageInput = styled.label`
   align-items: center;
   margin-left: 20px;
 `;
+
+export const LikeButtonContainer = styled.div`
+  margin: 5px 0 0 12px;
+  cursor: pointer;
+`;
+
+export const LikeButtonStyles = {
+  color: gray,
+
+  "&:hover": {
+    color: lightGray,
+  },
+};
+
+export const LikedMessageReceivedIconStyles = {
+  position: "absolute",
+  bottom: "-14px",
+  left: "18px",
+  color: darkRed,
+};
+
+export const LikedMessageSentIconStyles = {
+  position: "absolute",
+  bottom: "-14px",
+  right: "18px",
+  color: darkRed,
+};
 
 export const LinearProgressStyles = {
   zIndex: 100,
@@ -153,6 +182,7 @@ export const MessageImageContainer = styled.div<MessageContainerProps>`
 `;
 
 export const MessageReceivedByUserContainer = styled.div`
+  position: relative;
   margin-top: 5px;
   margin-left: 25px;
   padding: 15px 20px;
@@ -167,6 +197,11 @@ export const MessageReceivedByUserContainer = styled.div`
   border-top-left-radius: 0;
 `;
 
+export const MessageReceivedByUserDiv = styled.div`
+  display: flex;
+  align-items: center;
+`;
+
 export const MessageSendTimeContainer = styled.div<MessageContainerProps>`
   margin-top: 3px;
   margin-left: ${({ moveToLeft }) => (moveToLeft ? "0" : "auto")};
@@ -176,7 +211,8 @@ export const MessageSendTimeContainer = styled.div<MessageContainerProps>`
 `;
 
 export const MessageSentByUserContainer = styled.div<MessageSentByUserContainerProps>`
-  margin: 5px 25px 0 auto;
+  position: relative;
+  margin: 5px 25px 0 0;
   padding: 15px 20px;
   padding-bottom: 5px;
   width: max-content;
@@ -188,6 +224,12 @@ export const MessageSentByUserContainer = styled.div<MessageSentByUserContainerP
   background-color: ${({ background }) => background};
   border-radius: 20px;
   border-bottom-right-radius: 0;
+`;
+
+export const MessageSentByUserDiv = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
 `;
 
 export const MessageWindowContainer = styled.div`

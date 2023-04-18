@@ -1,4 +1,5 @@
 import { useContext } from "react";
+import FavoriteOutlinedIcon from "@mui/icons-material/FavoriteOutlined";
 
 import { AppContext } from "../../../../../context/AppContext";
 import { ChatContext } from "../../../../../context/ChatContext";
@@ -6,17 +7,21 @@ import MessageTime from "./MessageTime";
 import { MessageOnWindow } from "../../../../../common/types";
 import { SHOW_IMAGE } from "../../../../../common/constants";
 import {
+  LikedMessageSentIconStyles,
   MessageImage,
   MessageImageContainer,
   MessageSentByUserContainer,
+  MessageSentByUserDiv,
 } from "../../ChatWindow.styles";
 
 const MessageSentByUser: React.FC<MessageOnWindow> = ({
-  date,
+  handleHoverOnMessage,
   handleImageLoaded,
-  imageUrl,
-  messageText,
+  isLiked,
+  message,
 }): JSX.Element => {
+  const { date, id, imageUrl, messageText } = message;
+
   const [{ appThemeColor }] = useContext(AppContext);
   const [, dispatch] = useContext(ChatContext);
 
@@ -38,13 +43,24 @@ const MessageSentByUser: React.FC<MessageOnWindow> = ({
           />
         </MessageImageContainer>
       )}
-      <MessageSentByUserContainer background={appThemeColor}>
-        {messageText}
-        <MessageTime
-          time={date.toDate().toLocaleTimeString()}
-          moveToLeft={false}
-        />
-      </MessageSentByUserContainer>
+      <MessageSentByUserDiv
+        onMouseEnter={() => handleHoverOnMessage(id)}
+        onMouseLeave={() => handleHoverOnMessage("")}
+      >
+        <MessageSentByUserContainer background={appThemeColor}>
+          {messageText}
+          {isLiked && (
+            <FavoriteOutlinedIcon
+              fontSize="small"
+              sx={LikedMessageSentIconStyles}
+            />
+          )}
+          <MessageTime
+            time={date.toDate().toLocaleTimeString()}
+            moveToLeft={false}
+          />
+        </MessageSentByUserContainer>
+      </MessageSentByUserDiv>
     </>
   );
 };

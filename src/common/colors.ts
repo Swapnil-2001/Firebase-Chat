@@ -5,7 +5,8 @@ export const errorMessageColor = "#DF2E38";
 export const messageByUserBackgroundColor = "#655DBB";
 
 export const black = "#000000";
-export const darkRed = "#B46060";
+export const lightRed = "#B46060";
+export const darkRed = "#B22727";
 export const deepBlue = "#002B5B";
 export const gray = "#73777B";
 export const green = "#82CD47";

@@ -3,16 +3,18 @@ export interface ConversationMessage {
   senderId: string;
   messageText: string;
   imageUrl: string;
+  isLiked: boolean;
   conversationDateString: string;
   date: any;
   showDate: boolean;
 }
 
 export interface MessageOnWindow {
-  date: any;
+  handleHoverOnMessage: (messageId: string) => void;
   handleImageLoaded: () => void;
-  imageUrl: string;
-  messageText: string;
+  idOfMessageHoveredOver?: string;
+  isLiked: boolean;
+  message: ConversationMessage;
 }
 
 export interface MessageRecipient {
