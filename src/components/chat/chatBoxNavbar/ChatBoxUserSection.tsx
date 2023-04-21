@@ -9,11 +9,7 @@ import { AppContext } from "../../../context/AppContext";
 import { ChatContext } from "../../../context/ChatContext";
 import { UserContext } from "../../../context/UserContext";
 import { changeProfilePicture } from "../../../common/firebaseFunctions";
-import {
-  CHANGE_PROFILE_PICTURE,
-  CHANGE_USER_PROFILE_PICTURE_ERROR_MESSAGE,
-  RESET_TO_DEFAULT_VALUES,
-} from "../../../common/constants";
+import { RESET_TO_DEFAULT_VALUES } from "../../../common/constants";
 import {
   ArrowBackIconStyles,
   ChatBoxUserSectionContainer,
@@ -43,7 +39,7 @@ const ChatBoxUserSection: React.FC<ChatBoxUserSectionProps> = ({
 
   const [{ appThemeColor }] = useContext(AppContext);
   const [, dispatch] = useContext(ChatContext);
-  const [{ currentUser }, userContextDispatch] = useContext(UserContext);
+  const [{ currentUser }] = useContext(UserContext);
 
   const handleChangeProfilePicture = async (
     event: React.FormEvent<HTMLInputElement>
@@ -51,12 +47,7 @@ const ChatBoxUserSection: React.FC<ChatBoxUserSectionProps> = ({
     const { files } = event.currentTarget;
     if (files && currentUser) {
       setChangingProfilePicture(true);
-      const downloadURL = await changeProfilePicture(files[0], currentUser);
-      if (downloadURL !== CHANGE_USER_PROFILE_PICTURE_ERROR_MESSAGE)
-        userContextDispatch({
-          type: CHANGE_PROFILE_PICTURE,
-          payload: downloadURL,
-        });
+      await changeProfilePicture(files[0], currentUser);
       setChangingProfilePicture(false);
     }
   };

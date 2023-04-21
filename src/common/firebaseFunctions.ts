@@ -65,7 +65,7 @@ export const addNewMessageToConversation = async (
 export const changeProfilePicture = async (
   updatedUserImage: File,
   loggedInUser: User
-): Promise<string> => {
+): Promise<void> => {
   const firebaseStorageUrl: string = `userImages/${uuid()}`;
   try {
     const downloadUrl = await getImageDownloadUrl(
@@ -79,10 +79,8 @@ export const changeProfilePicture = async (
     await updateDoc(usersDocReference, {
       photoURL: downloadUrl,
     });
-    return downloadUrl;
   } catch (error) {
     console.error(CHANGE_USER_PROFILE_PICTURE_ERROR_MESSAGE);
-    return CHANGE_USER_PROFILE_PICTURE_ERROR_MESSAGE;
   }
 };
 

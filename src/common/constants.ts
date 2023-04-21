@@ -65,7 +65,6 @@ export const SHOW_IMAGE = "SHOW_IMAGE";
 export const UNHIDE_MESSAGE_WINDOW = "UNHIDE_MESSAGE_WINDOW";
 
 // UserContext dispatch constants
-export const CHANGE_PROFILE_PICTURE = "CHANGE_PROFILE_PICTURE";
 export const LOGOUT_USER = "LOGOUT_USER";
 export const SET_LOGGED_IN_USER = "SET_LOGGED_IN_USER";
 
