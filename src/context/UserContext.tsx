@@ -1,41 +1,64 @@
-import { onAuthStateChanged, User } from "firebase/auth";
-import { createContext, PropsWithChildren, useEffect, useState } from "react";
-import { auth } from "../firebase";
+import { createContext, Dispatch, PropsWithChildren, useReducer } from "react";
+import { User } from "firebase/auth";
 
-interface UserContextInitialState {
+import {
+  CHANGE_PROFILE_PICTURE,
+  LOGOUT_USER,
+  SET_LOGGED_IN_USER,
+} from "../common/constants";
+
+interface UserInitialState {
   currentUser: User | null;
-  hasCurrentUserBeenSet: boolean;
 }
 
-export const UserContext = createContext<UserContextInitialState>({
+const initialState: UserInitialState = {
   currentUser: null,
-  hasCurrentUserBeenSet: false,
-});
+};
+
+export const UserContext = createContext<[UserInitialState, Dispatch<any>]>([
+  initialState,
+  () => {},
+]);
 
 const UserContextProvider: React.FC<PropsWithChildren> = ({
   children,
 }): JSX.Element => {
-  const [userValues, setUserValues] = useState<UserContextInitialState>({
-    currentUser: null,
-    hasCurrentUserBeenSet: false,
-  });
+  const userReducer = (
+    state: UserInitialState,
+    action: { type: string; payload: any }
+  ) => {
+    switch (action.type) {
+      case CHANGE_PROFILE_PICTURE:
+        if (action.payload === null) return state;
+        return {
+          ...state,
+          currentUser: {
+            ...state.currentUser,
+            photoURL: action.payload,
+          },
+        };
+      case LOGOUT_USER:
+        return initialState;
+      case SET_LOGGED_IN_USER:
+        if (action.payload === null) return state;
+        return {
+          ...state,
+          currentUser: action.payload,
+        };
+      default:
+        return state;
+    }
+  };
 
-  useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, (user) => {
-      setUserValues((prevValues) => ({
-        ...prevValues,
-        currentUser: user,
-        hasCurrentUserBeenSet: true,
-      }));
-    });
-
-    return () => {
-      unsubscribe();
-    };
-  }, []);
+  const [currentState, userContextDispatch] = useReducer(
+    userReducer,
+    initialState
+  );
 
   return (
-    <UserContext.Provider value={userValues}>{children}</UserContext.Provider>
+    <UserContext.Provider value={[currentState, userContextDispatch]}>
+      {children}
+    </UserContext.Provider>
   );
 };
 

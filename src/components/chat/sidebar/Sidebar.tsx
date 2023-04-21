@@ -41,7 +41,7 @@ const Sidebar: React.FC = (): JSX.Element => {
     useState<boolean>(true);
 
   const [{ conversationId }, dispatch] = useContext(ChatContext);
-  const { currentUser } = useContext(UserContext);
+  const [{ currentUser }] = useContext(UserContext);
 
   useEffect(() => {
     if (searchedUser.length === 0) setSearchResults([]);

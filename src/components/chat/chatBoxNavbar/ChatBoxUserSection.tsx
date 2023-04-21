@@ -1,18 +1,24 @@
-import { useContext } from "react";
+import { useContext, useState } from "react";
 import { signOut } from "firebase/auth";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
+import CircularProgress from "@mui/material/CircularProgress";
 import { Fade } from "@mui/material";
 
 import { auth } from "../../../firebase";
 import { AppContext } from "../../../context/AppContext";
 import { ChatContext } from "../../../context/ChatContext";
 import { UserContext } from "../../../context/UserContext";
-import { RESET_TO_DEFAULT_VALUES } from "../../../common/constants";
+import { changeProfilePicture } from "../../../common/firebaseFunctions";
+import {
+  CHANGE_PROFILE_PICTURE,
+  RESET_TO_DEFAULT_VALUES,
+} from "../../../common/constants";
 import {
   ArrowBackIconStyles,
   ChatBoxUserSectionContainer,
   ChatBoxUserSectionImage,
   ChatBoxUserSectionImageContainer,
+  ChatBoxUserSectionImageContainerLabel,
   ChatBoxUserSectionLogoutButton,
   ChatBoxUserSectionLogoutButtonContainer,
   ChatBoxUserSectionNameContainer,
@@ -20,6 +26,7 @@ import {
   ChatBoxUserSectionNavbarText,
 } from "./ChatBoxNavbar.styles";
 import defaultImage from "../../../assets/Default.png";
+import { white } from "../../../common/colors";
 
 interface ChatBoxUserSectionProps {
   openUserSection: boolean;
@@ -30,9 +37,27 @@ const ChatBoxUserSection: React.FC<ChatBoxUserSectionProps> = ({
   openUserSection,
   handleCloseUserSection,
 }): JSX.Element => {
+  const [changingProfilePicture, setChangingProfilePicture] =
+    useState<boolean>(false);
+
   const [{ appThemeColor }] = useContext(AppContext);
   const [, dispatch] = useContext(ChatContext);
-  const { currentUser } = useContext(UserContext);
+  const [{ currentUser }, userContextDispatch] = useContext(UserContext);
+
+  const handleChangeProfilePicture = async (
+    event: React.FormEvent<HTMLInputElement>
+  ) => {
+    const { files } = event.currentTarget;
+    if (files && currentUser) {
+      setChangingProfilePicture(true);
+      const downloadURL = await changeProfilePicture(files[0], currentUser);
+      userContextDispatch({
+        type: CHANGE_PROFILE_PICTURE,
+        payload: downloadURL,
+      });
+      setChangingProfilePicture(false);
+    }
+  };
 
   const handleLogout = (): void => {
     dispatch({ type: RESET_TO_DEFAULT_VALUES });
@@ -56,6 +81,21 @@ const ChatBoxUserSection: React.FC<ChatBoxUserSectionProps> = ({
             src={currentUser?.photoURL ? currentUser.photoURL : defaultImage}
             alt="User Image"
           />
+          <input
+            id="userProfileImageEdit"
+            name="image"
+            type="file"
+            accept=".png,.jpeg,.jpg"
+            onChange={handleChangeProfilePicture}
+            style={{ display: "none" }}
+          />
+          <ChatBoxUserSectionImageContainerLabel htmlFor="userProfileImageEdit">
+            {changingProfilePicture ? (
+              <CircularProgress size={10} sx={{ color: white }} />
+            ) : (
+              "Edit"
+            )}
+          </ChatBoxUserSectionImageContainerLabel>
         </ChatBoxUserSectionImageContainer>
         <ChatBoxUserSectionNameContainer>
           {currentUser?.displayName}

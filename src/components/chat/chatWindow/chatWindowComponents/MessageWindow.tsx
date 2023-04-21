@@ -34,7 +34,7 @@ const MessageWindow: React.FC<MessageWindowProps> = ({
   const [idOfMessageHoveredOver, setIdOfMessageHoveredOver] =
     useState<string>("");
 
-  const { currentUser } = useContext(UserContext);
+  const [{ currentUser }] = useContext(UserContext);
   const [{ conversationId, messageRecipient, unreadConversations }, dispatch] =
     useContext(ChatContext);
 

@@ -61,7 +61,7 @@ const TypeMessageSection: React.FC<TypeMessageSectionProps> = ({
     },
     dispatch,
   ] = useContext(ChatContext);
-  const { currentUser } = useContext(UserContext);
+  const [{ currentUser }] = useContext(UserContext);
 
   const handleImageSelect = (
     event: React.ChangeEvent<HTMLInputElement>

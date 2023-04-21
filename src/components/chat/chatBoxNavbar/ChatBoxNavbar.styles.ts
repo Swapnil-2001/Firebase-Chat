@@ -3,6 +3,7 @@ import styled from "styled-components";
 import {
   black,
   chatWindowBackgroundColor,
+  gray,
   lightBlack,
   lightGray,
   lightRed,
@@ -52,7 +53,8 @@ export const ChatBoxNavbarImageContainer = styled.div`
 export const ChatBoxNavbarSettingsButton = styled.div<ChatBoxNavbarSettingsButtonProps>`
   display: flex;
   align-items: center;
-  margin-left: 19%;
+  margin-left: auto;
+  margin-right: 40px;
   color: ${({ openSettingsModal }) => (openSettingsModal ? yellow : lightGray)};
   border-top: ${({ openSettingsModal }) =>
     `3px solid ${openSettingsModal ? yellow : "transparent"}`};
@@ -87,8 +89,27 @@ export const ChatBoxUserSectionImage = styled.img`
 `;
 
 export const ChatBoxUserSectionImageContainer = styled.div`
-  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
   margin: 30px 20px;
+`;
+
+export const ChatBoxUserSectionImageContainerLabel = styled.label`
+  margin-top: 20px;
+  padding: 5px 15px;
+  height: 20px;
+  color: ${gray};
+  font-size: 0.8rem;
+  background-color: ${lightBlack};
+  border-radius: 5px;
+  transition: 0.4s all;
+
+  &:hover {
+    color: ${lightGray};
+    box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+    cursor: pointer;
+  }
 `;
 
 export const ChatBoxUserSectionLogoutButton = styled.button`

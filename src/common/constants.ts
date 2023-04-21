@@ -35,6 +35,8 @@ export const PASSWORDS_DO_NOT_MATCH_ERROR = "Passwords must match.";
 // firestore async call errors
 export const ADD_MESSAGE_TO_CONVERSATION_ERROR_MESSAGE =
   "An error occurred while adding a new message to the conversation.";
+export const CHANGE_USER_PROFILE_PICTURE_ERROR_MESSAGE =
+  "An error occurred while changing the user's profile picture.";
 export const CREATE_NEW_USER_ERROR_MESSAGE =
   "An error occurred while creating a new user.";
 export const GET_IMAGE_DOWNLOAD_URL_ERROR_MESSAGE =
@@ -45,6 +47,8 @@ export const SEARCH_USERS_ERROR_MESSAGE =
   "An error occurred while searching for users.";
 export const SET_CONVERSATION_AS_READ_ERROR_MESSAGE =
   "An error occurred while changing the status of the conversation to READ.";
+export const SIGNUP_ERROR_MESSAGE =
+  "An error occurred while signing up the user.";
 export const UPDATE_USER_CHATS_ERROR_MESSAGE =
   "An error occurred while updating user chats.";
 
@@ -59,6 +63,11 @@ export const SET_SENDING_MESSAGE_LOADING = "SET_SENDING_MESSAGE_LOADING";
 export const SET_UNREAD_CONVERSATIONS = "SET_UNREAD_CONVERSATIONS";
 export const SHOW_IMAGE = "SHOW_IMAGE";
 export const UNHIDE_MESSAGE_WINDOW = "UNHIDE_MESSAGE_WINDOW";
+
+// UserContext dispatch constants
+export const CHANGE_PROFILE_PICTURE = "CHANGE_PROFILE_PICTURE";
+export const LOGOUT_USER = "LOGOUT_USER";
+export const SET_LOGGED_IN_USER = "SET_LOGGED_IN_USER";
 
 // Names of DB collections
 export const ALL_MESSAGES_COLLECTION_NAME = "allMessages";

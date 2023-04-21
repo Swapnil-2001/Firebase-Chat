@@ -46,8 +46,8 @@ const ChatBox: React.FC = (): JSX.Element => {
   return (
     <>
       <SettingsModal />
+      <MagnifiedImageComponent />
       <ChatBoxOuterContainer>
-        <MagnifiedImageComponent />
         <ChatBoxNavbar />
         <ChatBoxInnerContainer>
           <Sidebar />

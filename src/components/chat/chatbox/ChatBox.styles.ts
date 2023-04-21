@@ -6,6 +6,7 @@ import {
   chatWindowBackgroundColor,
   darkRed,
   lightBlack,
+  lightGray,
   white,
 } from "../../../common/colors";
 
@@ -99,9 +100,10 @@ export const ChatBoxUserSectionLogoutButtonContainer = styled.div`
 `;
 
 export const MagnifiedImage = styled.img`
-  max-height: 90%;
+  max-height: 95%;
   max-width: 95%;
   object-fit: contain;
+  margin: 20px 10px;
 `;
 
 export const MagnifiedImageContainer = styled.div`
@@ -115,14 +117,18 @@ export const MagnifiedImageContainer = styled.div`
   height: 100%;
   width: 100%;
   background-color: ${chatWindowBackgroundColor};
-  border-radius: ${chatBoxBorderRadius};
   z-index: 100;
 `;
 
 export const MagnifiedImageContainerNavbar = styled.div`
-  padding: 10px 0;
+  margin-top: 20px;
   height: 30px;
   width: max-content;
-  color: ${white};
+  color: ${lightGray};
   cursor: pointer;
+  transition: 0.3s color;
+
+  &:hover {
+    color: ${white};
+  }
 `;

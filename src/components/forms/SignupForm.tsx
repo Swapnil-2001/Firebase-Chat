@@ -1,16 +1,10 @@
 import { useContext, useState } from "react";
 import { Link, NavigateFunction, useNavigate } from "react-router-dom";
-import { createUserWithEmailAndPassword, updateProfile } from "firebase/auth";
-import { v4 as uuid } from "uuid";
 import { AddAPhoto, CheckCircle } from "@mui/icons-material";
 import { CircularProgress, TextField } from "@mui/material";
 
-import { auth } from "../../firebase";
 import { ChatContext } from "../../context/ChatContext";
-import {
-  createNewUser,
-  getImageDownloadUrl,
-} from "../../common/firebaseFunctions";
+import { signUpUser } from "../../common/firebaseFunctions";
 import {
   EMAIL_ALREADY_IN_USE_ERROR_CODE,
   EMAIL_FIELD_IS_EMPTY_ERROR,
@@ -90,14 +84,11 @@ const SignupForm: React.FC = (): JSX.Element => {
     event: React.SyntheticEvent
   ): Promise<void> => {
     event.preventDefault();
-
     dispatch({
       type: SET_NEW_MESSAGE_RECIPIENT,
       payload: null,
     });
-
     const { name, email, password, confirmPassword } = signupFormFields;
-
     if (
       name === undefined ||
       email === undefined ||
@@ -113,38 +104,10 @@ const SignupForm: React.FC = (): JSX.Element => {
       return;
 
     setIsLoading(true);
-
     const displayName = name.trim();
     const trimmedEmail = email.trim();
-
     try {
-      const userCredential = await createUserWithEmailAndPassword(
-        auth,
-        trimmedEmail,
-        password
-      );
-
-      let downloadUrl = "";
-      if (userImage) {
-        const firebaseStorageUrl = `userImages/${uuid()}`;
-        downloadUrl = await getImageDownloadUrl(firebaseStorageUrl, userImage);
-      }
-
-      const signedUpUser = userCredential.user;
-      const signedUpUserId = signedUpUser.uid;
-      await updateProfile(signedUpUser, {
-        displayName,
-        photoURL: downloadUrl,
-      });
-
-      // Add data to Firestore
-      await createNewUser(
-        displayName,
-        downloadUrl,
-        signedUpUserId,
-        trimmedEmail
-      );
-
+      await signUpUser(displayName, trimmedEmail, password, userImage);
       navigate("/");
     } catch (error: any) {
       const errorCode: string = error.code;

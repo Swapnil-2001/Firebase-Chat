@@ -18,7 +18,7 @@ const ChatBoxNavbar: React.FC = (): JSX.Element => {
   const [openUserSection, setOpenUserSection] = useState<boolean>(false);
 
   const [{ openSettingsModal }, dispatch] = useContext(AppContext);
-  const { currentUser } = useContext(UserContext);
+  const [{ currentUser }] = useContext(UserContext);
 
   const handleCloseUserSection = (): void => {
     setOpenUserSection(false);

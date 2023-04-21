@@ -1,4 +1,10 @@
 import {
+  createUserWithEmailAndPassword,
+  updateProfile,
+  User,
+  UserCredential,
+} from "firebase/auth";
+import {
   arrayUnion,
   collection,
   doc,
@@ -15,8 +21,9 @@ import {
   updateDoc,
 } from "firebase/firestore";
 import { getDownloadURL, ref, uploadBytesResumable } from "firebase/storage";
+import { v4 as uuid } from "uuid";
 
-import { db, storage } from "../firebase";
+import { auth, db, storage } from "../firebase";
 import { MessageRecipient } from "./types";
 import {
   ALL_MESSAGES_COLLECTION_NAME,
@@ -29,6 +36,8 @@ import {
   USER_CHATS_COLLECTION_NAME,
   CREATE_NEW_USER_ERROR_MESSAGE,
   LIKE_MESSAGE_ERROR_MESSAGE,
+  SIGNUP_ERROR_MESSAGE,
+  CHANGE_USER_PROFILE_PICTURE_ERROR_MESSAGE,
 } from "./constants";
 
 export const addNewMessageToConversation = async (
@@ -50,6 +59,30 @@ export const addNewMessageToConversation = async (
     }
   } catch (error) {
     console.error(ADD_MESSAGE_TO_CONVERSATION_ERROR_MESSAGE);
+  }
+};
+
+export const changeProfilePicture = async (
+  updatedUserImage: File,
+  loggedInUser: User
+): Promise<string> => {
+  const firebaseStorageUrl: string = `userImages/${uuid()}`;
+  try {
+    const downloadUrl = await getImageDownloadUrl(
+      firebaseStorageUrl,
+      updatedUserImage
+    );
+    await updateProfile(loggedInUser, {
+      photoURL: downloadUrl,
+    });
+    const usersDocReference = doc(db, USERS_COLLECTION_NAME, loggedInUser.uid);
+    await updateDoc(usersDocReference, {
+      photoURL: downloadUrl,
+    });
+    return downloadUrl;
+  } catch (error) {
+    console.error(CHANGE_USER_PROFILE_PICTURE_ERROR_MESSAGE);
+    return CHANGE_USER_PROFILE_PICTURE_ERROR_MESSAGE;
   }
 };
 
@@ -149,6 +182,37 @@ export const setConversationAsRead = async (
     });
   } catch (_) {
     console.error(SET_CONVERSATION_AS_READ_ERROR_MESSAGE);
+  }
+};
+
+export const signUpUser = async (
+  displayName: string,
+  email: string,
+  password: string,
+  userImage: File | null
+): Promise<void> => {
+  try {
+    const userCredential: UserCredential = await createUserWithEmailAndPassword(
+      auth,
+      email,
+      password
+    );
+    let downloadUrl: string = "";
+    if (userImage) {
+      const firebaseStorageUrl: string = `userImages/${uuid()}`;
+      downloadUrl = await getImageDownloadUrl(firebaseStorageUrl, userImage);
+    }
+
+    const signedUpUser: User = userCredential.user;
+    const signedUpUserId: string = signedUpUser.uid;
+    await updateProfile(signedUpUser, {
+      displayName,
+      photoURL: downloadUrl,
+    });
+    // Add data to Firestore
+    await createNewUser(displayName, downloadUrl, signedUpUserId, email);
+  } catch (error) {
+    console.error(SIGNUP_ERROR_MESSAGE);
   }
 };
 

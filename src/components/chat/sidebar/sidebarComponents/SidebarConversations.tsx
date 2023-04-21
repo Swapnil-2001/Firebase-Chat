@@ -29,7 +29,7 @@ const SidebarConversations: React.FC<SidebarConversationsProps> = ({
   userConversations,
 }): JSX.Element => {
   const [{ messageRecipient }] = useContext(ChatContext);
-  const { currentUser } = useContext(UserContext);
+  const [{ currentUser }] = useContext(UserContext);
 
   const handleSelectAnUser = (userInfo: MessageRecipient): void => {
     selectAnUser(userInfo);
