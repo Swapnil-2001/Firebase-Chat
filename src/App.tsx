@@ -27,7 +27,7 @@ const App: React.FC = (): JSX.Element => {
     return () => {
       unsubscribe();
     };
-  }, [dispatch]);
+  }, [currentUser, dispatch]);
 
   const isUserLoggedIn = !hasAppLoaded || currentUser;
 

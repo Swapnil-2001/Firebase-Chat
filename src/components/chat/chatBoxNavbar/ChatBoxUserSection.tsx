@@ -11,6 +11,7 @@ import { UserContext } from "../../../context/UserContext";
 import { changeProfilePicture } from "../../../common/firebaseFunctions";
 import {
   CHANGE_PROFILE_PICTURE,
+  CHANGE_USER_PROFILE_PICTURE_ERROR_MESSAGE,
   RESET_TO_DEFAULT_VALUES,
 } from "../../../common/constants";
 import {
@@ -51,10 +52,11 @@ const ChatBoxUserSection: React.FC<ChatBoxUserSectionProps> = ({
     if (files && currentUser) {
       setChangingProfilePicture(true);
       const downloadURL = await changeProfilePicture(files[0], currentUser);
-      userContextDispatch({
-        type: CHANGE_PROFILE_PICTURE,
-        payload: downloadURL,
-      });
+      if (downloadURL !== CHANGE_USER_PROFILE_PICTURE_ERROR_MESSAGE)
+        userContextDispatch({
+          type: CHANGE_PROFILE_PICTURE,
+          payload: downloadURL,
+        });
       setChangingProfilePicture(false);
     }
   };
