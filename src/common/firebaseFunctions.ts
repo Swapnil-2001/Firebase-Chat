@@ -20,7 +20,12 @@ import {
   Timestamp,
   updateDoc,
 } from "firebase/firestore";
-import { getDownloadURL, ref, uploadBytesResumable } from "firebase/storage";
+import {
+  deleteObject,
+  getDownloadURL,
+  ref,
+  uploadBytesResumable,
+} from "firebase/storage";
 import { v4 as uuid } from "uuid";
 
 import { auth, db, storage } from "../firebase";
@@ -66,8 +71,16 @@ export const changeProfilePicture = async (
   updatedUserImage: File,
   loggedInUser: User
 ): Promise<void> => {
-  const firebaseStorageUrl: string = `userImages/${uuid()}`;
   try {
+    const usersDocReference = doc(db, USERS_COLLECTION_NAME, loggedInUser.uid);
+    const userDocSnap = await getDoc(usersDocReference);
+    if (!userDocSnap.exists()) return;
+    const prevImageStorageLocation = userDocSnap.data().imageStorageLocation;
+    if (prevImageStorageLocation !== "") {
+      const imageRef = ref(storage, prevImageStorageLocation);
+      await deleteObject(imageRef);
+    }
+    const firebaseStorageUrl: string = `userImages/${uuid()}`;
     const downloadUrl = await getImageDownloadUrl(
       firebaseStorageUrl,
       updatedUserImage
@@ -75,9 +88,9 @@ export const changeProfilePicture = async (
     await updateProfile(loggedInUser, {
       photoURL: downloadUrl,
     });
-    const usersDocReference = doc(db, USERS_COLLECTION_NAME, loggedInUser.uid);
     await updateDoc(usersDocReference, {
       photoURL: downloadUrl,
+      imageStorageLocation: firebaseStorageUrl,
     });
   } catch (error) {
     console.error(CHANGE_USER_PROFILE_PICTURE_ERROR_MESSAGE);
@@ -88,7 +101,8 @@ export const createNewUser = async (
   displayName: string,
   downloadUrl: string,
   signedUpUserId: string,
-  trimmedEmail: string
+  trimmedEmail: string,
+  imageStorageLocation: string
 ) => {
   try {
     const usersDocReference = doc(db, USERS_COLLECTION_NAME, signedUpUserId);
@@ -97,6 +111,7 @@ export const createNewUser = async (
       displayName,
       email: trimmedEmail,
       photoURL: downloadUrl,
+      imageStorageLocation,
     });
     const userChatsDocReference = doc(
       db,
@@ -196,10 +211,9 @@ export const signUpUser = async (
       password
     );
     let downloadUrl: string = "";
-    if (userImage) {
-      const firebaseStorageUrl: string = `userImages/${uuid()}`;
+    const firebaseStorageUrl: string = `userImages/${uuid()}`;
+    if (userImage)
       downloadUrl = await getImageDownloadUrl(firebaseStorageUrl, userImage);
-    }
 
     const signedUpUser: User = userCredential.user;
     const signedUpUserId: string = signedUpUser.uid;
@@ -208,7 +222,13 @@ export const signUpUser = async (
       photoURL: downloadUrl,
     });
     // Add data to Firestore
-    await createNewUser(displayName, downloadUrl, signedUpUserId, email);
+    await createNewUser(
+      displayName,
+      downloadUrl,
+      signedUpUserId,
+      email,
+      firebaseStorageUrl
+    );
   } catch (error) {
     console.error(SIGNUP_ERROR_MESSAGE);
   }
