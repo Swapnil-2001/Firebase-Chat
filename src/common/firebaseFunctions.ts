@@ -211,9 +211,10 @@ export const signUpUser = async (
       password
     );
     let downloadUrl: string = "";
-    const firebaseStorageUrl: string = `userImages/${uuid()}`;
+    let firebaseStorageUrl: string = `userImages/${uuid()}`;
     if (userImage)
       downloadUrl = await getImageDownloadUrl(firebaseStorageUrl, userImage);
+    else firebaseStorageUrl = "";
 
     const signedUpUser: User = userCredential.user;
     const signedUpUserId: string = signedUpUser.uid;
