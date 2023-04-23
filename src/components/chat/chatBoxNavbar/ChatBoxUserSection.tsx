@@ -9,7 +9,7 @@ import { AppContext } from "../../../context/AppContext";
 import { ChatContext } from "../../../context/ChatContext";
 import { UserContext } from "../../../context/UserContext";
 import { changeProfilePicture } from "../../../common/firebaseFunctions";
-import { RESET_TO_DEFAULT_VALUES } from "../../../common/constants";
+import { RESET_TO_DEFAULT_VALUES, SHOW_IMAGE } from "../../../common/constants";
 import {
   ArrowBackIconStyles,
   ChatBoxUserSectionContainer,
@@ -57,6 +57,11 @@ const ChatBoxUserSection: React.FC<ChatBoxUserSectionProps> = ({
     signOut(auth);
   };
 
+  const showMagnifiedProfilePicture = () => {
+    if (currentUser && currentUser.photoURL)
+      dispatch({ type: SHOW_IMAGE, payload: currentUser.photoURL });
+  };
+
   return (
     <Fade in={openUserSection} timeout={350}>
       <ChatBoxUserSectionContainer>
@@ -73,6 +78,7 @@ const ChatBoxUserSection: React.FC<ChatBoxUserSectionProps> = ({
           <ChatBoxUserSectionImage
             src={currentUser?.photoURL ? currentUser.photoURL : defaultImage}
             alt="User Image"
+            onClick={showMagnifiedProfilePicture}
           />
           <input
             id="userProfileImageEdit"

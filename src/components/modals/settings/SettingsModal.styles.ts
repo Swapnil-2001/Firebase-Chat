@@ -20,7 +20,7 @@ export const SettingsModalContainer = styled.div`
   justify-content: center;
   padding: 50px 75px;
   background-color: ${chatBoxBackgroundColor};
-  border-radius: 10px;
+  border-radius: 20px;
   outline: none;
 `;
 

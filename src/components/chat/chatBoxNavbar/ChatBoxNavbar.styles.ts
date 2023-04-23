@@ -86,6 +86,7 @@ export const ChatBoxUserSectionImage = styled.img`
   width: 120px;
   object-fit: cover;
   border-radius: 50%;
+  cursor: pointer;
 `;
 
 export const ChatBoxUserSectionImageContainer = styled.div`

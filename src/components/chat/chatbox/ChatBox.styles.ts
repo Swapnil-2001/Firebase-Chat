@@ -103,7 +103,7 @@ export const MagnifiedImage = styled.img`
   max-height: 90%;
   max-width: 95%;
   object-fit: contain;
-  margin: 10px;
+  margin: auto 0;
 `;
 
 export const MagnifiedImageContainer = styled.div`
@@ -113,11 +113,10 @@ export const MagnifiedImageContainer = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
   height: 100%;
   width: 100%;
   background-color: ${chatWindowBackgroundColor};
-  z-index: 100;
+  z-index: 200;
 `;
 
 export const MagnifiedImageContainerNavbar = styled.div`
