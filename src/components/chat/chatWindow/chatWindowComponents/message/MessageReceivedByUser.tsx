@@ -57,6 +57,7 @@ const MessageReceivedByUser: React.FC<MessageOnWindow> = ({
               sx={LikedMessageReceivedIconStyles}
             />
           )}
+          {messageText && <div style={{ paddingTop: "10px" }} />}
           {messageText}
           <MessageTime
             time={date.toDate().toLocaleTimeString()}

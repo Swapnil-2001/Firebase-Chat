@@ -189,8 +189,7 @@ export const MessageReceivedByUserContainer = styled.div`
   position: relative;
   margin-top: 5px;
   margin-left: 25px;
-  padding: 15px 20px;
-  padding-bottom: 5px;
+  padding: 5px 20px;
   width: max-content;
   max-width: 35%;
   color: ${white};
@@ -217,8 +216,7 @@ export const MessageSendTimeContainer = styled.div<MessageContainerProps>`
 export const MessageSentByUserContainer = styled.div<MessageSentByUserContainerProps>`
   position: relative;
   margin: 5px 25px 0 0;
-  padding: 15px 20px;
-  padding-bottom: 5px;
+  padding: 5px 20px;
   width: max-content;
   max-width: 35%;
   color: ${white};

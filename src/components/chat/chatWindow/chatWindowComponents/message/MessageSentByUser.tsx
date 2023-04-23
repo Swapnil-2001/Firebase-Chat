@@ -48,6 +48,7 @@ const MessageSentByUser: React.FC<MessageOnWindow> = ({
         onMouseLeave={() => handleHoverOnMessage("")}
       >
         <MessageSentByUserContainer background={appThemeColor}>
+          {messageText && <div style={{ paddingTop: "10px" }} />}
           {messageText}
           {isLiked && (
             <FavoriteOutlinedIcon
