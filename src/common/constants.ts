@@ -53,6 +53,7 @@ export const UPDATE_USER_CHATS_ERROR_MESSAGE =
   "An error occurred while updating user chats.";
 
 // AppContext dispatch constants
+export const OPEN_USER_MODAL = "OPEN_USER_MODAL";
 export const OPEN_SETTINGS_MODAL = "OPEN_SETTINGS_MODAL";
 export const SET_APP_THEME_COLOR = "SET_APP_THEME_COLOR";
 

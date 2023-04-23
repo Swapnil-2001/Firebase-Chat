@@ -20,10 +20,12 @@ import {
   AuthFormErrorMessage,
   AuthFormFooter,
   AuthFormHeader,
+  AuthFormImage,
   AuthFormInputStyles,
   AuthFormRedirectLinkStyles,
   AuthFormSubmitButton,
 } from "./Form.styles";
+import AppLogo from "../../assets/Chat.png";
 
 interface LoginFormFields {
   email?: string;
@@ -118,6 +120,7 @@ const LoginForm: React.FC = (): JSX.Element => {
 
   return (
     <AuthFormContainer>
+      <AuthFormImage src={AppLogo} alt="App Logo" />
       <AuthFormHeader>Welcome Back</AuthFormHeader>
       {loginError.length > 0 && (
         <AuthFormErrorMessage>{loginError}</AuthFormErrorMessage>

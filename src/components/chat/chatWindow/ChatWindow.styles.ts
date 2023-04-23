@@ -65,6 +65,7 @@ export const ChatWindowNavbarContainer = styled.div`
   height: ${chatWindowNavbarHeight};
   background-color: ${black};
   border-top-left-radius: 20px;
+  cursor: pointer;
 `;
 
 export const ChatWindowNavbarImage = styled.img`

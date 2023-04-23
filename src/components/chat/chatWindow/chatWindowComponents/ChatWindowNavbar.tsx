@@ -1,6 +1,8 @@
 import { useContext } from "react";
 
+import { AppContext } from "../../../../context/AppContext";
 import { ChatContext } from "../../../../context/ChatContext";
+import { OPEN_USER_MODAL } from "../../../../common/constants";
 import {
   ChatWindowNavbarContainer,
   ChatWindowNavbarImage,
@@ -10,9 +12,14 @@ import {
 
 const ChatWindowNavbar: React.FC = (): JSX.Element => {
   const [{ messageRecipient }] = useContext(ChatContext);
+  const [, dispatch] = useContext(AppContext);
+
+  const openUserModal = () => {
+    if (messageRecipient) dispatch({ type: OPEN_USER_MODAL, payload: true });
+  };
 
   return (
-    <ChatWindowNavbarContainer>
+    <ChatWindowNavbarContainer onClick={openUserModal}>
       {messageRecipient ? (
         <>
           <ChatWindowNavbarImage src={messageRecipient.photoURL} />

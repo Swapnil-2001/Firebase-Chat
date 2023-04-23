@@ -40,6 +40,7 @@ export const AuthFormContainer = styled.div`
   align-items: center;
   text-align: center;
   padding: 50px 75px;
+  padding-top: 40px;
   width: 300px;
   background-color: ${white};
 `;
@@ -59,6 +60,12 @@ export const AuthFormFooter = styled.div`
 export const AuthFormHeader = styled.h2`
   color: ${deepBlue};
   font-size: 1.8rem;
+`;
+
+export const AuthFormImage = styled.img`
+  margin-bottom: 25px;
+  height: 75px;
+  width: 75px;
 `;
 
 export const AuthFormInputStyles = {

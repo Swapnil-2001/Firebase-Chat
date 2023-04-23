@@ -1,15 +1,21 @@
 import { createContext, Dispatch, PropsWithChildren, useReducer } from "react";
 
-import { OPEN_SETTINGS_MODAL, SET_APP_THEME_COLOR } from "../common/constants";
+import {
+  OPEN_USER_MODAL,
+  OPEN_SETTINGS_MODAL,
+  SET_APP_THEME_COLOR,
+} from "../common/constants";
 
 interface AppInitialState {
   appThemeColor: string;
   openSettingsModal: boolean;
+  openUserModal: boolean;
 }
 
 const initialState: AppInitialState = {
   appThemeColor: "#655DBB",
   openSettingsModal: false,
+  openUserModal: false,
 };
 
 export const AppContext = createContext<[AppInitialState, Dispatch<any>]>([
@@ -25,6 +31,12 @@ const AppContextProvider: React.FC<PropsWithChildren> = ({
     action: { type: string; payload: any }
   ) => {
     switch (action.type) {
+      case OPEN_USER_MODAL:
+        if (action.payload === null) return state;
+        return {
+          ...state,
+          openUserModal: action.payload,
+        };
       case OPEN_SETTINGS_MODAL:
         if (action.payload === null) return state;
         return {

@@ -24,10 +24,12 @@ import {
   AuthFormErrorMessage,
   AuthFormFooter,
   AuthFormHeader,
+  AuthFormImage,
   AuthFormInputStyles,
   AuthFormRedirectLinkStyles,
   AuthFormSubmitButton,
 } from "./Form.styles";
+import AppLogo from "../../assets/Chat.png";
 
 interface SignupFormFields {
   name?: string;
@@ -151,6 +153,7 @@ const SignupForm: React.FC = (): JSX.Element => {
 
   return (
     <AuthFormContainer>
+      <AuthFormImage src={AppLogo} alt="App Logo" />
       <AuthFormHeader>Create an Account</AuthFormHeader>
       {signupError.length > 0 && (
         <AuthFormErrorMessage>{signupError}</AuthFormErrorMessage>

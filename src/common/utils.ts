@@ -7,7 +7,7 @@ export const downloadImage = (imageUrl: string): void => {
     const url: string = window.URL.createObjectURL(xhr.response);
     const a: HTMLAnchorElement = document.createElement("a");
     a.href = url;
-    a.download = "image.png";
+    a.download = "Image.png";
     document.body.appendChild(a);
     a.click();
     window.URL.revokeObjectURL(url);
