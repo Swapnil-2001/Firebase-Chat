@@ -1,5 +1,6 @@
 import { useContext } from "react";
 import CloseOutlinedIcon from "@mui/icons-material/CloseOutlined";
+import FileDownloadOutlinedIcon from "@mui/icons-material/FileDownloadOutlined";
 import { Fade } from "@mui/material";
 
 import { ChatContext } from "../../../context/ChatContext";
@@ -14,10 +15,27 @@ import {
   MagnifiedImage,
   MagnifiedImageContainer,
   MagnifiedImageContainerNavbar,
+  MagnifiedImageContainerNavbarIcon,
 } from "./ChatBox.styles";
 
 const MagnifiedImageComponent: React.FC = (): JSX.Element => {
   const [{ magnifiedImageUrl }, dispatch] = useContext(ChatContext);
+
+  const downloadImage = (): void => {
+    const xhr: XMLHttpRequest = new XMLHttpRequest();
+    xhr.responseType = "blob";
+    xhr.onload = () => {
+      const url: string = window.URL.createObjectURL(xhr.response);
+      const a: HTMLAnchorElement = document.createElement("a");
+      a.href = url;
+      a.download = "image.png";
+      document.body.appendChild(a);
+      a.click();
+      window.URL.revokeObjectURL(url);
+    };
+    xhr.open("GET", magnifiedImageUrl);
+    xhr.send();
+  };
 
   const removeMagnifiedImage = (): void => {
     dispatch({ type: SHOW_IMAGE, payload: "" });
@@ -30,8 +48,13 @@ const MagnifiedImageComponent: React.FC = (): JSX.Element => {
   return (
     <Fade in={shouldShowImage} timeout={250}>
       <MagnifiedImageContainer>
-        <MagnifiedImageContainerNavbar onClick={removeMagnifiedImage}>
-          <CloseOutlinedIcon />
+        <MagnifiedImageContainerNavbar>
+          <MagnifiedImageContainerNavbarIcon onClick={downloadImage}>
+            <FileDownloadOutlinedIcon />
+          </MagnifiedImageContainerNavbarIcon>
+          <MagnifiedImageContainerNavbarIcon onClick={removeMagnifiedImage}>
+            <CloseOutlinedIcon />
+          </MagnifiedImageContainerNavbarIcon>
         </MagnifiedImageContainerNavbar>
         <MagnifiedImage
           src={magnifiedImageUrl}

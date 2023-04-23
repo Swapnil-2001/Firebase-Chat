@@ -100,10 +100,10 @@ export const ChatBoxUserSectionLogoutButtonContainer = styled.div`
 `;
 
 export const MagnifiedImage = styled.img`
-  max-height: 95%;
+  max-height: 90%;
   max-width: 95%;
   object-fit: contain;
-  margin: 20px 10px;
+  margin: 10px;
 `;
 
 export const MagnifiedImageContainer = styled.div`
@@ -121,11 +121,18 @@ export const MagnifiedImageContainer = styled.div`
 `;
 
 export const MagnifiedImageContainerNavbar = styled.div`
+  display: flex;
+  justify-content: flex-end;
   margin-top: 20px;
+  margin-right: 75px;
   height: 30px;
-  width: max-content;
+  width: 100%;
   color: ${lightGray};
   cursor: pointer;
+`;
+
+export const MagnifiedImageContainerNavbarIcon = styled.div`
+  margin-left: 20px;
   transition: 0.3s color;
 
   &:hover {
