@@ -5,7 +5,10 @@ import FavoriteOutlinedIcon from "@mui/icons-material/FavoriteOutlined";
 import { ChatContext } from "../../../../../context/ChatContext";
 import MessageTime from "./MessageTime";
 import { MessageOnWindow } from "../../../../../common/types";
-import { SHOW_IMAGE } from "../../../../../common/constants";
+import {
+  SET_IS_MESSAGE_LIKED,
+  SHOW_IMAGE,
+} from "../../../../../common/constants";
 import {
   LikeButtonContainer,
   LikeButtonStyles,
@@ -27,6 +30,11 @@ const MessageReceivedByUser: React.FC<MessageOnWindow> = ({
   const { date, id, imageUrl, messageText } = message;
 
   const [{ conversationId }, dispatch] = useContext(ChatContext);
+
+  const handleLikeMessage = () => {
+    dispatch({ type: SET_IS_MESSAGE_LIKED, payload: true });
+    likeMessage(conversationId, id);
+  };
 
   const showMagnifiedImageView = (imageUrl: string): void => {
     dispatch({ type: SHOW_IMAGE, payload: imageUrl });
@@ -65,7 +73,7 @@ const MessageReceivedByUser: React.FC<MessageOnWindow> = ({
           />
         </MessageReceivedByUserContainer>
         {id === idOfMessageHoveredOver && (
-          <LikeButtonContainer onClick={() => likeMessage(conversationId, id)}>
+          <LikeButtonContainer onClick={handleLikeMessage}>
             {isLiked ? (
               <FavoriteOutlinedIcon fontSize="small" sx={LikeButtonStyles} />
             ) : (

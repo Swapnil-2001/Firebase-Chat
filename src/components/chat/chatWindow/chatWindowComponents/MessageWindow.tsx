@@ -12,6 +12,7 @@ import { generateFormattedMessages } from "../../../../common/utils";
 import { ConversationMessage } from "../../../../common/types";
 import {
   ALL_MESSAGES_COLLECTION_NAME,
+  SET_IS_MESSAGE_LIKED,
   SET_SENDING_MESSAGE_LOADING,
   SET_UNREAD_CONVERSATIONS,
   UNHIDE_MESSAGE_WINDOW,
@@ -35,8 +36,10 @@ const MessageWindow: React.FC<MessageWindowProps> = ({
     useState<string>("");
 
   const [{ currentUser }] = useContext(UserContext);
-  const [{ conversationId, messageRecipient, unreadConversations }, dispatch] =
-    useContext(ChatContext);
+  const [
+    { conversationId, isMessageLiked, messageRecipient, unreadConversations },
+    dispatch,
+  ] = useContext(ChatContext);
 
   const currentUserId = currentUser?.uid;
   const messageRecipientId = messageRecipient?.uid;
@@ -81,6 +84,8 @@ const MessageWindow: React.FC<MessageWindowProps> = ({
       if (componentJustLoaded) {
         scrollToBottom();
         setComponentJustLoaded(false);
+      } else if (isMessageLiked) {
+        dispatch({ type: SET_IS_MESSAGE_LIKED, payload: false });
       } else if (
         conversationMessages[numConversations - 1].senderId === currentUserId ||
         !isDistanceFromBottomAbove300

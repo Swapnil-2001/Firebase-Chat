@@ -3,6 +3,7 @@ import { createContext, Dispatch, PropsWithChildren, useReducer } from "react";
 import { MessageRecipient } from "../common/types";
 import {
   RESET_TO_DEFAULT_VALUES,
+  SET_IS_MESSAGE_LIKED,
   SET_NEW_MESSAGE_RECIPIENT,
   SET_SENDING_MESSAGE_LOADING,
   SET_UNREAD_CONVERSATIONS,
@@ -17,6 +18,7 @@ interface ChatInitialState {
   // === 1 --> show loading animation
   // >= 2 --> show message window
   hideMessageWindow: number;
+  isMessageLiked: boolean;
   magnifiedImageUrl: string;
   messageRecipient: MessageRecipient | null;
   sendingMessageLoading: boolean;
@@ -27,6 +29,7 @@ const initialState: ChatInitialState = {
   conversationId: "",
   hideMessageInput: true,
   hideMessageWindow: 0,
+  isMessageLiked: false,
   magnifiedImageUrl: "",
   messageRecipient: null,
   sendingMessageLoading: false,
@@ -48,6 +51,12 @@ const ChatContextProvider: React.FC<PropsWithChildren> = ({
     switch (action.type) {
       case RESET_TO_DEFAULT_VALUES:
         return initialState;
+      case SET_IS_MESSAGE_LIKED:
+        if (action.payload === null) return state;
+        return {
+          ...state,
+          isMessageLiked: action.payload,
+        };
       case SET_NEW_MESSAGE_RECIPIENT:
         if (action.payload === null) return state;
         const { conversationId, messageRecipient } = action.payload;
