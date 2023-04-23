@@ -1,5 +1,21 @@
 import { ConversationMessage, UserConversation } from "./types";
 
+export const downloadImage = (imageUrl: string): void => {
+  const xhr: XMLHttpRequest = new XMLHttpRequest();
+  xhr.responseType = "blob";
+  xhr.onload = () => {
+    const url: string = window.URL.createObjectURL(xhr.response);
+    const a: HTMLAnchorElement = document.createElement("a");
+    a.href = url;
+    a.download = "image.png";
+    document.body.appendChild(a);
+    a.click();
+    window.URL.revokeObjectURL(url);
+  };
+  xhr.open("GET", imageUrl);
+  xhr.send();
+};
+
 export const generateFormattedMessages = (
   conversationMessages: any[]
 ): ConversationMessage[] => {
