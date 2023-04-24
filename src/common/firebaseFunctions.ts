@@ -224,7 +224,7 @@ export const signUpUser = async (
     });
     // Add data to Firestore
     await createNewUser(
-      displayName,
+      displayName.toLowerCase(),
       downloadUrl,
       signedUpUserId,
       email,

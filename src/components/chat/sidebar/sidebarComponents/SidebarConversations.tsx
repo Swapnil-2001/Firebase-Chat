@@ -5,6 +5,7 @@ import ImageOutlinedIcon from "@mui/icons-material/ImageOutlined";
 
 import { ChatContext } from "../../../../context/ChatContext";
 import { UserContext } from "../../../../context/UserContext";
+import { convertStringToNameFormat } from "../../../../common/utils";
 import { MessageRecipient, UserConversation } from "../../../../common/types";
 import {
   DoneAllOutlinedIconStyles,
@@ -51,7 +52,7 @@ const SidebarConversations: React.FC<SidebarConversationsProps> = ({
           <SidebarConversationImage src={userInfo.photoURL} alt="User Image" />
           <SidebarConversationInfoContainer>
             <SidebarConversationUserName>
-              {userInfo.displayName}
+              {convertStringToNameFormat(userInfo.displayName)}
             </SidebarConversationUserName>
             {lastMessage.messageText.length > 0 ? (
               <SidebarConversationLastMessage>

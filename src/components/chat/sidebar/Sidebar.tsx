@@ -88,17 +88,9 @@ const Sidebar: React.FC = (): JSX.Element => {
     if (event.code === "Enter") handleSearchForUser();
   };
 
-  const handleUserSearchInput = (
-    event: React.FormEvent<HTMLInputElement>
-  ): void => {
-    const { value: searchTerm } = event.target as HTMLInputElement;
-    setSearchedUser(searchTerm);
-    setHasSearched(false);
-  };
-
   const handleSearchForUser = async (): Promise<void> => {
     setSearchResults([]);
-    const querySnapshot = await searchForUsers(searchedUser);
+    const querySnapshot = await searchForUsers(searchedUser.toLowerCase());
     querySnapshot?.forEach((doc) => {
       setSearchResults((prevState) => [
         ...prevState,
@@ -106,6 +98,14 @@ const Sidebar: React.FC = (): JSX.Element => {
       ]);
     });
     setHasSearched(true);
+  };
+
+  const handleUserSearchInput = (
+    event: React.FormEvent<HTMLInputElement>
+  ): void => {
+    const { value: searchTerm } = event.target as HTMLInputElement;
+    setSearchedUser(searchTerm);
+    setHasSearched(false);
   };
 
   const removeSearchTerm = (): void => {

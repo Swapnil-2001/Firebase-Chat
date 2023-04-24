@@ -1,5 +1,14 @@
 import { ConversationMessage, UserConversation } from "./types";
 
+export const convertStringToNameFormat = (lowercasedName: string): string => {
+  const words: string[] = lowercasedName.split(/\s+/);
+  const capitalizedWords: string[] = words.map(
+    (word) => word.charAt(0).toUpperCase() + word.slice(1)
+  );
+  const formattedName = capitalizedWords.join(" ");
+  return formattedName;
+};
+
 export const downloadImage = (imageUrl: string): void => {
   const xhr: XMLHttpRequest = new XMLHttpRequest();
   xhr.responseType = "blob";

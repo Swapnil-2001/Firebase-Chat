@@ -3,6 +3,7 @@ import CloseOutlinedIcon from "@mui/icons-material/CloseOutlined";
 
 import { ChatContext } from "../../../../context/ChatContext";
 import { SearchedUser } from "../Sidebar";
+import { convertStringToNameFormat } from "../../../../common/utils";
 import { MessageRecipient } from "../../../../common/types";
 import {
   CloseSearchSectionButton,
@@ -58,7 +59,7 @@ const SidebarSearchResults: React.FC<SidebarSearchResultsProps> = ({
               alt="The user searched for"
             />
             <SidebarSearchResultName>
-              {result.displayName}
+              {convertStringToNameFormat(result.displayName)}
             </SidebarSearchResultName>
           </SidebarSearchResult>
         ))

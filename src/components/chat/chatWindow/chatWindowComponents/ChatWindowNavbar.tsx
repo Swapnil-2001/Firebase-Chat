@@ -2,6 +2,7 @@ import { useContext } from "react";
 
 import { AppContext } from "../../../../context/AppContext";
 import { ChatContext } from "../../../../context/ChatContext";
+import { convertStringToNameFormat } from "../../../../common/utils";
 import { OPEN_USER_MODAL } from "../../../../common/constants";
 import {
   ChatWindowNavbarContainer,
@@ -24,7 +25,7 @@ const ChatWindowNavbar: React.FC = (): JSX.Element => {
         <>
           <ChatWindowNavbarImage src={messageRecipient.photoURL} />
           <ChatWindowNavbarUserName>
-            {messageRecipient.displayName}
+            {convertStringToNameFormat(messageRecipient.displayName)}
           </ChatWindowNavbarUserName>
         </>
       ) : (

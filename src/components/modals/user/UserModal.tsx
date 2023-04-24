@@ -5,6 +5,7 @@ import { Fade } from "@mui/material";
 
 import { AppContext } from "../../../context/AppContext";
 import { ChatContext } from "../../../context/ChatContext";
+import { convertStringToNameFormat } from "../../../common/utils";
 import { OPEN_USER_MODAL } from "../../../common/constants";
 import {
   CloseModalIconContainer,
@@ -35,7 +36,9 @@ const SettingsModal: React.FC = (): JSX.Element => {
             src={messageRecipient.photoURL}
             alt="Message Recipient"
           />
-          <UserModalText>{messageRecipient.displayName}</UserModalText>
+          <UserModalText>
+            {convertStringToNameFormat(messageRecipient.displayName)}
+          </UserModalText>
         </UserModalContainer>
       </Fade>
     </Modal>
