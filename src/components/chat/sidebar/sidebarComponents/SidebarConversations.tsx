@@ -63,8 +63,8 @@ const SidebarConversations: React.FC<SidebarConversationsProps> = ({
                 {lastMessage.idOfSender === currentUser?.uid && (
                   <DoneAllOutlinedIcon sx={DoneAllOutlinedIconStyles} />
                 )}
-                {lastMessage.messageText.substring(0, 20)}
-                {lastMessage.messageText.length > 20 && "..."}
+                {lastMessage.messageText.substring(0, 15)}
+                {lastMessage.messageText.length > 15 && "..."}
               </SidebarConversationLastMessage>
             ) : (
               <SidebarConversationLastMessageIsImage>
