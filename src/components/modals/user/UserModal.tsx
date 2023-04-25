@@ -14,6 +14,7 @@ import {
   UserModalImage,
   UserModalText,
 } from "./UserModal.styles";
+import defaultImage from "../../../assets/Default.png";
 
 const SettingsModal: React.FC = (): JSX.Element => {
   const [{ openUserModal }, dispatch] = useContext(AppContext);
@@ -33,7 +34,11 @@ const SettingsModal: React.FC = (): JSX.Element => {
             <CloseOutlinedIcon sx={CloseModalIconStyles} />
           </CloseModalIconContainer>
           <UserModalImage
-            src={messageRecipient.photoURL}
+            src={
+              messageRecipient.photoURL
+                ? messageRecipient.photoURL
+                : defaultImage
+            }
             alt="Message Recipient"
           />
           <UserModalText>
