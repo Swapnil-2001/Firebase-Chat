@@ -10,6 +10,7 @@ import {
   ChatWindowNavbarText,
   ChatWindowNavbarUserName,
 } from "../ChatWindow.styles";
+import defaultImage from "../../../../assets/Default.png";
 
 const ChatWindowNavbar: React.FC = (): JSX.Element => {
   const [{ messageRecipient }] = useContext(ChatContext);
@@ -23,7 +24,13 @@ const ChatWindowNavbar: React.FC = (): JSX.Element => {
     <ChatWindowNavbarContainer onClick={openUserModal}>
       {messageRecipient ? (
         <>
-          <ChatWindowNavbarImage src={messageRecipient.photoURL} />
+          <ChatWindowNavbarImage
+            src={
+              messageRecipient.photoURL
+                ? messageRecipient.photoURL
+                : defaultImage
+            }
+          />
           <ChatWindowNavbarUserName>
             {convertStringToNameFormat(messageRecipient.displayName)}
           </ChatWindowNavbarUserName>

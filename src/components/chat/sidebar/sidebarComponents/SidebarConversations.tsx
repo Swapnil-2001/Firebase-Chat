@@ -19,6 +19,7 @@ import {
   SidebarConversationUserName,
   SidebarUnreadNotification,
 } from "../Sidebar.styles";
+import defaultImage from "../../../../assets/Default.png";
 
 interface SidebarConversationsProps {
   selectAnUser: (userToBeSelected: MessageRecipient) => void;
@@ -49,7 +50,10 @@ const SidebarConversations: React.FC<SidebarConversationsProps> = ({
           onClick={() => handleSelectAnUser(userInfo)}
           isSelected={userInfo.uid === messageRecipient?.uid}
         >
-          <SidebarConversationImage src={userInfo.photoURL} alt="User Image" />
+          <SidebarConversationImage
+            src={userInfo.photoURL ? userInfo.photoURL : defaultImage}
+            alt="User Image"
+          />
           <SidebarConversationInfoContainer>
             <SidebarConversationUserName>
               {convertStringToNameFormat(userInfo.displayName)}
