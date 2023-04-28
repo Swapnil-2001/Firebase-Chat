@@ -196,7 +196,7 @@ export const MessageReceivedByUserContainer = styled.div`
   font-size: 0.8rem;
   line-height: 1.8;
   background-color: ${lightBlack};
-  border-radius: 20px;
+  border-radius: 15px;
   border-top-left-radius: 0;
 `;
 
@@ -224,7 +224,7 @@ export const MessageSentByUserContainer = styled.div<MessageSentByUserContainerP
   font-weight: 500;
   line-height: 1.8;
   background-color: ${({ background }) => background};
-  border-radius: 20px;
+  border-radius: 15px;
   border-bottom-right-radius: 0;
 `;
 
